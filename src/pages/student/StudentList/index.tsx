@@ -4,9 +4,7 @@ import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 
 import { Divider, Modal, Portal, ProgressBar } from 'react-native-paper'
 
-import api from '../../../services/api'
-
-import * as SecureStorage from '../../../services/secure-storage'
+import { api } from '../../../services/api'
 
 import { PRIMARY_COLOR } from '../../../colors'
 
@@ -22,12 +20,9 @@ const StudentList = ({ searchQuery, modalVisible }: any) => {
     try {
       setProgressVisible(true)
 
-      const token = await SecureStorage.retrieveItem('token')
-
-      const headers = { Authorization: `Token ${ token }` }
       const params = searchQuery ? { name: searchQuery } : {}
 
-      const { data } = await api.get(studentUrl, { headers, params })
+      const { data } = await api.get(studentUrl, { params })
 
       setStudents(data)
     } catch (e) {
@@ -55,8 +50,8 @@ const StudentList = ({ searchQuery, modalVisible }: any) => {
   return (
     <View style={ styles.container }>
       <Portal>
-        <Modal visible={modalVisible} contentContainerStyle={ { backgroundColor: 'white', margin: 32, padding: 16 }}>
-          <Text>Example Modal.  Click outside this area to dismiss.</Text>
+        <Modal visible={ modalVisible } contentContainerStyle={ { backgroundColor: 'white', margin: 32, padding: 16 } }>
+          <Text>Example Modal. Click outside this area to dismiss.</Text>
         </Modal>
       </Portal>
       <ProgressBar

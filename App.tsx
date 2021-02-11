@@ -6,10 +6,11 @@ import { Platform, SafeAreaView, StatusBar, StyleSheet } from 'react-native'
 import AppLoading from 'expo-app-loading'
 import { useFonts } from 'expo-font'
 
-import { configureFonts, DefaultTheme, Provider as PaperProvider } from 'react-native-paper'
+import MainApp from './src/MainApp'
 
-import Routes from './src/routes'
-import { PRIMARY_COLOR, SECONDARY_COLOR, TERCIARY_COLOR } from './src/colors'
+import { Provider as PaperProvider } from 'react-native-paper'
+
+import { TERCIARY_COLOR } from './src/colors'
 
 const App = () => {
   const [ fontsLoaded ] = useFonts({
@@ -24,49 +25,17 @@ const App = () => {
     return <AppLoading/>
   }
 
-  // const fontConfig = {
-  //   default: {
-  //     regular: {
-  //       fontFamily: 'Chai-SemiBold',
-  //       fontWeight: 'normal' as 'normal',
-  //     },
-  //     medium: {
-  //       fontFamily: 'Chai-Medium',
-  //       fontWeight: 'normal' as 'normal',
-  //     },
-  //     light: {
-  //       fontFamily: 'Chai-Regular',
-  //       fontWeight: 'normal' as 'normal',
-  //     },
-  //     thin: {
-  //       fontFamily: 'Chai-Light',
-  //       fontWeight: 'normal' as 'normal',
-  //     },
-  //   }
-  // };
-
-  // const theme = {
-  //   ...DefaultTheme,
-  //   roundness: 24,
-  //   colors: {
-  //     ...DefaultTheme.colors,
-  //     primary: PRIMARY_COLOR,
-  //     accent: SECONDARY_COLOR
-  //   },
-  //   fonts: configureFonts(fontConfig)
-  // }
-
   return (
-    <PaperProvider>
+      <PaperProvider>
         <StatusBar
           barStyle='light-content'
           backgroundColor={ TERCIARY_COLOR }
           translucent
         />
         <SafeAreaView style={ styles.safeArea }>
-          <Routes/>
+          <MainApp/>
         </SafeAreaView>
-    </PaperProvider>
+      </PaperProvider>
   )
 }
 

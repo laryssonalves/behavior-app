@@ -6,7 +6,8 @@ export const storeItem = async (key: string, value: string) => {
 
 export const retrieveItem = async (key: string): Promise<any> => {
   const value = await SecureStore.getItemAsync(key)
-  return JSON.parse(value || '')
+
+  return value ? JSON.parse(value) : null
 }
 
 export const clearItem = async (key: string) => {

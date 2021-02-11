@@ -8,12 +8,16 @@ import { Appbar, Searchbar } from 'react-native-paper'
 
 import * as SecureStorage from '../../services/secure-storage'
 
+import { useAuth } from '../../contexts/auth.context'
+
 import styles from './styles'
 
 const AppHeader = ({ navigation, previous, setSearchQuery, setModalVisible }: any) => {
   const [ title, setTitle ] = useState<string>('')
   const [ searchBarVisible, setSearchBarVisible ] = useState<boolean>(false)
   const [ searchBarQuery, setSearchBarQuery ] = useState<string>('')
+
+  const { signOut } = useAuth()
 
   const route = useRoute()
 
@@ -71,8 +75,9 @@ const AppHeader = ({ navigation, previous, setSearchQuery, setModalVisible }: an
             titleStyle={ styles.appBarContentTitle }/>
           <Appbar.Action
             icon='magnify'
-            onPress={ () => { setSearchBarVisible(true) } } />
+            onPress={ () => { setSearchBarVisible(true) } }/>
           <Appbar.Action icon='plus' onPress={ () => { setModalVisible(true) } }/>
+          <Appbar.Action icon='logout-variant' onPress={ async () => await signOut() }/>
         </Appbar.Header>
       }
     </View>
