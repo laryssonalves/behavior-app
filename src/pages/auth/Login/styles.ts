@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
-import GlobalStyle from '../../global-style'
-import { PRIMARY_COLOR, SECONDARY_COLOR, TERCIARY_COLOR } from '../../colors'
+import GlobalStyle from '../../../global-style'
+import { PRIMARY_COLOR, SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 
 const styles = StyleSheet.create({
   container: {
@@ -17,22 +17,13 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
+    ...GlobalStyle.inputView,
     width: '80%',
-    backgroundColor: 'white',
     borderColor: PRIMARY_COLOR,
-    borderWidth: 2,
-    borderRadius: 25,
-    height: 50,
-    marginBottom: 20,
-    justifyContent: 'center',
-    padding: 20
   },
 
   inputText: {
-    height: 50,
-    fontSize: 16,
-    color: SECONDARY_COLOR,
-    ...GlobalStyle.textRegular
+    ...GlobalStyle.inputText
   },
 
   btnLogin: {

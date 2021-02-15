@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 
 import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-import { UserCredential } from '../../interfaces/user'
-import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../colors'
+import { UserCredential } from '../../../interfaces/user'
+import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 
-import { useAuth } from '../../contexts/auth.context'
+import { useAuth } from '../../../contexts/auth.context'
 
 import styles from './styles'
 
@@ -27,7 +27,7 @@ const Login = () => {
 
   return (
     <View style={ styles.container }>
-      <Image source={ require('../../assets/logo-login4.png') } style={ styles.logo }/>
+      <Image source={ require('../../../assets/logo-login4.png') } style={ styles.logo }/>
       <View style={ styles.inputView }>
         <TextInput
           style={ styles.inputText }

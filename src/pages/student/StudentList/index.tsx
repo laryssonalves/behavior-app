@@ -1,30 +1,32 @@
 import React, { useEffect, useState } from 'react'
 
-import { FlatList, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-import { Divider, Modal, Portal, ProgressBar } from 'react-native-paper'
+import { Divider, FAB, Modal, Portal, ProgressBar } from 'react-native-paper'
 
-import { api } from '../../../services/api'
-
-import { PRIMARY_COLOR } from '../../../colors'
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 
 import styles from './styles'
+import { useHeaderContext } from '../../../shared/contexts/header.context'
+import StudentService from '../../../services/student-service'
+import StudentAdd from '../StudentAdd'
 
-const StudentList = ({ searchQuery, modalVisible }: any) => {
+const StudentList = () => {
   const [ students, setStudents ] = useState<Student[]>([])
   const [ progressVisible, setProgressVisible ] = useState<boolean>(false)
+  const [ modalVisible, setModalVisible ] = useState<boolean>(false)
 
-  const studentUrl = 'student'
+  const { state: { searchBarQuery } } = useHeaderContext()
+
+  const studentService = StudentService.getInstance()
+  const showModal = () => setModalVisible(true)
+  const hideModal = () => setModalVisible(false)
 
   const getStudents = async () => {
     try {
       setProgressVisible(true)
-
-      const params = searchQuery ? { name: searchQuery } : {}
-
-      const { data } = await api.get(studentUrl, { params })
-
-      setStudents(data)
+      const students = await studentService.getStudents(searchBarQuery)
+      setStudents(students)
     } catch (e) {
       console.log(e)
     } finally {
@@ -32,7 +34,13 @@ const StudentList = ({ searchQuery, modalVisible }: any) => {
     }
   }
 
-  useEffect(() => { (async () => { await getStudents() })() }, [ searchQuery ])
+  useEffect(() => { (async () => { await getStudents() })() }, [ searchBarQuery ])
+
+  // useEffect(() => {
+  //   const interval = setInterval(getStudents, 300)
+  //
+  //   return () => clearInterval(interval)
+  // }, [searchBarQuery]);
 
   const renderItem = (student: Student, index: number) => {
 
@@ -49,21 +57,34 @@ const StudentList = ({ searchQuery, modalVisible }: any) => {
 
   return (
     <View style={ styles.container }>
-      <Portal>
-        <Modal visible={ modalVisible } contentContainerStyle={ { backgroundColor: 'white', margin: 32, padding: 16 } }>
-          <Text>Example Modal. Click outside this area to dismiss.</Text>
-        </Modal>
-      </Portal>
+
+      <StudentAdd visible={modalVisible} hideModal={hideModal} />
+
       <ProgressBar
         style={ styles.progressBar }
         visible={ progressVisible }
         color={ PRIMARY_COLOR }
         indeterminate/>
+
+
       <FlatList
         style={ styles.flatList }
         data={ students }
         renderItem={ ({ item, index }) => renderItem(item, index) }
         keyExtractor={ item => item.id.toString() }
+      />
+
+      <FAB
+        style={ {
+          position: 'absolute',
+          backgroundColor: PRIMARY_COLOR,
+          margin: 24,
+          right: 0,
+          bottom: 0
+        } }
+        icon="plus"
+        color={ SECONDARY_COLOR }
+        onPress={ showModal }
       />
     </View>
   )

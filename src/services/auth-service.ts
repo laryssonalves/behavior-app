@@ -2,9 +2,9 @@ import { api } from './api'
 import { User, UserCredential } from '../interfaces/user'
 
 export default class AuthService {
-  loginUrl = 'auth/login/'
-  logoutUrl = 'auth/logout/'
-  userDetailsUrl = 'users/details/'
+  private loginUrl = 'auth/login/'
+  private logoutUrl = 'auth/logout/'
+  private userDetailsUrl = 'users/details/'
 
   constructor() {}
 

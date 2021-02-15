@@ -2,7 +2,7 @@ import React from 'react'
 
 import { createStackNavigator } from '@react-navigation/stack'
 
-import Login from '../pages/Login'
+import Login from '../pages/auth/Login'
 
 const AppStack = createStackNavigator()
 
