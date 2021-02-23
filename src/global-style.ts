@@ -36,6 +36,15 @@ const GlobalStyle = StyleSheet.create({
     color: TERCIARY_COLOR
   },
 
+  btnDefault: {
+    borderRadius: 24,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#EFEFEF',
+    width: '100%'
+  },
+
   inputView: {
     width: '100%',
     backgroundColor: 'white',

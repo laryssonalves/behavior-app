@@ -20,7 +20,6 @@ const Login = () => {
       setLogging(true)
       await signIn(credential)
     } catch (e) {
-      console.log(e)
       setLogging(false)
     }
   }

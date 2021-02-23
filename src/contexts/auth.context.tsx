@@ -4,6 +4,7 @@ import * as SecureStorage from '../services/secure-storage'
 import { User, UserCredential } from '../interfaces/user'
 import AuthService from '../services/auth-service'
 import { configDefaultTokenInHeader } from '../services/api'
+import CompanyService from '../services/company-service'
 
 interface AuthContextData {
   signed: boolean
@@ -18,23 +19,30 @@ const AuthProvider = ({ children }: any) => {
   const [ user, setUser ] = useState<User | null>(null)
 
   const signIn = async (credential: UserCredential) => {
-    const authService = new AuthService()
+    const authService = AuthService.getInstance()
+    const companyService = CompanyService.getInstance()
+
     const { token, user } = await authService.login(credential)
 
     configDefaultTokenInHeader(token)
 
-    setUser(user)
+    const company = await companyService.getSelectedCompany()
 
-    await SecureStorage.storeItem('beeapp_token', JSON.stringify(token))
-    await SecureStorage.storeItem('beeapp_user', JSON.stringify(user))
+    await SecureStorage.storeItem('token', JSON.stringify(token))
+    await SecureStorage.storeItem('user', JSON.stringify(user))
+    await SecureStorage.storeItem('company', JSON.stringify(company))
+
+    setUser(user)
   }
 
   const signOut = async () => {
-    const authService = new AuthService()
+    const authService = AuthService.getInstance()
+
     await authService.logout()
 
-    await SecureStorage.clearItem('beeapp_token')
-    await SecureStorage.clearItem('beeapp_user')
+    await SecureStorage.clearItem('token')
+    await SecureStorage.clearItem('user')
+    await SecureStorage.clearItem('company')
 
     configDefaultTokenInHeader()
 
@@ -43,8 +51,8 @@ const AuthProvider = ({ children }: any) => {
 
   useEffect(() => {
     (async () => {
-      const storagedToken = await SecureStorage.retrieveItem('beeapp_token')
-      const storagedUser = await SecureStorage.retrieveItem('beeapp_user')
+      const storagedToken = await SecureStorage.retrieveItem('token')
+      const storagedUser = await SecureStorage.retrieveItem('user')
 
       if (storagedUser && storagedToken) {
         configDefaultTokenInHeader(storagedToken)

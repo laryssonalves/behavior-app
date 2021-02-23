@@ -1,26 +1,38 @@
 import React, { useEffect, useState } from 'react'
 
-import { FlatList, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native'
 
-import { Divider, FAB, Modal, Portal, ProgressBar } from 'react-native-paper'
+import { useNavigation } from '@react-navigation/native'
+
+import { Divider, FAB, ProgressBar } from 'react-native-paper'
 
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 
-import styles from './styles'
 import { useHeaderContext } from '../../../shared/contexts/header.context'
+
 import StudentService from '../../../services/student-service'
+
+import { Student } from '../../../models/student'
+
 import StudentAdd from '../StudentAdd'
 
+import styles from './styles'
+
 const StudentList = () => {
-  const [ students, setStudents ] = useState<Student[]>([])
-  const [ progressVisible, setProgressVisible ] = useState<boolean>(false)
-  const [ modalVisible, setModalVisible ] = useState<boolean>(false)
+  const [students, setStudents] = useState<Student[]>([])
+  const [progressVisible, setProgressVisible] = useState<boolean>(false)
+  const [modalVisible, setModalVisible] = useState<boolean>(false)
+
+  const navigation = useNavigation()
 
   const { state: { searchBarQuery } } = useHeaderContext()
 
   const studentService = StudentService.getInstance()
   const showModal = () => setModalVisible(true)
-  const hideModal = () => setModalVisible(false)
+  const hideModal = () => {
+    getStudents()
+    setModalVisible(false)
+  }
 
   const getStudents = async () => {
     try {
@@ -34,57 +46,54 @@ const StudentList = () => {
     }
   }
 
-  useEffect(() => { (async () => { await getStudents() })() }, [ searchBarQuery ])
-
-  // useEffect(() => {
-  //   const interval = setInterval(getStudents, 300)
-  //
-  //   return () => clearInterval(interval)
-  // }, [searchBarQuery]);
+  useEffect(() => { (async () => { await getStudents() })() }, [searchBarQuery])
 
   const renderItem = (student: Student, index: number) => {
 
     return (
-      <TouchableOpacity onPress={ () => { } }>
-        <Text style={ styles.textItemName }>{ student.name }</Text>
-        <Text style={ styles.textItemAge }>{ student.age } anos</Text>
+      <View >
+        <TouchableOpacity onPress={() => { }} style={styles.flatListItem}>
+          <Text style={styles.textItemName}>{student.name}</Text>
+          <Text style={styles.textItemAge}>{student.age} anos</Text>
+        </TouchableOpacity>
         {
-          index !== (students.length - 1) ? <Divider style={ styles.dividerItem }/> : null
+          index !== (students.length - 1) ? <Divider style={styles.dividerItem} /> : null
         }
-      </TouchableOpacity>
+      </View>
     )
   }
 
   return (
-    <View style={ styles.container }>
+    <View style={styles.container}>
 
       <StudentAdd visible={modalVisible} hideModal={hideModal} />
 
       <ProgressBar
-        style={ styles.progressBar }
-        visible={ progressVisible }
-        color={ PRIMARY_COLOR }
-        indeterminate/>
+        style={styles.progressBar}
+        visible={progressVisible}
+        color={PRIMARY_COLOR}
+        indeterminate />
 
 
       <FlatList
-        style={ styles.flatList }
-        data={ students }
-        renderItem={ ({ item, index }) => renderItem(item, index) }
-        keyExtractor={ item => item.id.toString() }
+        style={styles.flatList}
+        data={students}
+        refreshControl={
+          <RefreshControl
+            progressBackgroundColor='#FFF'
+            colors={[PRIMARY_COLOR, SECONDARY_COLOR]}
+            refreshing={false}
+            onRefresh={async () => await getStudents()} />
+        }
+        renderItem={({ item, index }) => renderItem(item, index)}
+        keyExtractor={item => item.id.toString()}
       />
 
       <FAB
-        style={ {
-          position: 'absolute',
-          backgroundColor: PRIMARY_COLOR,
-          margin: 24,
-          right: 0,
-          bottom: 0
-        } }
+        style={styles.fabAdd}
         icon="plus"
-        color={ SECONDARY_COLOR }
-        onPress={ showModal }
+        color={SECONDARY_COLOR}
+        onPress={showModal}
       />
     </View>
   )

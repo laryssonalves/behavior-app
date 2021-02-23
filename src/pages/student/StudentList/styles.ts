@@ -4,7 +4,7 @@ import { PRIMARY_COLOR, PRIMARY_TEXT_COLOR, SECONDARY_COLOR, SECONDARY_TEXT_COLO
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
 
   progressBar: {
@@ -12,10 +12,14 @@ const styles = StyleSheet.create({
   },
 
   flatList: {
-    paddingTop: 10,
-    paddingRight: 16,
     paddingBottom: 16,
-    paddingLeft: 16,
+    paddingHorizontal: 16,
+    marginBottom: 16
+  },
+
+  flatListItem: {
+    //backgroundColor: '#000',
+    padding: 8
   },
 
   textItemName: {
@@ -31,9 +35,17 @@ const styles = StyleSheet.create({
   },
 
   dividerItem: {
-    margin: 8,
+    marginHorizontal: 16,
     height: 2,
   },
+
+  fabAdd: {
+    position: 'absolute',
+    backgroundColor: PRIMARY_COLOR,
+    margin: 24,
+    right: 0,
+    bottom: 0
+  }
 })
 
 export default styles
