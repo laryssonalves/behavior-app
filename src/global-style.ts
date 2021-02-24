@@ -50,7 +50,7 @@ const GlobalStyle = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: SECONDARY_COLOR,
     borderWidth: 2,
-    borderRadius: 25,
+    borderRadius: 24,
     height: 50,
     marginBottom: 20,
     justifyContent: 'center',

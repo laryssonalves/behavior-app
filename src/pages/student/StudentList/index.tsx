@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native'
-
-import { useNavigation } from '@react-navigation/native'
+import { FlatList, RefreshControl, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
 
 import { Divider, FAB, ProgressBar } from 'react-native-paper'
 
@@ -22,8 +20,6 @@ const StudentList = () => {
   const [students, setStudents] = useState<Student[]>([])
   const [progressVisible, setProgressVisible] = useState<boolean>(false)
   const [modalVisible, setModalVisible] = useState<boolean>(false)
-
-  const navigation = useNavigation()
 
   const { state: { searchBarQuery } } = useHeaderContext()
 
@@ -48,20 +44,28 @@ const StudentList = () => {
 
   useEffect(() => { (async () => { await getStudents() })() }, [searchBarQuery])
 
-  const renderItem = (student: Student, index: number) => {
+  const renderItem = (student: Student, index: number) => (
+    <View>
+      <TouchableOpacity onPress={() => { }} style={styles.flatListItem}>
+        <Text style={styles.textItemName}>{student.name}</Text>
+        <Text style={styles.textItemAge}>{student.age} anos</Text>
+      </TouchableOpacity>
+      {
+        index !== (students.length - 1) ? <Divider style={styles.dividerItem} /> : null
+      }
+    </View>
+  )
 
-    return (
-      <View >
-        <TouchableOpacity onPress={() => { }} style={styles.flatListItem}>
-          <Text style={styles.textItemName}>{student.name}</Text>
-          <Text style={styles.textItemAge}>{student.age} anos</Text>
-        </TouchableOpacity>
-        {
-          index !== (students.length - 1) ? <Divider style={styles.dividerItem} /> : null
-        }
-      </View>
-    )
-  }
+
+
+  const refreshControl = (
+    <RefreshControl
+      progressBackgroundColor='#FFF'
+      colors={[PRIMARY_COLOR, SECONDARY_COLOR]}
+      refreshing={false}
+      onRefresh={async () => await getStudents()} />
+  )
+
 
   return (
     <View style={styles.container}>
@@ -74,17 +78,10 @@ const StudentList = () => {
         color={PRIMARY_COLOR}
         indeterminate />
 
-
       <FlatList
         style={styles.flatList}
         data={students}
-        refreshControl={
-          <RefreshControl
-            progressBackgroundColor='#FFF'
-            colors={[PRIMARY_COLOR, SECONDARY_COLOR]}
-            refreshing={false}
-            onRefresh={async () => await getStudents()} />
-        }
+        refreshControl={refreshControl}
         renderItem={({ item, index }) => renderItem(item, index)}
         keyExtractor={item => item.id.toString()}
       />
