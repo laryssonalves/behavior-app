@@ -1,5 +1,5 @@
 import { Student } from '../models/student'
-import { api } from './api'
+import { api } from '../shared/services/api'
 
 export default class StudentService {
   private static instance: StudentService

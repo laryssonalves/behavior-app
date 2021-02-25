@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-import * as SecureStorage from '../services/secure-storage'
+import * as SecureStorage from '../shared/services/secure-storage'
+import { configDefaultTokenInHeader } from '../shared/services/api'
+
 import { User, UserCredential } from '../interfaces/user'
 import AuthService from '../services/auth-service'
-import { configDefaultTokenInHeader } from '../services/api'
 import CompanyService from '../services/company-service'
 
 interface AuthContextData {

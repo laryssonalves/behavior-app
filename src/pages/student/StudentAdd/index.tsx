@@ -16,7 +16,7 @@ import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 
 import { genreChoiceList } from '../../../models/choice.model'
 
-import * as SecureStorage from '../../../services/secure-storage'
+import * as SecureStorage from '../../../shared/services/secure-storage'
 
 import Company from '../../../models/company.model'
 

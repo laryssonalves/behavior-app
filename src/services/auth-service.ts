@@ -1,4 +1,4 @@
-import { api, configDefaultTokenInHeader } from './api'
+import { api, configDefaultTokenInHeader } from '../shared/services/api'
 import { User, UserCredential } from '../interfaces/user'
 
 export default class AuthService {
