@@ -24,6 +24,7 @@
     "android": {
       "package": "com.smartdev.beeapp",
       "versionCode": 1,
+      "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-logo-icon.png",
         "backgroundColor": "#f9cc15"
