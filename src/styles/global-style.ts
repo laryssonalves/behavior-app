@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { PRIMARY_COLOR, SECONDARY_COLOR, TERCIARY_COLOR } from './colors'
+import { PRIMARY_COLOR, SECONDARY_COLOR, TERCIARY_COLOR } from '../colors'
 
 const GlobalStyle = StyleSheet.create({
   textBold: {

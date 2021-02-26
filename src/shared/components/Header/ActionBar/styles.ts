@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native'
 
-import { PRIMARY_COLOR, SECONDARY_COLOR, TERCIARY_COLOR } from '../../../../colors'
+import { SECONDARY_COLOR } from '../../../../colors'
 
-import GlobalStyle from '../../../../global-style'
+import GlobalStyle from '../../../../styles/global-style'
 
 const styles = StyleSheet.create({
     actionBar: {

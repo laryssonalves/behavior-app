@@ -24,12 +24,10 @@ import { Student } from '../../../models/student'
 
 import GlobalStyle from '../../../styles/global-style'
 
-import { pickerStyleValid, pickerStyleInvalid } from '../../../styles/datepicker-style'
-
 import styles from './styles'
 
-const StudentAdd = ({ visible, hideModal }: any) => {
-  const [student, setStudent] = useState<Student>(new Student())
+const StudentEdit = ({ visible, hideModal, student }: any) => {
+  const [studentSave, setStudentSave] = useState<Student>(student)
   const [loading, setLoading] = useState<boolean>(false)
   const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false)
@@ -58,7 +56,7 @@ const StudentAdd = ({ visible, hideModal }: any) => {
   }
 
   const resetState = () => {
-    setStudent({} as Student)
+    setStudentSave({} as Student)
     setLoading(false)
     setSubmitted(false)
   }
@@ -72,7 +70,7 @@ const StudentAdd = ({ visible, hideModal }: any) => {
   const closeDatePicker = () => setDatePickerVisible(false)
 
   const updateStudent = (data: any) => {
-    setStudent({ ...student, ...data })
+    setStudentSave({ ...student, ...data })
   }
 
   const onBirthPickerChange = (selectedDate?: Date) => {
@@ -152,4 +150,49 @@ const StudentAdd = ({ visible, hideModal }: any) => {
   )
 }
 
-export default StudentAdd
+export default StudentEdit
+
+
+const basePickerStyle = 
+// StyleSheet.create(
+  {
+
+  placeholder: {
+    fontSize: 16,
+    fontFamily: 'Chai-Regular',
+    color: SECONDARY_COLOR
+  },
+  inputAndroid: {
+    flex: 1,
+    fontSize: 16,
+    color: SECONDARY_COLOR,
+    fontFamily: 'Chai-Regular',
+    marginLeft: 20
+  },
+}
+// )
+
+const pickerStyleInvalid = StyleSheet.create({
+  ...basePickerStyle,
+
+  inputAndroidContainer: {
+    height: 50,
+    borderColor: 'red',
+    borderWidth: 2,
+    borderRadius: 24,
+    marginBottom: 8
+  },
+})
+
+const pickerStyleValid = StyleSheet.create({
+  ...basePickerStyle,
+
+  inputAndroidContainer: {
+    height: 50,
+    borderColor: SECONDARY_COLOR,
+    borderWidth: 2,
+    borderRadius: 24,
+    marginBottom: 8
+  },
+})
+

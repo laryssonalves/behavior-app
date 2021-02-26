@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
-import GlobalStyle from '../../../global-style'
-import { PRIMARY_COLOR, PRIMARY_TEXT_COLOR, SECONDARY_COLOR, SECONDARY_TEXT_COLOR } from '../../../colors'
+
+import GlobalStyle from '../../../styles/global-style'
+import { PRIMARY_COLOR, PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR } from '../../../colors'
 
 const styles = StyleSheet.create({
   container: {
