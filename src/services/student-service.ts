@@ -26,5 +26,10 @@ export default class StudentService {
     const response = await api.post<Student>(this.studentUrl, student.getPayload())
     return Student.createFromJSON(response.data)
   }
+
+  async editStudent(student: Student): Promise<Student> {
+    const response = await api.put<Student>(`${this.studentUrl}${student.id}`, student.getPayload())
+    return Student.createFromJSON(response.data)
+  }
 }
 

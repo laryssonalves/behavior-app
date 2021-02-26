@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import moment from 'moment'
 
-import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -11,19 +11,15 @@ import { Modal, Portal } from 'react-native-paper'
 import RNPickerSelect from 'react-native-picker-select'
 
 import StudentService from '../../../services/student-service'
-
-import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
-
-import { genreChoiceList } from '../../../models/choice.model'
-
 import * as SecureStorage from '../../../shared/services/secure-storage'
 
+import { genreChoiceList } from '../../../models/choice.model'
 import Company from '../../../models/company.model'
-
 import { Student } from '../../../models/student'
 
+import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 import GlobalStyle from '../../../styles/global-style'
-
+import { pickerStyleInvalid, pickerStyleValid } from '../../../styles/datepicker-style';
 import styles from './styles'
 
 const StudentEdit = ({ visible, hideModal, student }: any) => {
@@ -36,6 +32,7 @@ const StudentEdit = ({ visible, hideModal, student }: any) => {
   const genreChoices = genreChoiceList().map(genre => ({ label: genre.name, value: genre.value }))
 
   const onClickSave = async () => {
+    console.log('editing', studentSave)
     try {
       setLoading(true)
 
@@ -43,9 +40,11 @@ const StudentEdit = ({ visible, hideModal, student }: any) => {
 
       const storagedCompany = await SecureStorage.retrieveItem('company') as Company
 
-      const studentToSave = Student.createFromJSON({ ...student, company: storagedCompany.id })
+      const studentToSave = Student.createFromJSON({ ...studentSave, company: storagedCompany.id })
 
-      await studentService.addStudent(studentToSave)
+      const studentEdited = await studentService.editStudent(studentToSave)
+      
+      console.log('edited', studentEdited)
 
       closeModal()
     } catch (e) {
@@ -70,13 +69,13 @@ const StudentEdit = ({ visible, hideModal, student }: any) => {
   const closeDatePicker = () => setDatePickerVisible(false)
 
   const updateStudent = (data: any) => {
-    setStudentSave({ ...student, ...data })
+    setStudentSave({ ...studentSave, ...data })
   }
 
   const onBirthPickerChange = (selectedDate?: Date) => {
     closeDatePicker()
 
-    const currentDate = selectedDate || student.birth_date ? moment(selectedDate || student.birth_date) : null
+    const currentDate = selectedDate || studentSave.birth_date ? moment(selectedDate || studentSave.birth_date) : null
 
     updateStudent({ birth_date: currentDate })
   }
@@ -86,7 +85,7 @@ const StudentEdit = ({ visible, hideModal, student }: any) => {
       <DateTimePickerModal
         isVisible={datePickerVisible}
         maximumDate={new Date()}
-        date={student.birth_date ? student.birth_date.toDate() : new Date()}
+        date={studentSave.birth_date ? studentSave.birth_date.toDate() : new Date()}
         mode="date"
         onConfirm={onBirthPickerChange}
         onCancel={closeDatePicker}
@@ -97,32 +96,36 @@ const StudentEdit = ({ visible, hideModal, student }: any) => {
 
   const validatedViewStyle = (value: any) => submitted && !value ? styles.inputViewError : styles.inputView
 
+  useEffect(() => setStudentSave(student), [student])
+
   return (
     <Portal>
       <Modal
         visible={visible}
         onDismiss={closeModal}
         contentContainerStyle={GlobalStyle.modalContainer}>
-        <Text style={GlobalStyle.modalTitle}>Adicionar estudante</Text>
+        <Text style={GlobalStyle.modalTitle}>Alterar estudante</Text>
         <View style={GlobalStyle.modalBody}>
-          <View style={submitted && !student.name ? styles.inputViewError : styles.inputView}>
+          <View style={submitted && !studentSave.name ? styles.inputViewError : styles.inputView}>
             <TextInput
               style={GlobalStyle.inputText}
               placeholder="Nome"
+              value={studentSave.name}
               placeholderTextColor={SECONDARY_COLOR}
               onChangeText={name => updateStudent({ name })} />
           </View>
           <RNPickerSelect
             useNativeAndroidPickerStyle={false}
-            style={submitted && !student.genre ? pickerStyleInvalid : pickerStyleValid}
+            style={submitted && !studentSave.genre ? pickerStyleInvalid : pickerStyleValid}
+            value={studentSave.genre}
             pickerProps={{ mode: 'dropdown' }}
             placeholder={{ label: 'Gênero', value: null }}
             onValueChange={genre => updateStudent({ genre })}
             items={genreChoices}
           />
-          <TouchableOpacity style={validatedViewStyle(student.birth_date)} onPress={openDatePicker}>
+          <TouchableOpacity style={validatedViewStyle(studentSave.birth_date)} onPress={openDatePicker}>
             <Text style={styles.datePickerText}>
-              {student.birth_date ? student.birth_date.format('DD/MM/YYYY') : 'Data Nascimento'}
+              {studentSave.birth_date ? studentSave.birth_date.format('DD/MM/YYYY') : 'Data Nascimento'}
             </Text>
             {MemoizedDatePicker}
           </TouchableOpacity>
@@ -151,48 +154,4 @@ const StudentEdit = ({ visible, hideModal, student }: any) => {
 }
 
 export default StudentEdit
-
-
-const basePickerStyle = 
-// StyleSheet.create(
-  {
-
-  placeholder: {
-    fontSize: 16,
-    fontFamily: 'Chai-Regular',
-    color: SECONDARY_COLOR
-  },
-  inputAndroid: {
-    flex: 1,
-    fontSize: 16,
-    color: SECONDARY_COLOR,
-    fontFamily: 'Chai-Regular',
-    marginLeft: 20
-  },
-}
-// )
-
-const pickerStyleInvalid = StyleSheet.create({
-  ...basePickerStyle,
-
-  inputAndroidContainer: {
-    height: 50,
-    borderColor: 'red',
-    borderWidth: 2,
-    borderRadius: 24,
-    marginBottom: 8
-  },
-})
-
-const pickerStyleValid = StyleSheet.create({
-  ...basePickerStyle,
-
-  inputAndroidContainer: {
-    height: 50,
-    borderColor: SECONDARY_COLOR,
-    borderWidth: 2,
-    borderRadius: 24,
-    marginBottom: 8
-  },
-})
 

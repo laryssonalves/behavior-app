@@ -13,21 +13,31 @@ import StudentService from '../../../services/student-service'
 import { Student } from '../../../models/student'
 
 import StudentAdd from '../StudentAdd'
+import StudentEdit from '../StudentEdit'
 
 import styles from './styles'
 
 const StudentList = () => {
   const [students, setStudents] = useState<Student[]>([])
+  const [studentEdit, setStudentEdit] = useState<Student>({} as Student)
   const [progressVisible, setProgressVisible] = useState<boolean>(false)
-  const [modalVisible, setModalVisible] = useState<boolean>(false)
+  const [addModalVisible, setAddModalVisible] = useState<boolean>(false)
+  const [editModalVisible, setEditModalVisible] = useState<boolean>(false)
 
   const { state: { searchBarQuery } } = useHeaderContext()
 
   const studentService = StudentService.getInstance()
-  const showModal = () => setModalVisible(true)
-  const hideModal = () => {
+
+  const showAddModal = () => setAddModalVisible(true)
+  const hideAddModal = () => {
     getStudents()
-    setModalVisible(false)
+    setAddModalVisible(false)
+  }
+
+  const showEditModal = () => setEditModalVisible(true)
+  const hideEditModal = () => {
+    getStudents()
+    setEditModalVisible(false)
   }
 
   const getStudents = async () => {
@@ -42,11 +52,16 @@ const StudentList = () => {
     }
   }
 
+  const editStudent = (student: Student) => {
+    setStudentEdit(student)
+    showEditModal()
+  }
+
   useEffect(() => { (async () => { await getStudents() })() }, [searchBarQuery])
 
   const renderItem = (student: Student, index: number) => (
     <View>
-      <TouchableOpacity onPress={() => { }} style={styles.flatListItem}>
+      <TouchableOpacity onPress={() => editStudent(student)} style={styles.flatListItem}>
         <Text style={styles.textItemName}>{student.name}</Text>
         <Text style={styles.textItemAge}>{student.age} anos</Text>
       </TouchableOpacity>
@@ -66,11 +81,11 @@ const StudentList = () => {
       onRefresh={async () => await getStudents()} />
   )
 
-
   return (
     <View style={styles.container}>
 
-      <StudentAdd visible={modalVisible} hideModal={hideModal} />
+      <StudentAdd visible={addModalVisible} hideModal={hideAddModal} />
+      <StudentEdit visible={editModalVisible} hideModal={hideEditModal} student={studentEdit} />
 
       <ProgressBar
         style={styles.progressBar}
@@ -90,7 +105,7 @@ const StudentList = () => {
         style={styles.fabAdd}
         icon="plus"
         color={SECONDARY_COLOR}
-        onPress={showModal}
+        onPress={showAddModal}
       />
     </View>
   )
