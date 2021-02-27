@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { FlatList, RefreshControl, Text, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native'
 
 import { Divider, FAB, ProgressBar } from 'react-native-paper'
 
@@ -8,42 +8,33 @@ import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 
 import { useHeaderContext } from '../../../shared/contexts/header.context'
 
-import StudentService from '../../../services/student-service'
+import { getStudents } from '../../../services/student-service'
 
 import { Student } from '../../../models/student'
 
-import StudentAdd from '../StudentAdd'
-import StudentEdit from '../StudentEdit'
+import StudentForm from '../StudentForm'
 
 import styles from './styles'
 
 const StudentList = () => {
   const [students, setStudents] = useState<Student[]>([])
-  const [studentEdit, setStudentEdit] = useState<Student>({} as Student)
+  const [studentToEdit, setStudentToEdit] = useState<Student>({name: ''} as Student)
+  const [studentFormVisible, setStudentFormVisible] = useState<boolean>(false)
+
   const [progressVisible, setProgressVisible] = useState<boolean>(false)
-  const [addModalVisible, setAddModalVisible] = useState<boolean>(false)
-  const [editModalVisible, setEditModalVisible] = useState<boolean>(false)
 
   const { state: { searchBarQuery } } = useHeaderContext()
 
-  const studentService = StudentService.getInstance()
-
-  const showAddModal = () => setAddModalVisible(true)
-  const hideAddModal = () => {
-    getStudents()
-    setAddModalVisible(false)
+  const showStudentFormModal = () => setStudentFormVisible(true)
+  const hideStudentFormModal = () => {
+    fetchStudents()
+    setStudentFormVisible(false)
   }
 
-  const showEditModal = () => setEditModalVisible(true)
-  const hideEditModal = () => {
-    getStudents()
-    setEditModalVisible(false)
-  }
-
-  const getStudents = async () => {
+  const fetchStudents = async () => {
     try {
       setProgressVisible(true)
-      const students = await studentService.getStudents(searchBarQuery)
+      const students = await getStudents(searchBarQuery)
       setStudents(students)
     } catch (e) {
       console.log(e)
@@ -53,11 +44,11 @@ const StudentList = () => {
   }
 
   const editStudent = (student: Student) => {
-    setStudentEdit(student)
-    showEditModal()
+    setStudentToEdit(student)
+    showStudentFormModal()
   }
 
-  useEffect(() => { (async () => { await getStudents() })() }, [searchBarQuery])
+  useEffect(() => { (async () => { await fetchStudents() })() }, [searchBarQuery])
 
   const renderItem = (student: Student, index: number) => (
     <View>
@@ -71,21 +62,17 @@ const StudentList = () => {
     </View>
   )
 
-
-
   const refreshControl = (
     <RefreshControl
       progressBackgroundColor='#FFF'
       colors={[PRIMARY_COLOR, SECONDARY_COLOR]}
       refreshing={false}
-      onRefresh={async () => await getStudents()} />
+      onRefresh={async () => await fetchStudents()} />
   )
 
   return (
     <View style={styles.container}>
-
-      <StudentAdd visible={addModalVisible} hideModal={hideAddModal} />
-      <StudentEdit visible={editModalVisible} hideModal={hideEditModal} student={studentEdit} />
+      <StudentForm visible={studentFormVisible} hideModal={hideStudentFormModal} studentToEdit={studentToEdit} />
 
       <ProgressBar
         style={styles.progressBar}
@@ -105,7 +92,7 @@ const StudentList = () => {
         style={styles.fabAdd}
         icon="plus"
         color={SECONDARY_COLOR}
-        onPress={showAddModal}
+        onPress={showStudentFormModal}
       />
     </View>
   )

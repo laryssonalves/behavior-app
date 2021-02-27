@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
   },
 
   flatListItem: {
-    //backgroundColor: '#000',
     padding: 8
   },
 
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
   },
 
   dividerItem: {
-    marginHorizontal: 16,
+    marginHorizontal: 8,
     height: 2,
   },
 

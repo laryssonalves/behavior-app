@@ -1,35 +1,25 @@
-import { Student } from '../models/student'
-import { api } from '../shared/services/api'
+import { api } from "../shared/services/api";
 
-export default class StudentService {
-  private static instance: StudentService
+import { Student } from "../models/student";
 
-  private studentUrl = 'student/'
+const studentUrl = 'student/'
 
-  constructor() { }
+const getStudents = async (query: string): Promise<Student[]> => {
+  const params = query ? { name: query } : {}
+  const response = await api.get<Student[]>(studentUrl, { params })
 
-  public static getInstance(): StudentService {
-    if (!StudentService.instance) {
-      StudentService.instance = new StudentService()
-    }
-    return StudentService.instance
-  }
-
-  async getStudents(query: string): Promise<Student[]> {
-    const params = query ? { name: query } : {}
-    const response = await api.get<Student[]>(this.studentUrl, { params })
-
-    return response.data.map(student => Student.createFromJSON(student))
-  }
-
-  async addStudent(student: Student): Promise<Student> {
-    const response = await api.post<Student>(this.studentUrl, student.getPayload())
-    return Student.createFromJSON(response.data)
-  }
-
-  async editStudent(student: Student): Promise<Student> {
-    const response = await api.put<Student>(`${this.studentUrl}${student.id}`, student.getPayload())
-    return Student.createFromJSON(response.data)
-  }
+  return response.data.map(student => Student.createFromJSON(student))
 }
 
+const addStudent = async (student: Student): Promise<Student> => {
+  const response = await api.post<Student>(studentUrl, student.getPayload())
+  return Student.createFromJSON(response.data)
+}
+
+const editStudent = async (student: Student): Promise<Student> => {
+  const response = await api.put<Student>(`${studentUrl}${student.id}`, student.getPayload())
+  return Student.createFromJSON(response.data)
+}
+
+
+export { getStudents, addStudent, editStudent }
