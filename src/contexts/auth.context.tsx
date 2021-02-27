@@ -4,7 +4,7 @@ import * as SecureStorage from '../shared/services/secure-storage'
 import { configDefaultTokenInHeader } from '../shared/services/api'
 
 import { User, UserCredential } from '../interfaces/user'
-import AuthService from '../services/auth-service'
+import { login, logout } from '../services/auth-service'
 import CompanyService from '../services/company-service'
 
 interface AuthContextData {
@@ -20,10 +20,9 @@ const AuthProvider = ({ children }: any) => {
   const [ user, setUser ] = useState<User | null>(null)
 
   const signIn = async (credential: UserCredential) => {
-    const authService = AuthService.getInstance()
     const companyService = CompanyService.getInstance()
 
-    const { token, user } = await authService.login(credential)
+    const { token, user } = await login(credential)
 
     configDefaultTokenInHeader(token)
 
@@ -37,9 +36,7 @@ const AuthProvider = ({ children }: any) => {
   }
 
   const signOut = async () => {
-    const authService = AuthService.getInstance()
-
-    await authService.logout()
+    await logout()
 
     await SecureStorage.clearItem('token')
     await SecureStorage.clearItem('user')
