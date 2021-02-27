@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-import { UserCredential } from '../../../interfaces/user'
+import { UserCredential } from '../../../entities/user'
 import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 
 import { useAuth } from '../../../contexts/auth.context'

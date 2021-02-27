@@ -10,7 +10,7 @@ import { useHeaderContext } from '../../../shared/contexts/header.context'
 
 import { getStudents } from '../../../services/student-service'
 
-import { Student } from '../../../models/student'
+import { Student } from '../../../entities/student'
 
 import StudentForm from '../StudentForm'
 

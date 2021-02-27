@@ -1,6 +1,6 @@
 import { api } from '../shared/services/api'
 
-import Company from '../models/company.model'
+import Company from '../entities/company'
 
 const companyUrl = 'company/'
 

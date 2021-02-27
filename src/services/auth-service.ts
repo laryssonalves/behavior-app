@@ -1,6 +1,6 @@
 import { api } from '../shared/services/api'
 
-import { User, UserCredential } from '../interfaces/user'
+import { User, UserCredential } from '../entities/user'
 
 const loginUrl = 'auth/login/'
 const logoutUrl = 'auth/logout/'

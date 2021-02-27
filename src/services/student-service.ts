@@ -1,6 +1,6 @@
 import { api } from "../shared/services/api";
 
-import { Student } from "../models/student";
+import { Student } from "../entities/student";
 
 const studentUrl = 'student/'
 

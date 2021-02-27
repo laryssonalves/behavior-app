@@ -13,9 +13,9 @@ import RNPickerSelect from 'react-native-picker-select'
 import { addStudent, editStudent } from '../../../services/student-service'
 import * as SecureStorage from '../../../shared/services/secure-storage'
 
-import { genreChoiceList } from '../../../models/choice.model'
-import Company from '../../../models/company.model'
-import { Student } from '../../../models/student'
+import { genreChoiceList } from '../../../entities/choices'
+import Company from '../../../entities/company'
+import { Student } from '../../../entities/student'
 
 import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 import GlobalStyle from '../../../styles/global-style'

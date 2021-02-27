@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import * as SecureStorage from '../shared/services/secure-storage'
 import { configDefaultTokenInHeader } from '../shared/services/api'
 
-import { User, UserCredential } from '../interfaces/user'
+import { User, UserCredential } from '../entities/user'
 import { login, logout } from '../services/auth-service'
 import { getSelectedCompany } from '../services/company-service'
 
