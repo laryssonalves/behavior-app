@@ -5,7 +5,7 @@ import { configDefaultTokenInHeader } from '../shared/services/api'
 
 import { User, UserCredential } from '../interfaces/user'
 import { login, logout } from '../services/auth-service'
-import CompanyService from '../services/company-service'
+import { getSelectedCompany } from '../services/company-service'
 
 interface AuthContextData {
   signed: boolean
@@ -20,13 +20,11 @@ const AuthProvider = ({ children }: any) => {
   const [ user, setUser ] = useState<User | null>(null)
 
   const signIn = async (credential: UserCredential) => {
-    const companyService = CompanyService.getInstance()
-
     const { token, user } = await login(credential)
 
     configDefaultTokenInHeader(token)
 
-    const company = await companyService.getSelectedCompany()
+    const company = await getSelectedCompany()
 
     await SecureStorage.storeItem('token', JSON.stringify(token))
     await SecureStorage.storeItem('user', JSON.stringify(user))

@@ -2,27 +2,14 @@ import { api } from '../shared/services/api'
 
 import Company from '../models/company.model'
 
-export default class CompanyService {
-  private static instance: CompanyService
+const companyUrl = 'company/'
 
-  private companyUrl = 'company/'
+const getSelectedCompany = async (): Promise<Company> => {
+  const url = `${companyUrl}selected`
 
-  constructor() {}
+  const response = await api.get(url)
 
-  public static getInstance(): CompanyService {
-    if (!CompanyService.instance) {
-      CompanyService.instance = new CompanyService()
-    }
-    return CompanyService.instance
-  }
-
-
-  async getSelectedCompany(): Promise<Company> {
-    const url = `${this.companyUrl}selected`
-
-    const response = await api.get(url)
-
-    return response.data as Company
-  }
+  return response.data as Company
 }
 
+export { getSelectedCompany }
