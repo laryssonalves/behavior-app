@@ -38,7 +38,7 @@ const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
 
       const storagedCompany = await SecureStorage.retrieveItem('company') as Company
 
-      const studentToSave = Student.createFromJSON({ ...student, company: storagedCompany.id })
+      const studentToSave = new Student({ ...student, company: storagedCompany.id })
 
       if (student.id) {
         await editStudent(studentToSave)

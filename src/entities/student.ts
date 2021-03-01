@@ -1,7 +1,7 @@
 import moment, { Moment } from "moment"
 
 export class Student {
-  id: number
+  readonly id: number
   name: string
   owner: number
   company: number
@@ -10,10 +10,13 @@ export class Student {
   birth_date: Moment
   first_avaliation_date: Moment
 
-  static createFromJSON(data: any): Student {
-    birth_date = moment(data.birth_date, 'YYYY-MM-DD')
+  constructor(props?: Partial<Student>) {
+    const birth_date = moment(props?.birth_date, 'YYYY-MM-DD')
+    const first_avaliation_date = moment(props?.first_avaliation_date, 'YYYY-MM-DD')
 
-    return Object.assign(new Student(), data, { birth_date })
+    const momentDates = { birth_date, first_avaliation_date }
+
+    Object.assign(this, props, momentDates)
   }
 
   getPayload() {
