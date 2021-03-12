@@ -19,18 +19,10 @@ const getHeaderTitle = (name: string): string => {
 }
 
 const ActionBar = ({ navigation, previous }: any) => {
-  const [ title, setTitle ] = useState<string>('')
-
   const { signOut } = useAuth()
 
-  const { actions } = useHeaderContext()
-
-  const route = useRoute()
-
-  useEffect(() => {
-    setTitle(getHeaderTitle(route.name))
-  }, [ route.name ])
-
+  const { state, actions } = useHeaderContext()
+  
   return (
     <Appbar.Header
       statusBarHeight={ 0 }
@@ -40,7 +32,7 @@ const ActionBar = ({ navigation, previous }: any) => {
           <Appbar.BackAction onPress={ navigation.goBack }/> : null
       }
       <Appbar.Content
-        title={ title }
+        title={ state.actionBarTitle }
         titleStyle={ styles.titleStyle }/>
       <Appbar.Action
         icon='magnify'

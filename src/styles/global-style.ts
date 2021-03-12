@@ -57,6 +57,19 @@ const GlobalStyle = StyleSheet.create({
     padding: 20
   },
 
+  inputViewError: {
+    width: '100%',
+    backgroundColor: 'white',
+    borderColor: SECONDARY_COLOR,
+    borderWidth: 2,
+    borderRadius: 24,
+    height: 50,
+    marginBottom: 20,
+    justifyContent: 'center',
+    padding: 20,
+    borderColor: 'red'
+  },
+
   inputText: {
     height: 50,
     fontSize: 16,

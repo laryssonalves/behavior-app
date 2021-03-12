@@ -23,6 +23,11 @@ const styles = StyleSheet.create({
     borderColor: PRIMARY_COLOR,
   },
 
+  inputViewError: {
+    ...GlobalStyle.inputViewError,
+    width: '80%',
+  },
+
   inputText: {
     ...GlobalStyle.inputText
   },

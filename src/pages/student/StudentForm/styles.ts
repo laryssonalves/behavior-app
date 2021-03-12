@@ -10,9 +10,8 @@ const styles = StyleSheet.create({
   },
 
   inputViewError: {
-    ...GlobalStyle.inputView,
+    ...GlobalStyle.inputViewError,
     marginBottom: 8,
-    borderColor: 'red',
   },
 
   btnDefault: {

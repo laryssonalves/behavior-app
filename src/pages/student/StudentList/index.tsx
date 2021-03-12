@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native'
+
+import { useFocusEffect, useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 
 import { Divider, FAB, ProgressBar } from 'react-native-paper'
 
@@ -16,14 +18,17 @@ import StudentForm from '../StudentForm'
 
 import styles from './styles'
 
+
 const StudentList = () => {
   const [students, setStudents] = useState<Student[]>([])
   const [studentToEdit, setStudentToEdit] = useState<Student>({name: ''} as Student)
   const [studentFormVisible, setStudentFormVisible] = useState<boolean>(false)
 
+  const navigation = useNavigation()
+
   const [progressVisible, setProgressVisible] = useState<boolean>(false)
 
-  const { state: { searchBarQuery } } = useHeaderContext()
+  const { state, actions } = useHeaderContext()
 
   const showStudentFormModal = () => setStudentFormVisible(true)
   const hideStudentFormModal = () => {
@@ -34,7 +39,7 @@ const StudentList = () => {
   const fetchStudents = async () => {
     try {
       setProgressVisible(true)
-      const students = await getStudents(searchBarQuery)
+      const students = await getStudents(state.searchBarQuery)
       setStudents(students)
     } catch (e) {
       console.log(e)
@@ -48,11 +53,25 @@ const StudentList = () => {
     showStudentFormModal()
   }
 
-  useEffect(() => { (async () => { await fetchStudents() })() }, [searchBarQuery])
+  const goToStudentDetails = (student: Student) => { 
+    const { id, name } = student
+    navigation.navigate('StudentDetails', { id, name }) 
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      actions.setActionBarTitle('Estudantes')
+    }, [])
+  )
+
+  useEffect(() => { (async () => { await fetchStudents() })() }, [state.searchBarQuery])
 
   const renderItem = (student: Student, index: number) => (
     <View>
-      <TouchableOpacity onPress={() => editStudent(student)} style={styles.flatListItem}>
+      <TouchableOpacity 
+        onPress={() => { goToStudentDetails(student) }} 
+        onLongPress={() => editStudent(student)}
+        style={styles.flatListItem}>
         <Text style={styles.textItemName}>{student.name}</Text>
         <Text style={styles.textItemAge}>{student.age} anos</Text>
       </TouchableOpacity>

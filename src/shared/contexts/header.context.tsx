@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState } from 'react'
 interface HeaderContextState {
   searchBarVisible: boolean;
   searchBarQuery: string;
+  actionBarTitle: string;
   modalVisible: boolean
 
   page: {
@@ -17,6 +18,7 @@ interface HeaderContextData {
   actions: {
     setSearchBarVisible: (visible: boolean) => void;
     setSearchBarQuery: (query: string) => void;
+    setActionBarTitle: (query: string) => void;
     setModalVisible: (visible: boolean) => void;
   };
 }
@@ -33,9 +35,14 @@ const HeaderProvider = ({ children }: any) => {
     setState(newState)
   }
 
+  const setActionBarTitle = (title: string) => {
+    const newState = { ...state, actionBarTitle: title }
+    setState(newState)
+  }
+
   const setModalVisible = (visible: boolean) => { setState({ ...state, searchBarVisible: visible }) }
 
-  const actions = { setSearchBarVisible, setSearchBarQuery, setModalVisible }
+  const actions = { setSearchBarVisible, setSearchBarQuery, setActionBarTitle, setModalVisible }
 
   return (
     <HeaderContext.Provider value={ { state, actions } }>
