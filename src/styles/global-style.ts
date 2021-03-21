@@ -2,6 +2,10 @@ import { StyleSheet } from 'react-native'
 import { PRIMARY_COLOR, SECONDARY_COLOR, TERCIARY_COLOR } from '../colors'
 
 const GlobalStyle = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+
   textBold: {
     fontFamily: 'Chai-Bold'
   },
@@ -28,7 +32,7 @@ const GlobalStyle = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: PRIMARY_COLOR,
     borderRadius: 24,
-    height: 48,
+    height: 48
   },
 
   btnPrimaryText: {
@@ -60,7 +64,6 @@ const GlobalStyle = StyleSheet.create({
   inputViewError: {
     width: '100%',
     backgroundColor: 'white',
-    borderColor: SECONDARY_COLOR,
     borderWidth: 2,
     borderRadius: 24,
     height: 50,
@@ -97,8 +100,11 @@ const GlobalStyle = StyleSheet.create({
   modalFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between'
-  }
+  },
 
+  progressBar: {
+    height: 8
+  }
 })
 
 export default GlobalStyle

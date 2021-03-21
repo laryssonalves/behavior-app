@@ -5,15 +5,10 @@ import {
   RefreshControl,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native'
 
-import {
-  useFocusEffect,
-  useIsFocused,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 
 import { Divider, FAB, ProgressBar } from 'react-native-paper'
 
@@ -28,11 +23,12 @@ import { Student } from '../../../entities/student'
 import StudentForm from '../StudentForm'
 
 import styles from './styles'
+import GlobalStyle from '../../../styles/global-style'
 
 const StudentList = () => {
   const [students, setStudents] = useState<Student[]>([])
   const [studentToEdit, setStudentToEdit] = useState<Student>({
-    name: '',
+    name: ''
   } as Student)
   const [studentFormVisible, setStudentFormVisible] = useState<boolean>(false)
 
@@ -73,7 +69,7 @@ const StudentList = () => {
   useFocusEffect(
     useCallback(() => {
       actions.setActionBarTitle('Estudantes')
-    }, []),
+    }, [])
   )
 
   useEffect(() => {
@@ -110,7 +106,7 @@ const StudentList = () => {
   )
 
   return (
-    <View style={styles.container}>
+    <View style={GlobalStyle.container}>
       <StudentForm
         visible={studentFormVisible}
         hideModal={hideStudentFormModal}
@@ -129,7 +125,7 @@ const StudentList = () => {
         data={students}
         refreshControl={refreshControl}
         renderItem={({ item, index }) => renderItem(item, index)}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
       />
 
       <FAB

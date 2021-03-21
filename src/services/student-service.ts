@@ -1,6 +1,6 @@
-import { api } from "../shared/services/api";
+import { api } from '../shared/services/api'
 
-import { Student } from "../entities/student";
+import { Student } from '../entities/student'
 
 const studentUrl = 'student/'
 
@@ -17,9 +17,11 @@ const addStudent = async (student: Student): Promise<Student> => {
 }
 
 const editStudent = async (student: Student): Promise<Student> => {
-  const response = await api.put<Student>(`${studentUrl}${student.id}`, student.getPayload())
+  const response = await api.put<Student>(
+    `${studentUrl}${student.id}`,
+    student.getPayload()
+  )
   return new Student(response.data)
 }
-
 
 export { getStudents, addStudent, editStudent }

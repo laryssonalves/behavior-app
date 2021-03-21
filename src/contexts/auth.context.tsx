@@ -9,7 +9,7 @@ import { getSelectedCompany } from '../services/company-service'
 
 interface AuthContextData {
   signed: boolean
-  user: User | null,
+  user: User | null
   signIn: (credential: UserCredential) => Promise<void>
   signOut: () => Promise<void>
 }
@@ -17,7 +17,7 @@ interface AuthContextData {
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 const AuthProvider = ({ children }: any) => {
-  const [ user, setUser ] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(null)
 
   const signIn = async (credential: UserCredential) => {
     const { token, user } = await login(credential)
@@ -46,7 +46,7 @@ const AuthProvider = ({ children }: any) => {
   }
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const storagedToken = await SecureStorage.retrieveItem('token')
       const storagedUser = await SecureStorage.retrieveItem('user')
 
@@ -58,8 +58,8 @@ const AuthProvider = ({ children }: any) => {
   })
 
   return (
-    <AuthContext.Provider value={ { signed: !!user, user, signIn, signOut } }>
-      { children }
+    <AuthContext.Provider value={{ signed: !!user, user, signIn, signOut }}>
+      {children}
     </AuthContext.Provider>
   )
 }

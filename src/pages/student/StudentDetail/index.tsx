@@ -1,14 +1,22 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+
+import { View } from 'react-native'
 
 import { useFocusEffect, useRoute, RouteProp } from '@react-navigation/native'
 
-import { BottomNavigation, Text } from 'react-native-paper'
+import { BottomNavigation, ProgressBar, Text } from 'react-native-paper'
 
 import { useHeaderContext } from '../../../shared/contexts/header.context'
 
-import { SECONDARY_COLOR } from '../../../colors'
+import { getStudentExercises } from '../../../services/student-exercise-service'
 
-const StudentDetailExercise = () => <Text>Exercise</Text>
+import { StudentExercise } from '../../../entities/student'
+
+import StudentDetailExercise from './StudentDetailExercise'
+
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
+
+import GlobalStyle from '../../../styles/global-style'
 
 const StudentDetailConsultation = () => <Text>Albums</Text>
 
@@ -26,33 +34,61 @@ const StudentDetail = () => {
     {
       key: 'consultation',
       title: 'Atendimentos',
-      icon: 'calendar-check-outline',
-    },
+      icon: 'calendar-check-outline'
+    }
   ])
+
+  const [studentExercises, setStudentExercises] = useState<StudentExercise[]>(
+    []
+  )
+
+  const [progressVisible, setProgressVisible] = useState(false)
 
   const { actions } = useHeaderContext()
 
   const route = useRoute<RouteProp<StudentDetailParams, 'Params'>>()
 
-  const renderScene = BottomNavigation.SceneMap({
-    exercise: StudentDetailExercise,
-    consultation: StudentDetailConsultation,
-  })
+  const renderScene = ({ route }: any) => {
+    switch (route.key) {
+      case 'exercise':
+        return <StudentDetailExercise exercises={studentExercises} />
+      case 'consultation':
+        return <StudentDetailConsultation />
+    }
+  }
 
   useFocusEffect(
     useCallback(() => {
       const { name } = route.params
       actions.setActionBarTitle(name)
-    }, []),
+    }, [])
   )
 
+  useEffect(() => {
+    ;(async () => {
+      setProgressVisible(true)
+      const { id } = route.params
+      const studentExercises = await getStudentExercises(id)
+      setStudentExercises(studentExercises)
+      setProgressVisible(false)
+    })()
+  }, [])
+
   return (
-    <BottomNavigation
-      barStyle={{ backgroundColor: SECONDARY_COLOR }}
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-    />
+    <View style={GlobalStyle.container}>
+      <ProgressBar
+        style={GlobalStyle.progressBar}
+        visible={progressVisible}
+        color={PRIMARY_COLOR}
+        indeterminate
+      />
+      <BottomNavigation
+        barStyle={{ backgroundColor: SECONDARY_COLOR }}
+        navigationState={{ index, routes }}
+        onIndexChange={setIndex}
+        renderScene={renderScene}
+      />
+    </View>
   )
 }
 
