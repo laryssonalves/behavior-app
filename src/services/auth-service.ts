@@ -1,6 +1,7 @@
 import { api } from '../shared/services/api'
 
 import { User, UserCredential } from '../entities/user'
+import { TokenResponse } from '../entities/token-response'
 
 const loginUrl = 'auth/login/'
 const logoutUrl = 'auth/logout/'

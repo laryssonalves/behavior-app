@@ -1,30 +1,23 @@
 import React from 'react'
 
-import { createStackNavigator, StackHeaderProps } from '@react-navigation/stack'
+import { View } from 'react-native'
 
-import { HeaderProvider } from '../shared/contexts/header.context'
-
-import AppHeader from '../shared/components/Header'
+import { createStackNavigator } from '@react-navigation/stack'
 
 import StudentList from '../pages/student/StudentList'
 import StudentDetail from '../pages/student/StudentDetail'
+import GlobalStyle from '../styles/global-style'
 
 const AppStack = createStackNavigator()
 
 const AppRoutes = () => {
-  const screenOptions = {
-    header: (props: StackHeaderProps) => {
-      return <AppHeader {...props} />
-    },
-  }
-
   return (
-    <HeaderProvider>
-      <AppStack.Navigator screenOptions={screenOptions}>
+    <View style={GlobalStyle.container}>
+      <AppStack.Navigator screenOptions={{headerShown: false}}>
         <AppStack.Screen name="StudentList" component={StudentList} />
         <AppStack.Screen name="StudentDetail" component={StudentDetail} />
       </AppStack.Navigator>
-    </HeaderProvider>
+    </View>
   )
 }
 

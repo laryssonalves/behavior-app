@@ -32,7 +32,6 @@ const Login = () => {
       setLogging(true)
       await signIn(credential)
     } catch (e) {
-      console.log(e)
       showSnackBar()
       setLogging(false)
     }

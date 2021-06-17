@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   FlatList,
@@ -8,13 +8,11 @@ import {
   View
 } from 'react-native'
 
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 import { Divider, FAB, ProgressBar } from 'react-native-paper'
 
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
-
-import { useHeaderContext } from '../../../shared/contexts/header.context'
 
 import { getStudents } from '../../../services/student-service'
 
@@ -25,18 +23,28 @@ import StudentForm from '../StudentForm'
 import styles from './styles'
 import GlobalStyle from '../../../styles/global-style'
 
+import StudentListHeader from './Header'
+
+class HeaderState {
+  searchBar = {
+    visible: false,
+    query: '',
+  }
+  actionBar = {
+    title: 'Estudantes'
+  }
+}
+
 const StudentList = () => {
   const [students, setStudents] = useState<Student[]>([])
-  const [studentToEdit, setStudentToEdit] = useState<Student>({
-    name: ''
-  } as Student)
+  const [studentToEdit, setStudentToEdit] = useState<Student>({name: ''} as Student)
   const [studentFormVisible, setStudentFormVisible] = useState<boolean>(false)
+
+  const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
 
   const navigation = useNavigation()
 
   const [progressVisible, setProgressVisible] = useState<boolean>(false)
-
-  const { state, actions } = useHeaderContext()
 
   const showStudentFormModal = () => setStudentFormVisible(true)
   const hideStudentFormModal = () => {
@@ -47,7 +55,7 @@ const StudentList = () => {
   const fetchStudents = async () => {
     try {
       setProgressVisible(true)
-      const students = await getStudents(state.searchBarQuery)
+      const students = await getStudents(headerState.searchBar.query)
       setStudents(students)
     } catch (e) {
       console.log(e)
@@ -66,17 +74,21 @@ const StudentList = () => {
     navigation.navigate('StudentDetail', { id, name })
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      actions.setActionBarTitle('Estudantes')
-    }, [])
-  )
-
   useEffect(() => {
     ;(async () => {
       await fetchStudents()
     })()
-  }, [state.searchBarQuery])
+  }, [headerState.searchBar.query])
+
+  const setSearchBarQuery = (query: string) => { 
+    const searchBar = { ...headerState.searchBar, query }
+    setHeaderState({ ...headerState, searchBar }) 
+  }
+
+  const setSearchBarVisible = (visible: boolean) => {
+    const searchBar = { ...headerState.searchBar, visible, query: visible ? headerState.searchBar.query : '' }
+    setHeaderState({ ...headerState, searchBar })
+  }
 
   const renderItem = (student: Student, index: number) => (
     <View>
@@ -106,35 +118,43 @@ const StudentList = () => {
   )
 
   return (
-    <View style={GlobalStyle.container}>
-      <StudentForm
-        visible={studentFormVisible}
-        hideModal={hideStudentFormModal}
-        studentToEdit={studentToEdit}
-      />
+      <View style={GlobalStyle.container}>
+        <StudentListHeader {...{ 
+          headerState, 
+          actions: {
+            setSearchBarQuery,
+            setSearchBarVisible
+          }}} 
+        />
 
-      <ProgressBar
-        style={styles.progressBar}
-        visible={progressVisible}
-        color={PRIMARY_COLOR}
-        indeterminate
-      />
+        <StudentForm
+          visible={studentFormVisible}
+          hideModal={hideStudentFormModal}
+          studentToEdit={studentToEdit}
+        />
 
-      <FlatList
-        style={styles.flatList}
-        data={students}
-        refreshControl={refreshControl}
-        renderItem={({ item, index }) => renderItem(item, index)}
-        keyExtractor={item => item.id.toString()}
-      />
+        <ProgressBar
+          style={styles.progressBar}
+          visible={progressVisible}
+          color={PRIMARY_COLOR}
+          indeterminate
+        />
 
-      <FAB
-        style={styles.fabAdd}
-        icon="plus"
-        color={SECONDARY_COLOR}
-        onPress={showStudentFormModal}
-      />
-    </View>
+        <FlatList
+          style={styles.flatList}
+          data={students}
+          refreshControl={refreshControl}
+          renderItem={({ item, index }) => renderItem(item, index)}
+          keyExtractor={item => item.id.toString()}
+        />
+
+        <FAB
+          style={styles.fabAdd}
+          icon="plus"
+          color={SECONDARY_COLOR}
+          onPress={showStudentFormModal}
+        />
+      </View>
   )
 }
 

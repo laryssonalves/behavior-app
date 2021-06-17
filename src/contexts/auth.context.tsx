@@ -26,9 +26,7 @@ const AuthProvider = ({ children }: any) => {
 
     const company = await getSelectedCompany()
 
-    await SecureStorage.storeItem('token', JSON.stringify(token))
-    await SecureStorage.storeItem('user', JSON.stringify(user))
-    await SecureStorage.storeItem('company', JSON.stringify(company))
+    await SecureStorage.storeLogin(token, user, company)
 
     setUser(user)
   }
@@ -36,9 +34,7 @@ const AuthProvider = ({ children }: any) => {
   const signOut = async () => {
     await logout()
 
-    await SecureStorage.clearItem('token')
-    await SecureStorage.clearItem('user')
-    await SecureStorage.clearItem('company')
+    await SecureStorage.clearToLogout()
 
     configDefaultTokenInHeader()
 
