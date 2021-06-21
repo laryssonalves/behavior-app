@@ -30,7 +30,7 @@ const ActionBar = ({ navigation, previous }: any) => {
     },
     {
       screenName: 'StudentDetail',
-      menu: <MenuStudentDetail onAddPress={() => console.log('add')} />
+      menu: <MenuStudentDetail onAddPress={() => {}} />
     }
   ]
 

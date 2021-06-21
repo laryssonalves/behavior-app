@@ -19,6 +19,7 @@ import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 
 import GlobalStyle from '../../../styles/global-style'
 import StudentDetailActionBar from './ActionBar'
+import ConsultationAdd from './ConsultationAdd'
 
 
 type StudentDetailParams = {
@@ -31,7 +32,11 @@ type StudentDetailParams = {
 const StudentDetail = () => {
   const [index, setIndex] = useState(0)
   const [routes] = useState([
-    { key: 'exercise', title: 'Treinos', icon: 'format-list-checks' },
+    { 
+      key: 'exercise', 
+      title: 'Treinos', 
+      icon: 'format-list-checks'
+    },
     {
       key: 'consultation',
       title: 'Atendimentos',
@@ -43,6 +48,7 @@ const StudentDetail = () => {
   const [consultations, setConsultations] = useState<Consultation[]>([])
 
   const [progressVisible, setProgressVisible] = useState(false)
+  const [consultationAddVisible, setConsultationAddVisible] = useState(false)
 
   const route = useRoute<RouteProp<StudentDetailParams, 'Params'>>()
 
@@ -79,17 +85,37 @@ const StudentDetail = () => {
     }
   }
 
+  const showConsultationAddModal = () => setConsultationAddVisible(true)
+  const hideConsultationAddModal = () => setConsultationAddVisible(false)
+
+  const isTabConsultationActive = () => {
+    return index === 1
+  }
+
   useEffect(() => {
     ;(async () => {
-      fetchStudentExercises()
-      fetchConsultations()
+      await fetchStudentExercises()
+      await fetchConsultations()
     })()
   }, [])
 
   return (
     <View style={GlobalStyle.container}>
-      <StudentDetailActionBar title={route.params.name} />
+      <StudentDetailActionBar 
+        title={route.params.name}
+        showAdd={isTabConsultationActive()}
+        onAddPress={showConsultationAddModal}
+      />
+
       <ProgressBar style={GlobalStyle.progressBar} visible={progressVisible} color={PRIMARY_COLOR} indeterminate />
+
+      <ConsultationAdd
+        visible={consultationAddVisible}
+        hideModal={hideConsultationAddModal}
+        exercises={studentExercises}
+        studentId={route.params.id}
+      />
+
       <BottomNavigation
         barStyle={{ backgroundColor: SECONDARY_COLOR }}
         navigationState={{ index, routes }}

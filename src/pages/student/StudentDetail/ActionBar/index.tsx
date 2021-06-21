@@ -8,7 +8,7 @@ import { MenuStudentDetail } from '../Menu'
 
 import styles from './styles'
 
-const StudentDetailActionBar = ({title}: any) => {
+const StudentDetailActionBar = ({title, showAdd, onAddPress}: any) => {
   const navigation = useNavigation()
 
   return (
@@ -18,7 +18,7 @@ const StudentDetailActionBar = ({title}: any) => {
         title={title}
         titleStyle={styles.titleStyle}
       />
-      <MenuStudentDetail onAddPress={() => console.log('add')} />
+      {showAdd && <MenuStudentDetail onAddPress={onAddPress} />}
     </Appbar.Header>
   )
 }

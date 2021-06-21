@@ -19,7 +19,7 @@ const ConsultationList = ({ consultations, refreshList }: any) => {
 
   const renderItem = (consultation: Consultation, lastItem: boolean) => (
     <View>
-      <TouchableOpacity onPress={() => console.log('consultation')} style={styles.flatListItem}>
+      <TouchableOpacity onPress={() => {}} style={styles.flatListItem}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.textItemName}>{`Terapeuta: ${consultation.owner.name}`}</Text>
           <Text style={styles.textItemAge}>{consultation.getDuration()}</Text>

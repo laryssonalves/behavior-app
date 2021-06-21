@@ -3,20 +3,22 @@ import { PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR } from '../../../../colors'
 import GlobalStyle from '../../../../styles/global-style'
 
 const styles = StyleSheet.create({
-  container: {
-    ...GlobalStyle.container,
-    paddingBottom: 16,
-    paddingHorizontal: 16,
-    marginBottom: 16
-  },
-
   textEmptyList: {
     ...GlobalStyle.textMedium,
     fontSize: 16,
   },
 
   flatListItem: {
-    padding: 8
+    padding: 8,
+    flexDirection: 'row',
+    minWidth: '100%'
+  },
+
+  titleContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+    flexDirection: 'row'
   },
 
   textItemName: {
@@ -34,7 +36,18 @@ const styles = StyleSheet.create({
   dividerItem: {
     marginHorizontal: 8,
     height: 2
-  }
+  },
+  
+  btnDefault: {
+    ...GlobalStyle.btnDefault,
+    width: '48%'
+  },
+
+  btnPrimary: {
+    ...GlobalStyle.btnPrimary,
+    width: '48%',
+  },
+  
 })
 
 export default styles

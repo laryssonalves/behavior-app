@@ -90,6 +90,14 @@ const StudentList = () => {
     setHeaderState({ ...headerState, searchBar })
   }
 
+  const headerProps = {
+    headerState, 
+    actions: {
+      setSearchBarQuery,
+      setSearchBarVisible
+    }
+  }
+
   const renderItem = (student: Student, index: number) => (
     <View>
       <TouchableOpacity
@@ -119,12 +127,7 @@ const StudentList = () => {
 
   return (
       <View style={GlobalStyle.container}>
-        <StudentListHeader {...{ 
-          headerState, 
-          actions: {
-            setSearchBarQuery,
-            setSearchBarVisible
-          }}} 
+        <StudentListHeader {...headerProps} 
         />
 
         <StudentForm

@@ -4,7 +4,6 @@ import StudentListSearchBar from './SearchBar'
 import StudentListActionBar from './ActionBar'
 
 const StudentListHeader = (props: any) => {
-  console.log(props)
   const { headerState } = props
 
   return (
