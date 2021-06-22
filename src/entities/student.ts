@@ -34,7 +34,7 @@ export class Student {
 
 export class StudentExercise {
   readonly id: number
-  studentId: number
+  student_id: number
   program: string
   application_type: number
   help_type: number
@@ -53,4 +53,9 @@ export class StudentExercise {
       )?.name || ''
     )
   }
+}
+
+export interface StudentExerciseTarget {
+  id: number
+  target: string
 }

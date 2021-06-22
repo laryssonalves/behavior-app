@@ -24,7 +24,7 @@ const ExcerciseList = ({ exercises, refreshList }: any) => {
 
   const renderItem = (studentExercise: StudentExercise, lastItem: boolean) => (
     <View>
-      <TouchableOpacity onPress={() => {}} style={styles.flatListItem}>
+      <TouchableOpacity style={styles.flatListItem}>
         <Text style={styles.textItemName}>{studentExercise.program}</Text>
         <Text style={styles.textItemAge}>{studentExercise.getApplicationTypeDescription()}</Text>
       </TouchableOpacity>

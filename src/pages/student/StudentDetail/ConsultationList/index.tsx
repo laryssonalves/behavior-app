@@ -1,12 +1,17 @@
 import React from 'react'
 
 import { View, Text, FlatList, RefreshControl, TouchableOpacity } from 'react-native'
+
+import { useNavigation } from '@react-navigation/native'
+
 import { Divider } from 'react-native-paper'
+
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../../colors'
 import { Consultation } from '../../../../entities/consultation'
 import styles from './styles'
 
 const ConsultationList = ({ consultations, refreshList }: any) => {
+  const navigation = useNavigation()
 
   const refreshControl = (
     <RefreshControl
@@ -19,7 +24,12 @@ const ConsultationList = ({ consultations, refreshList }: any) => {
 
   const renderItem = (consultation: Consultation, lastItem: boolean) => (
     <View>
-      <TouchableOpacity onPress={() => {}} style={styles.flatListItem}>
+      <TouchableOpacity 
+        onPress={() => {
+          navigation.navigate('ConsultationDetail', { consultation: consultation.toJson() })
+        }} 
+        style={styles.flatListItem}
+      >
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.textItemName}>{`Terapeuta: ${consultation.owner.name}`}</Text>
           <Text style={styles.textItemAge}>{consultation.getDuration()}</Text>

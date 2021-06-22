@@ -80,7 +80,7 @@ const ConsultationAdd = ({ visible, hideModal, exercises, studentId }: any) => {
       
       closeModal()
       
-      navigation.navigate('ConsultationDetail', { consultation })
+      navigation.navigate('ConsultationDetail', { consultation: consultation.toJson() })
     } catch (e) {
       console.log(e)
     } finally {
