@@ -6,8 +6,8 @@ import { useNavigation } from '@react-navigation/native'
 
 import { Divider } from 'react-native-paper'
 
-import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../../colors'
-import { Consultation } from '../../../../entities/consultation'
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
+import { Consultation } from '../../../entities/consultation'
 import styles from './styles'
 
 const ConsultationList = ({ consultations, refreshList }: any) => {

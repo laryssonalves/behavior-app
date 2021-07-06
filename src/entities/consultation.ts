@@ -1,6 +1,6 @@
 import moment, { Moment } from "moment"
 import { ResultTypeChoice } from "./choices"
-import { StudentExercise, StudentExerciseTarget } from "./student"
+import { Student, StudentExercise, StudentExerciseTarget } from "./student"
 import { User } from "./user"
 
 export class Consultation {
@@ -9,6 +9,7 @@ export class Consultation {
   concluded: boolean
   concluded_date: Moment
   owner: User
+  student: Student
   exercises: ConsultationExercise[]
 
   constructor(props?: Partial<Consultation>) {

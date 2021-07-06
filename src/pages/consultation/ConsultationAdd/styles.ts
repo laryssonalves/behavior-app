@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
-import { PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR } from '../../../../colors'
-import GlobalStyle from '../../../../styles/global-style'
+import { PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR } from '../../../colors'
+import GlobalStyle from '../../../styles/global-style'
 
 const styles = StyleSheet.create({
   textEmptyList: {

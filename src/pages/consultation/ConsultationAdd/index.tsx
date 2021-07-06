@@ -5,11 +5,11 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import { Divider, Modal, Portal, Checkbox, ActivityIndicator } from 'react-native-paper'
-import { PRIMARY_COLOR, TERCIARY_COLOR } from '../../../../colors'
-import { StudentExercise } from '../../../../entities/student'
-import { addConsultation } from '../../../../services/consultation-service'
+import { PRIMARY_COLOR, TERCIARY_COLOR } from '../../../colors'
+import { StudentExercise } from '../../../entities/student'
+import { addConsultation } from '../../../services/consultation-service'
 
-import GlobalStyle from '../../../../styles/global-style'
+import GlobalStyle from '../../../styles/global-style'
 import styles from './styles'
 
 const ConsultationAdd = ({ visible, hideModal, exercises, studentId }: any) => {

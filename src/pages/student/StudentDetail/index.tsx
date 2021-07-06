@@ -13,13 +13,13 @@ import { Consultation } from '../../../entities/consultation'
 import { StudentExercise } from '../../../entities/student'
 
 import ExcerciseList from './ExerciseList'
-import ConsultationList from './ConsultationList'
+import ConsultationList from '../../consultation/ConsultationList'
 
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 
 import GlobalStyle from '../../../styles/global-style'
 import StudentDetailActionBar from './ActionBar'
-import ConsultationAdd from './ConsultationAdd'
+import ConsultationAdd from '../../consultation/ConsultationAdd'
 
 
 type StudentDetailParams = {

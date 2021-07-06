@@ -11,12 +11,12 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
 import { Divider, ProgressBar } from 'react-native-paper'
 
-import GlobalStyle from '../../../../styles/global-style'
+import GlobalStyle from '../../../styles/global-style'
 import styles from './styles'
-import { PRIMARY_COLOR } from '../../../../colors'
+import { PRIMARY_COLOR } from '../../../colors'
 
-import ConsultationDetailHeader from './Header'
-import { Consultation, ConsultationExercise } from '../../../../entities/consultation'
+import ConsultationDetailActionBar from './ActionBar'
+import { Consultation, ConsultationExercise } from '../../../entities/consultation'
 
 class HeaderState {
   searchBar = {
@@ -24,7 +24,8 @@ class HeaderState {
     query: '',
   }
   actionBar = {
-    title: 'Estudantes'
+    title: 'Detalhes',
+    subTitle: ''
   }
 }
 
@@ -44,8 +45,7 @@ const ConsultationDetail = () => {
   const [progressVisible, setProgressVisible] = useState<boolean>(false)
 
   const goToConsultationExerciseDetail = (consultationExercise: ConsultationExercise) => {
-    
-    // navigation.navigate('ConsultationExerciseDetail', { id, name })
+
   }
 
   const setSearchBarQuery = (query: string) => { 
@@ -56,14 +56,6 @@ const ConsultationDetail = () => {
   const setSearchBarVisible = (visible: boolean) => {
     const searchBar = { ...headerState.searchBar, visible, query: visible ? headerState.searchBar.query : '' }
     setHeaderState({ ...headerState, searchBar })
-  }
-
-  const headerProps = {
-    headerState, 
-    actions: {
-      setSearchBarQuery,
-      setSearchBarVisible
-    }
   }
 
   const renderItem = (consultationExercise: ConsultationExercise, index: number) => (
@@ -83,9 +75,31 @@ const ConsultationDetail = () => {
     </View>
   )
 
+  const headerProps = {
+    headerState, 
+    actions: {
+      setSearchBarQuery,
+      setSearchBarVisible,
+      goBack: navigation.goBack
+    },
+  }
+
+  useEffect(() => {
+    const consultation = Consultation.fromJson(route.params.consultation)
+    const newHeaderState = { 
+      ...headerState, 
+      actionBar: { 
+        title: consultation.student.name,
+        subTitle: `Terapeuta: ${consultation.owner.name}` 
+      } 
+    }
+    setHeaderState(newHeaderState)
+    console.log(consultation)
+  }, [])
+
   return (
       <View style={GlobalStyle.container}>
-        <ConsultationDetailHeader {...headerProps} />
+        <ConsultationDetailActionBar {...headerProps} />
         
         <ProgressBar
           style={styles.progressBar}

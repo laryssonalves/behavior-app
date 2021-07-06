@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import StudentList from '../pages/student/StudentList'
 import StudentDetail from '../pages/student/StudentDetail'
 import GlobalStyle from '../styles/global-style'
-import ConsultationDetail from '../pages/student/StudentDetail/ConsultationDetail'
+import ConsultationDetail from '../pages/consultation/ConsultationDetail'
 
 const AppStack = createStackNavigator()
 

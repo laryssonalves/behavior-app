@@ -1,18 +1,20 @@
 import { StyleSheet } from 'react-native'
-import { PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR } from '../../../../colors'
-import GlobalStyle from '../../../../styles/global-style'
+import { PRIMARY_COLOR, PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR } from '../../../colors'
+import GlobalStyle from '../../../styles/global-style'
 
 const styles = StyleSheet.create({
   container: {
-    ...GlobalStyle.container,
+    flex: 1,
+  },
+
+  progressBar: {
+    height: 8
+  },
+
+  flatList: {
     paddingBottom: 16,
     paddingHorizontal: 16,
     marginBottom: 16
-  },
-
-  textEmptyList: {
-    ...GlobalStyle.textMedium,
-    fontSize: 16,
   },
 
   flatListItem: {
@@ -33,7 +35,15 @@ const styles = StyleSheet.create({
 
   dividerItem: {
     marginHorizontal: 8,
-    height: 2
+    height: 2,
+  },
+
+  fabAdd: {
+    position: 'absolute',
+    backgroundColor: PRIMARY_COLOR,
+    margin: 24,
+    right: 0,
+    bottom: 0
   }
 })
 
