@@ -71,6 +71,7 @@ const StudentDetail = () => {
       const consultations = await getConsultations(id)
       setConsultations(consultations)
     } catch (e) {
+      console.log(e)
     } finally {
       setProgressVisible(false)
     }

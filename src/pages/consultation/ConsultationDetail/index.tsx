@@ -17,24 +17,13 @@ import { PRIMARY_COLOR } from '../../../colors'
 
 import ConsultationDetailActionBar from './ActionBar'
 import { Consultation, ConsultationExercise } from '../../../entities/consultation'
-
-class HeaderState {
-  searchBar = {
-    visible: false,
-    query: '',
-  }
-  actionBar = {
-    title: 'Detalhes',
-    subTitle: ''
-  }
-}
+import { HeaderState } from '../../../entities/header-state'
 
 type ConsultationDetailParams = {
   Params: {
     consultation: string
   }
 }
-
 
 const ConsultationDetail = () => {
   const navigation = useNavigation()
@@ -44,25 +33,15 @@ const ConsultationDetail = () => {
   const [consultation, setConsultation] = useState<Consultation>(Consultation.fromJson(route.params.consultation))
   const [progressVisible, setProgressVisible] = useState<boolean>(false)
 
-  const goToConsultationExerciseDetail = (consultationExercise: ConsultationExercise) => {
-
-  }
-
-  const setSearchBarQuery = (query: string) => { 
-    const searchBar = { ...headerState.searchBar, query }
-    setHeaderState({ ...headerState, searchBar }) 
-  }
-
-  const setSearchBarVisible = (visible: boolean) => {
-    const searchBar = { ...headerState.searchBar, visible, query: visible ? headerState.searchBar.query : '' }
-    setHeaderState({ ...headerState, searchBar })
+  const goToConsultationExerciseList = (consultationExercise: ConsultationExercise) => {
+    navigation.navigate('ConsultationExerciseTargetForm', { consultationExercise: consultationExercise.toJson() })
   }
 
   const renderItem = (consultationExercise: ConsultationExercise, index: number) => (
     <View>
       <TouchableOpacity
         onPress={() => {
-          goToConsultationExerciseDetail(consultationExercise)
+          goToConsultationExerciseList(consultationExercise)
         }}
         style={styles.flatListItem}
       >
@@ -78,8 +57,6 @@ const ConsultationDetail = () => {
   const headerProps = {
     headerState, 
     actions: {
-      setSearchBarQuery,
-      setSearchBarVisible,
       goBack: navigation.goBack
     },
   }
@@ -94,7 +71,6 @@ const ConsultationDetail = () => {
       } 
     }
     setHeaderState(newHeaderState)
-    console.log(consultation)
   }, [])
 
   return (

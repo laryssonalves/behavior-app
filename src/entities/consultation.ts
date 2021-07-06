@@ -3,6 +3,7 @@ import { ResultTypeChoice } from "./choices"
 import { Student, StudentExercise, StudentExerciseTarget } from "./student"
 import { User } from "./user"
 
+
 export class Consultation {
   id: number
   create_date: Moment
@@ -48,13 +49,33 @@ export class ConsultationExercise {
 
   constructor(props?: Partial<ConsultationExercise>) {
     const exercise = new StudentExercise(props?.exercise)
-    Object.assign(this, props, { exercise })
+    const targets = props?.targets?.map(target => new ConsultationExerciseTarget(target))
+    Object.assign(this, props, { exercise, targets })
+  }
+
+  toJson() {
+    return JSON.stringify(this)
+  }
+
+  static fromJson(data: string) {
+    return new ConsultationExercise(JSON.parse(data))
   }
 }
 
-interface ConsultationExerciseTarget {
+export class ConsultationExerciseTarget {
   id: number
   consultation_exercise_id: number
   result_type: ResultTypeChoice
-  target: StudentExerciseTarget
+  student_target: StudentExerciseTarget
+
+  //frontend variables
+  showOptions = true
+
+  constructor(props?: Partial<ConsultationExerciseTarget>) {
+    Object.assign(this, props)
+  }
+
+  isNotApplied(): boolean {
+    return this.result_type === ResultTypeChoice.NOT_APPLIED
+  }
 }
