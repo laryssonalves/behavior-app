@@ -30,11 +30,17 @@ const ConsultationDetail = () => {
   const route = useRoute<RouteProp<ConsultationDetailParams, 'Params'>>()
   
   const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
-  const [consultation, setConsultation] = useState<Consultation>(Consultation.fromJson(route.params.consultation))
-  const [progressVisible, setProgressVisible] = useState<boolean>(false)
+  const [exercises, setExercises] = useState<ConsultationExercise[]>([])
 
   const goToConsultationExerciseList = (consultationExercise: ConsultationExercise) => {
-    navigation.navigate('ConsultationExerciseTargetForm', { consultationExercise: consultationExercise.toJson() })
+    const params = {
+      consultationId: consultationExercise.consultation_id,
+      consultationExerciseId: consultationExercise.id, 
+      program: consultationExercise.exercise.program,
+      applicationTypeDescription: consultationExercise.exercise.getApplicationTypeDescription() 
+    }
+
+    navigation.navigate('ConsultationExerciseTargetForm', params)
   }
 
   const renderItem = (consultationExercise: ConsultationExercise, index: number) => (
@@ -43,14 +49,11 @@ const ConsultationDetail = () => {
         onPress={() => {
           goToConsultationExerciseList(consultationExercise)
         }}
-        style={styles.flatListItem}
-      >
+        style={styles.flatListItem}>
         <Text style={styles.textItemName}>{consultationExercise.exercise.program}</Text>
         <Text style={styles.textItemAge}>{consultationExercise.exercise.getApplicationTypeDescription()}</Text>
       </TouchableOpacity>
-      {index !== consultation.exercises.length - 1 ? (
-        <Divider style={styles.dividerItem} />
-      ) : null}
+      {index !== exercises.length - 1 && (<Divider style={styles.dividerItem} />)}
     </View>
   )
 
@@ -71,22 +74,16 @@ const ConsultationDetail = () => {
       } 
     }
     setHeaderState(newHeaderState)
+    setExercises(consultation.exercises)
   }, [])
 
   return (
       <View style={GlobalStyle.container}>
         <ConsultationDetailActionBar {...headerProps} />
-        
-        <ProgressBar
-          style={styles.progressBar}
-          visible={progressVisible}
-          color={PRIMARY_COLOR}
-          indeterminate
-        />
 
         <FlatList
           style={styles.flatList}
-          data={consultation.exercises}
+          data={exercises}
           renderItem={({ item, index }) => renderItem(item, index)}
           keyExtractor={item => item.id.toString()}
         />

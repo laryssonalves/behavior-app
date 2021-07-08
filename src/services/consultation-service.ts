@@ -1,7 +1,8 @@
-import { Consultation } from '../entities/consultation'
+import { Consultation, ConsultationExerciseTarget } from '../entities/consultation'
 import { api } from '../shared/services/api'
 
 const consultationUrl = 'consultations/'
+const consultationExerciseUrl = (consultationId: number) => `${consultationUrl}${consultationId}/exercises/`
 
 const getConsultations = async (student: number): Promise<Consultation[]> => {
   // const params = { student, concluded: true }
@@ -16,4 +17,17 @@ const addConsultation = async (payload: any): Promise<Consultation> => {
   return new Consultation(response.data)
 }
 
-export { getConsultations, addConsultation }
+const sendConsultationExerciseTargetAnswers = async (consultationId: number, payload: any): Promise<void> => {
+  const targetsAnswersUrl = `${consultationExerciseUrl(consultationId)}targets-answers/`
+  await api.post(targetsAnswersUrl, payload)
+}
+
+const getConsultationExerciseTargets = 
+  async (consultationId: number, consultationExerciseId: number): Promise<ConsultationExerciseTarget[]> => {
+    const targetListUrl = `${consultationExerciseUrl(consultationId)}${consultationExerciseId}/targets-list/`
+    const response = await api.get<ConsultationExerciseTarget[]>(targetListUrl)
+
+    return response.data.map(consultationExerciseTarget => new ConsultationExerciseTarget(consultationExerciseTarget))
+  }
+
+export { getConsultations, addConsultation, sendConsultationExerciseTargetAnswers, getConsultationExerciseTargets }
