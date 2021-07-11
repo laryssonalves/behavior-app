@@ -8,35 +8,59 @@ import GlobalStyle from '../../../styles/global-style'
 import styles from './styles'
 
 import ConsultationExerciseTargetFormActionBar from './ActionBar'
-import { ConsultationExerciseTarget } from '../../../entities/consultation'
+import { ConsultationExercise, ConsultationExerciseTarget } from '../../../entities/consultation'
 import { HeaderState } from '../../../entities/header-state'
 import TargetListItem from './TargetListItem'
 import { sendConsultationExerciseTargetAnswers, getConsultationExerciseTargets } from '../../../services/consultation-service'
+import { ProgressBar } from 'react-native-paper'
+import { PRIMARY_COLOR } from '../../../colors'
 
 type ConsultationExerciseTargetFormParams = {
   Params: {
-    consultationId: number,
-    consultationExerciseId: number,
-    program: string,
-    applicationTypeDescription: string
+    consultationExercise: string,
   }
 }
 
 const ConsultationExerciseTargetForm = () => {
   const navigation = useNavigation()
   const route = useRoute<RouteProp<ConsultationExerciseTargetFormParams, 'Params'>>()
-  const { consultationId, consultationExerciseId, program, applicationTypeDescription } = route.params
+  const consultationExercise = ConsultationExercise.fromJson(route.params.consultationExercise)
   
   const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
   const [targets, setTargets] = useState<ConsultationExerciseTarget[]>([])
+  const [saved, setSaved] = useState<boolean>(false)
+  const [progressVisible, setProgressVisible] = useState<boolean>(false)
 
-  const finishApplication = async () => {
-    try {
-      console.log(targets)
-      await sendConsultationExerciseTargetAnswers(consultationId, { targets })
-    } catch (e) {
-      console.log(e)
+  const goBack = navigation.goBack
+
+  const showProgress = () => setProgressVisible(true)
+  const hideProgress = () => setProgressVisible(false)
+
+  const saveApplication = (concluded?: boolean) => {
+    showProgress()
+
+    const {id, consultation_id} = consultationExercise
+
+    const payload = {
+      consultation_exercise: id,
+      concluded: concluded === undefined ? consultationExercise.concluded : concluded,
+      targets
     }
+
+    sendConsultationExerciseTargetAnswers(consultation_id, payload)
+      .then(() => { 
+        setSaved(true)
+
+        if (concluded) {
+          goBack()
+        }
+      })
+      .catch(e => console.log(e))
+      .finally(() => hideProgress())
+  }
+
+  const concludeExercise = async () => {
+    saveApplication(true)
   }
 
   const showResume = () => {
@@ -48,30 +72,42 @@ const ConsultationExerciseTargetForm = () => {
   }
 
   const renderItem = (consultationExerciseTarget: ConsultationExerciseTarget, index: number) => {
-    const props = { consultationExerciseTarget, index, targetState: { targets, setTargets }}
+    const props = { 
+      consultationExerciseTarget, 
+      index, 
+      targetState: { targets, setTargets },
+      concluded: consultationExercise.concluded
+    }
+
     return <TargetListItem  {...props}/>
   }
 
  const headerProps = {
     headerState, 
     actions: {
-      goBack: navigation.goBack,
-      finishApplication,
+      goBack,
+      concludeExercise,
       showResume
     },
   }
 
   const getTargets = async () => {
-    const targets = await getConsultationExerciseTargets(consultationId, consultationExerciseId)
-    setTargets(targets)
+    showProgress()
+
+    const {id, consultation_id} = consultationExercise
+
+    getConsultationExerciseTargets(consultation_id, id)
+      .then(targets => setTargets(targets))
+      .finally(() => hideProgress())
   }
 
   const getHeaderState = () => {
     const newHeaderState = { 
-      ...headerState, 
+      ...headerState,
+      concluded: consultationExercise.concluded,
       actionBar: { 
-        title: program,
-        subTitle: applicationTypeDescription
+        title: consultationExercise.exercise.program,
+        subTitle: consultationExercise.exercise.getApplicationTypeDescription()
       } 
     }
     setHeaderState(newHeaderState)
@@ -82,17 +118,32 @@ const ConsultationExerciseTargetForm = () => {
     getTargets()
   }, [])
 
-  return (
-      <View style={GlobalStyle.container}>
-        <ConsultationExerciseTargetFormActionBar {...headerProps} />
+  const saveIfUnsaved = () => {
+    if (!saved) {
+      saveApplication()
+    }
+  }
 
-        <FlatList
-          style={styles.flatList}
-          data={targets}
-          renderItem={({ item, index }) => renderItem(item, index)}
-          keyExtractor={item => item.id.toString()}
-        />
-      </View>
+  useEffect(() => navigation.addListener('beforeRemove', saveIfUnsaved))
+
+  return (
+    <View style={GlobalStyle.container}>
+      <ConsultationExerciseTargetFormActionBar {...headerProps} />
+
+      <ProgressBar
+        style={styles.progressBar}
+        visible={progressVisible}
+        color={PRIMARY_COLOR}
+        indeterminate
+      />
+
+      <FlatList
+        style={styles.flatList}
+        data={targets}
+        renderItem={({ item, index }) => renderItem(item, index)}
+        keyExtractor={item => item.id.toString()}
+      />
+    </View>
   )
 }
 

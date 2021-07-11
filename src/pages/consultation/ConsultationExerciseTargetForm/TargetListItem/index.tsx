@@ -8,7 +8,7 @@ import { ConsultationExerciseTarget } from '../../../../entities/consultation'
 import styles from './styles'
 
 const TargetListItem = (props: any) => {
-  const {consultationExerciseTarget, index, targetState} = props
+  const {consultationExerciseTarget, index, targetState, concluded} = props
   const {targets, setTargets} = targetState
 
   const setShowOptions = (showOptions: boolean) => {
@@ -79,7 +79,7 @@ const TargetListItem = (props: any) => {
   return (
     <View style={styles.flatListItem}>
       {
-        consultationExerciseTarget.showOptions ?
+        consultationExerciseTarget.showOptions && !concluded?
         (
           <View style={styles.flatListItemOptions}>
             <Text style={styles.textTarget}>{consultationExerciseTarget.student_target.target}</Text>
@@ -92,12 +92,7 @@ const TargetListItem = (props: any) => {
         (
           <TouchableOpacity 
             style={styles.flatListItemAnswered}
-            // onPress={() => {
-            //   if (!consultationExerciseTarget.isNotApplied()) {
-            //     setShowOptions(true)
-            //   }
-            // }}
-            onPress={() => setShowOptions(true)}>
+            onPress={() => !concluded && setShowOptions(true)}>
             <Text style={styles.textTargetAnswered}>{consultationExerciseTarget.student_target.target}</Text>
             <IconButton 
               icon={getResultTypeIcon(consultationExerciseTarget.result_type)}

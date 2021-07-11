@@ -23,8 +23,8 @@ api.interceptors.response.use(
   undefined, 
   async error => {
     // if (error.response.status === 403) {
-    //   await SecureStorage.clearToLogout()
     //   navigate('Login')
+    //   await SecureStorage.clearToLogout()
     // }
     return Promise.reject(error)
   }

@@ -41,7 +41,7 @@ const StudentDetail = () => {
       key: 'consultation',
       title: 'Atendimentos',
       icon: 'calendar-check-outline'
-    }
+    },
   ])
 
   const [studentExercises, setStudentExercises] = useState<StudentExercise[]>([])

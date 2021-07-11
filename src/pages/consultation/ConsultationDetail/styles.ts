@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
   },
 
   flatListItem: {
-    padding: 8
+    padding: 8,
+    flexDirection: 'row'
   },
 
   textItemName: {

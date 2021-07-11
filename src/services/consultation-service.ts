@@ -1,4 +1,4 @@
-import { Consultation, ConsultationExerciseTarget } from '../entities/consultation'
+import { Consultation, ConsultationExercise, ConsultationExerciseTarget } from '../entities/consultation'
 import { api } from '../shared/services/api'
 
 const consultationUrl = 'consultations/'
@@ -30,4 +30,16 @@ const getConsultationExerciseTargets =
     return response.data.map(consultationExerciseTarget => new ConsultationExerciseTarget(consultationExerciseTarget))
   }
 
-export { getConsultations, addConsultation, sendConsultationExerciseTargetAnswers, getConsultationExerciseTargets }
+const getConsultationExercises = async (consultationId: number): Promise<ConsultationExercise[]> => {
+  const response = await api.get<ConsultationExercise[]>(consultationExerciseUrl(consultationId))
+
+  return response.data.map(consultationExercise => new ConsultationExercise(consultationExercise))
+}
+
+export { 
+  getConsultations, 
+  addConsultation, 
+  sendConsultationExerciseTargetAnswers, 
+  getConsultationExerciseTargets,
+  getConsultationExercises
+}

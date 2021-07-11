@@ -96,6 +96,8 @@ const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
 
   const validatedViewStyle = (value: any) => submitted && !value ? styles.inputViewError : styles.inputView
 
+  const getTitle = (): string => student.id ? 'Alterar estudante' : 'Novo estudante'
+
   useEffect(() => setStudent(studentToEdit), [studentToEdit])
 
   return (
@@ -104,7 +106,7 @@ const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
         visible={visible}
         onDismiss={closeModal}
         contentContainerStyle={GlobalStyle.modalContainer}>
-        <Text style={GlobalStyle.modalTitle}>Alterar estudante</Text>
+        <Text style={GlobalStyle.modalTitle}>{getTitle()}</Text>
         <View style={GlobalStyle.modalBody}>
           <View style={submitted && !student?.name ? styles.inputViewError : styles.inputView}>
             <TextInput

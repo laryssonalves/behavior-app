@@ -23,6 +23,10 @@ const ConsultationExerciseTargetFormActionBar = (props: any) => {
         subtitle={headerState.actionBar.subTitle}
         titleStyle={styles.titleStyle}
         subtitleStyle={styles.subTitleStyle}/>
+      {
+        headerState.concluded ? 
+        <Appbar.Action icon="lock"/>
+        :
         <Menu
           visible={menuVisible}
           onDismiss={closeMenu}
@@ -31,7 +35,7 @@ const ConsultationExerciseTargetFormActionBar = (props: any) => {
             title="Concluir" 
             onPress={() => {
               closeMenu()
-              actions.finishApplication()
+              actions.concludeExercise()
             }} />
           <Menu.Item 
             title="Ver resumo" 
@@ -40,6 +44,7 @@ const ConsultationExerciseTargetFormActionBar = (props: any) => {
               actions.showResume()
             }} />
         </Menu>
+      }
     </Appbar.Header>
   )
 }

@@ -5,20 +5,17 @@ import { User } from "./user"
 
 
 export class Consultation {
-  id: number
+  readonly id: number
   create_date: Moment
   concluded: boolean
   concluded_date: Moment
   owner: User
   student: Student
-  exercises: ConsultationExercise[]
 
   constructor(props?: Partial<Consultation>) {
     const create_date = moment(props?.create_date, 'YYYY-MM-DDTHH:mm:ss')
     const concluded_date = moment(props?.concluded_date, 'YYYY-MM-DDTHH:mm:ss')
-    const exercises = props?.exercises?.map(exercise => new ConsultationExercise(exercise))
-
-    const parsedData = { create_date, concluded_date, exercises }
+    const parsedData = { create_date, concluded_date }
 
     Object.assign(this, props, parsedData)
   }
@@ -42,15 +39,17 @@ export class Consultation {
 }
 
 export class ConsultationExercise {
-  id: number
+  readonly id: number
   consultation_id: number
-  exercise = new StudentExercise()
-  targets: ConsultationExerciseTarget[]
+  exercise: StudentExercise
+  concluded: boolean
+  concluded_date: Moment
 
   constructor(props?: Partial<ConsultationExercise>) {
     const exercise = new StudentExercise(props?.exercise)
-    const targets = props?.targets?.map(target => new ConsultationExerciseTarget(target))
-    Object.assign(this, props, { exercise, targets })
+    const concluded_date = moment(props?.concluded_date, 'YYYY-MM-DDTHH:mm:ss')
+    const parsedData = { exercise, concluded_date }
+    Object.assign(this, props, parsedData)
   }
 
   toJson() {
@@ -63,7 +62,7 @@ export class ConsultationExercise {
 }
 
 export class ConsultationExerciseTarget {
-  id: number
+  readonly id: number
   consultation_exercise_id: number
   result_type: ResultTypeChoice
   student_target: StudentExerciseTarget
