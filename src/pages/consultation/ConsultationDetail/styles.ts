@@ -38,14 +38,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     height: 2,
   },
+  
+  btnDefault: {
+    ...GlobalStyle.btnDefault,
+    width: '48%'
+  },
 
-  fabAdd: {
-    position: 'absolute',
-    backgroundColor: PRIMARY_COLOR,
-    margin: 24,
-    right: 0,
-    bottom: 0
-  }
+  btnPrimary: {
+    ...GlobalStyle.btnPrimary,
+    width: '48%',
+  },
+  
 })
 
 export default styles

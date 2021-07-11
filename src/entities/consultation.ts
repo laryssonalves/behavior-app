@@ -25,7 +25,7 @@ export class Consultation {
     const diff = moment.utc(moment.duration(this.concluded_date.diff(this.create_date)).asMilliseconds())
     const days = daysDiff ? `${daysDiff}d` : ''
     const hours = diff.hours() ? `${diff.hours()}h` : ''
-    const min = `${diff.minutes()}min`
+    const min = diff.minutes() ? `${diff.minutes()}min` : ''
     return `${days} ${hours} ${min}`
   }
 

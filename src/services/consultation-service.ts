@@ -5,8 +5,7 @@ const consultationUrl = 'consultations/'
 const consultationExerciseUrl = (consultationId: number) => `${consultationUrl}${consultationId}/exercises/`
 
 const getConsultations = async (student: number): Promise<Consultation[]> => {
-  // const params = { student, concluded: true }
-  const params = { student }
+  const params = { student, concluded: true }
   const response = await api.get<Consultation[]>(consultationUrl, { params })
 
   return response.data.map(consultation => new Consultation(consultation))
@@ -14,6 +13,12 @@ const getConsultations = async (student: number): Promise<Consultation[]> => {
 
 const addConsultation = async (payload: any): Promise<Consultation> => {
   const response = await api.post<Consultation>(consultationUrl, payload)
+  return new Consultation(response.data)
+}
+
+const editConsultation = async (consultationId: number, payload: any): Promise<Consultation> => {
+  const consultationDetailUrl = `${consultationUrl}${consultationId}/`
+  const response = await api.patch<Consultation>(consultationDetailUrl, payload)
   return new Consultation(response.data)
 }
 
@@ -39,6 +44,7 @@ const getConsultationExercises = async (consultationId: number): Promise<Consult
 export { 
   getConsultations, 
   addConsultation, 
+  editConsultation,
   sendConsultationExerciseTargetAnswers, 
   getConsultationExerciseTargets,
   getConsultationExercises

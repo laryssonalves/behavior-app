@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { View } from 'react-native'
 
-import { useRoute, RouteProp } from '@react-navigation/native'
+import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 
 import { BottomNavigation, ProgressBar } from 'react-native-paper'
 
@@ -30,6 +30,9 @@ type StudentDetailParams = {
 }
 
 const StudentDetail = () => {
+  const navigation = useNavigation()
+  const route = useRoute<RouteProp<StudentDetailParams, 'Params'>>()
+
   const [index, setIndex] = useState(0)
   const [routes] = useState([
     { 
@@ -49,8 +52,6 @@ const StudentDetail = () => {
 
   const [progressVisible, setProgressVisible] = useState(false)
   const [consultationAddVisible, setConsultationAddVisible] = useState(false)
-
-  const route = useRoute<RouteProp<StudentDetailParams, 'Params'>>()
 
   const fetchStudentExercises = async () => {
     try {
@@ -93,12 +94,18 @@ const StudentDetail = () => {
     return index === 1
   }
 
-  useEffect(() => {
-    ;(async () => {
-      await fetchStudentExercises()
-      await fetchConsultations()
-    })()
-  }, [])
+  const fetchData = async () => {
+    await fetchStudentExercises()
+    await fetchConsultations()
+  }
+
+  // useEffect(() => {
+  //   ;(async () => {
+  //     await fetchData()
+  //   })()
+  // }, [])
+
+  useEffect(() => navigation.addListener('focus', async () => await fetchData()))
 
   return (
     <View style={GlobalStyle.container}>

@@ -10,7 +10,7 @@ import {
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
-import { Divider, IconButton, ProgressBar } from 'react-native-paper'
+import { Divider, IconButton, Modal, Portal, ProgressBar } from 'react-native-paper'
 
 import GlobalStyle from '../../../styles/global-style'
 import styles from './styles'
@@ -19,7 +19,7 @@ import { PRIMARY_COLOR, SECONDARY_TEXT_COLOR, TERCIARY_COLOR } from '../../../co
 import ConsultationDetailActionBar from './ActionBar'
 import { Consultation, ConsultationExercise } from '../../../entities/consultation'
 import { HeaderState } from '../../../entities/header-state'
-import { getConsultationExercises } from '../../../services/consultation-service'
+import { getConsultationExercises, editConsultation } from '../../../services/consultation-service'
 
 type ConsultationDetailParams = {
   Params: {
@@ -34,11 +34,21 @@ const ConsultationDetail = () => {
   
   const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
   const [exercises, setExercises] = useState<ConsultationExercise[]>([])
+  const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [progressVisible, setProgressVisible] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [concluded, setConcluded] = useState<boolean>(false)
+
+  const goBack = navigation.goBack
 
   const showProgress = () => setProgressVisible(true)
   const hideProgress = () => setProgressVisible(false)
+
+  const showLoading = () => setLoading(true)
+  const hideLoading = () => setLoading(false)
+
+  const showModal = () => setModalVisible(true)
+  const hideModal = () => setModalVisible(false)
 
   const goToConsultationExerciseList = (consultationExercise: ConsultationExercise) => {
     const params = { consultationExercise: consultationExercise.toJson() }
@@ -94,8 +104,16 @@ const ConsultationDetail = () => {
       .finally(() => hideProgress())
   }
   
-  const concludeConsultation = () => {
-    
+  const concludeConsultation = async () => {
+    showLoading()
+    const payload = {concluded: true}
+    editConsultation(consultation.id, payload)
+      .then(() => {
+        setConcluded(true)
+        hideLoading()
+        goBack()
+      })
+      .catch(e => console.log(e))
   }
 
   useEffect(() => {
@@ -104,7 +122,12 @@ const ConsultationDetail = () => {
 
   useEffect(() => navigation.addListener('focus', getExercises))
 
-  useEffect(() => navigation.addListener('beforeRemove', concludeConsultation))
+  useEffect(() => navigation.addListener('beforeRemove', e => {
+    if (!concluded) {
+      e.preventDefault()
+      showModal()
+    }
+  }))
 
   return (
     <View style={GlobalStyle.container}>
@@ -126,13 +149,44 @@ const ConsultationDetail = () => {
 
       <TouchableOpacity
         style={{...GlobalStyle.btnPrimary, alignSelf: 'center', marginBottom: 16}}
-        onPress={() => {}}>
+        onPress={concludeConsultation}>
         {
           loading ?
             <ActivityIndicator animating={true} color={TERCIARY_COLOR} /> :
             <Text style={GlobalStyle.btnPrimaryText}>Concluir atendimento</Text>
         }
       </TouchableOpacity>
+
+      <Portal>
+        <Modal
+          visible={modalVisible}
+          onDismiss={hideModal}
+          contentContainerStyle={GlobalStyle.modalContainer}>
+            <Text style={GlobalStyle.modalTitle}>Aviso</Text>
+            <Text style={GlobalStyle.modalBody}>
+              O atendimento será concluído com as informações correntes. Tem certeza que deseja sair?
+            </Text>
+            <View style={GlobalStyle.modalFooter}>
+              <TouchableOpacity
+                style={styles.btnDefault}
+                onPress={hideModal}>
+                <Text style={GlobalStyle.btnPrimaryText}>CANCELAR</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.btnPrimary}
+                onPress={() => {
+                  hideModal()
+                  concludeConsultation()
+                }}>
+                {
+                  loading ?
+                    <ActivityIndicator animating={true} color={TERCIARY_COLOR} /> :
+                    <Text style={GlobalStyle.btnPrimaryText}>CONFIRMAR</Text>
+                }
+              </TouchableOpacity>
+            </View>
+        </Modal>
+      </Portal>
     </View>
   )
 }
