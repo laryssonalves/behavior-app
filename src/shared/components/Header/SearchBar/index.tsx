@@ -1,14 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
+
+import { BackHandler } from 'react-native'
+
+import _ from 'lodash'
 
 import { Searchbar } from 'react-native-paper'
 
 import { useHeaderContext } from '../../../contexts/header.context'
 
 import styles from './styles'
-import { BackHandler } from 'react-native'
+import { useState } from 'react'
 
 const SearchBar = () => {
   const { state, actions } = useHeaderContext()
+
+  const [ query, setQuery ] = useState<string>('')
+  
+  const delayedSetSearchBarQuery = useCallback(_.debounce(search => { actions.setSearchBarQuery(search) }, 300), []);
+
+  const onSearchChange = (search: string) => {
+    setQuery(search)
+    delayedSetSearchBarQuery(search)
+  }
 
   const backAction = () => {
     actions.setSearchBarVisible(false)
@@ -35,8 +48,9 @@ const SearchBar = () => {
       placeholderTextColor={ 'white' }
       placeholder="Pesquisar estudante..."
       autoFocus={ state.searchBarVisible }
-      onChangeText={ actions.setSearchBarQuery }
-      value={ state.searchBarQuery }
+      // onChangeText={ text => setQuery(text) }
+      onChangeText={onSearchChange}
+      value={ query }
     />
   )
 }

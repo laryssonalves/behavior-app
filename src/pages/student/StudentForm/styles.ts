@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
+
 import { SECONDARY_COLOR } from '../../../colors'
-import GlobalStyle from '../../../global-style'
+import GlobalStyle from '../../../styles/global-style'
 
 const styles = StyleSheet.create({
   inputView: {
@@ -9,9 +10,8 @@ const styles = StyleSheet.create({
   },
 
   inputViewError: {
-    ...GlobalStyle.inputView,
+    ...GlobalStyle.inputViewError,
     marginBottom: 8,
-    borderColor: 'red',
   },
 
   btnDefault: {

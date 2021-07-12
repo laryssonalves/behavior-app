@@ -1,26 +1,29 @@
-import React  from 'react'
+import React from 'react'
 
-import { createStackNavigator, StackHeaderProps } from '@react-navigation/stack'
+import { View } from 'react-native'
+
+import { createStackNavigator } from '@react-navigation/stack'
 
 import StudentList from '../pages/student/StudentList'
-import AppHeader from '../shared/components/Header'
-import { HeaderProvider } from '../shared/contexts/header.context'
+import StudentDetail from '../pages/student/StudentDetail'
+import GlobalStyle from '../styles/global-style'
+import ConsultationDetail from '../pages/consultation/ConsultationDetail'
+import ConsultationExerciseTargetForm from '../pages/consultation/ConsultationExerciseTargetForm'
+import ConsultationView from '../pages/consultation/ConsultationView'
 
 const AppStack = createStackNavigator()
 
 const AppRoutes = () => {
-  const screenOptions = {
-    header: (props: StackHeaderProps) => {
-      return <AppHeader  { ...props }/>
-    }
-  }
-
   return (
-    <HeaderProvider>
-      <AppStack.Navigator screenOptions={ screenOptions }>
-        <AppStack.Screen name='StudentList' component={ StudentList }/>
+    <View style={GlobalStyle.container}>
+      <AppStack.Navigator screenOptions={{headerShown: false}}>
+        <AppStack.Screen name="StudentList" component={StudentList} />
+        <AppStack.Screen name="StudentDetail" component={StudentDetail} />
+        <AppStack.Screen name="ConsultationDetail" component={ConsultationDetail} />
+        <AppStack.Screen name="ConsultationView" component={ConsultationView} />
+        <AppStack.Screen name="ConsultationExerciseTargetForm" component={ConsultationExerciseTargetForm} />
       </AppStack.Navigator>
-    </HeaderProvider>
+    </View>
   )
 }
 

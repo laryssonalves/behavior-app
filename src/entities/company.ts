@@ -1,4 +1,4 @@
-import { CorePerson, CorePersonValidationError } from '../models/core-person.model'
+import { CorePerson, CorePersonValidationError } from './core-person'
 
 export default interface Company extends CorePerson {
   responsible_name: string

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 import moment from 'moment'
 
-import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -10,32 +10,27 @@ import { Modal, Portal } from 'react-native-paper'
 
 import RNPickerSelect from 'react-native-picker-select'
 
-import StudentService from '../../../services/student-service'
-
-import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
-
-import { genreChoiceList } from '../../../models/choice.model'
-
+import { addStudent, editStudent } from '../../../services/student-service'
 import * as SecureStorage from '../../../shared/services/secure-storage'
 
-import Company from '../../../models/company.model'
+import { genreChoiceList } from '../../../entities/choices'
+import Company from '../../../entities/company'
+import { Student } from '../../../entities/student'
 
-import { Student } from '../../../models/student'
-
-import GlobalStyle from '../../../global-style'
-
+import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
+import GlobalStyle from '../../../styles/global-style'
+import { pickerStyleInvalid, pickerStyleValid } from '../../../styles/datepicker-style';
 import styles from './styles'
 
-const StudentAdd = ({ visible, hideModal }: any) => {
-  const [student, setStudent] = useState<Student>(new Student())
+const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
+  const [student, setStudent] = useState<Student>(studentToEdit)
   const [loading, setLoading] = useState<boolean>(false)
   const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false)
 
-  const studentService = StudentService.getInstance()
   const genreChoices = genreChoiceList().map(genre => ({ label: genre.name, value: genre.value }))
 
-  const onClickSave = async () => {
+  const submitForm = async () => {
     try {
       setLoading(true)
 
@@ -43,9 +38,13 @@ const StudentAdd = ({ visible, hideModal }: any) => {
 
       const storagedCompany = await SecureStorage.retrieveItem('company') as Company
 
-      const studentToSave = Student.createFromJSON({ ...student, company: storagedCompany.id })
+      const studentToSave = new Student({ ...student, company: storagedCompany.id })
 
-      await studentService.addStudent(studentToSave)
+      if (student.id) {
+        await editStudent(studentToSave)
+      } else {
+        await addStudent(studentToSave)
+      }
 
       closeModal()
     } catch (e) {
@@ -76,7 +75,7 @@ const StudentAdd = ({ visible, hideModal }: any) => {
   const onBirthPickerChange = (selectedDate?: Date) => {
     closeDatePicker()
 
-    const currentDate = selectedDate || student.birth_date ? moment(selectedDate || student.birth_date) : null
+    const currentDate = selectedDate || student?.birth_date ? moment(selectedDate || student?.birth_date) : null
 
     updateStudent({ birth_date: currentDate })
   }
@@ -86,7 +85,7 @@ const StudentAdd = ({ visible, hideModal }: any) => {
       <DateTimePickerModal
         isVisible={datePickerVisible}
         maximumDate={new Date()}
-        date={student.birth_date ? student.birth_date.toDate() : new Date()}
+        date={student?.birth_date ? student?.birth_date.toDate() : new Date()}
         mode="date"
         onConfirm={onBirthPickerChange}
         onCancel={closeDatePicker}
@@ -97,32 +96,39 @@ const StudentAdd = ({ visible, hideModal }: any) => {
 
   const validatedViewStyle = (value: any) => submitted && !value ? styles.inputViewError : styles.inputView
 
+  const getTitle = (): string => student.id ? 'Alterar estudante' : 'Novo estudante'
+
+  useEffect(() => setStudent(studentToEdit), [studentToEdit])
+
   return (
     <Portal>
       <Modal
         visible={visible}
         onDismiss={closeModal}
         contentContainerStyle={GlobalStyle.modalContainer}>
-        <Text style={GlobalStyle.modalTitle}>Adicionar estudante</Text>
+        <Text style={GlobalStyle.modalTitle}>{getTitle()}</Text>
         <View style={GlobalStyle.modalBody}>
-          <View style={submitted && !student.name ? styles.inputViewError : styles.inputView}>
+          <View style={submitted && !student?.name ? styles.inputViewError : styles.inputView}>
             <TextInput
               style={GlobalStyle.inputText}
               placeholder="Nome"
+              value={student?.name || ''}
+              autoCapitalize="words"
               placeholderTextColor={SECONDARY_COLOR}
               onChangeText={name => updateStudent({ name })} />
           </View>
           <RNPickerSelect
             useNativeAndroidPickerStyle={false}
             style={submitted && !student.genre ? pickerStyleInvalid : pickerStyleValid}
+            value={student?.genre || null}
             pickerProps={{ mode: 'dropdown' }}
             placeholder={{ label: 'Gênero', value: null }}
             onValueChange={genre => updateStudent({ genre })}
             items={genreChoices}
           />
-          <TouchableOpacity style={validatedViewStyle(student.birth_date)} onPress={openDatePicker}>
+          <TouchableOpacity style={validatedViewStyle(student?.birth_date)} onPress={openDatePicker}>
             <Text style={styles.datePickerText}>
-              {student.birth_date ? student.birth_date.format('DD/MM/YYYY') : 'Data Nascimento'}
+              {student?.birth_date ? student?.birth_date.format('DD/MM/YYYY') : 'Data Nascimento'}
             </Text>
             {MemoizedDatePicker}
           </TouchableOpacity>
@@ -136,7 +142,7 @@ const StudentAdd = ({ visible, hideModal }: any) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btnPrimary}
-            onPress={onClickSave}
+            onPress={submitForm}
             disabled={loading}>
             {
               loading ?
@@ -150,49 +156,5 @@ const StudentAdd = ({ visible, hideModal }: any) => {
   )
 }
 
-export default StudentAdd
-
-
-const basePickerStyle = 
-// StyleSheet.create(
-  {
-
-  placeholder: {
-    fontSize: 16,
-    fontFamily: 'Chai-Regular',
-    color: SECONDARY_COLOR
-  },
-  inputAndroid: {
-    flex: 1,
-    fontSize: 16,
-    color: SECONDARY_COLOR,
-    fontFamily: 'Chai-Regular',
-    marginLeft: 20
-  },
-}
-// )
-
-const pickerStyleInvalid = StyleSheet.create({
-  ...basePickerStyle,
-
-  inputAndroidContainer: {
-    height: 50,
-    borderColor: 'red',
-    borderWidth: 2,
-    borderRadius: 24,
-    marginBottom: 8
-  },
-})
-
-const pickerStyleValid = StyleSheet.create({
-  ...basePickerStyle,
-
-  inputAndroidContainer: {
-    height: 50,
-    borderColor: SECONDARY_COLOR,
-    borderWidth: 2,
-    borderRadius: 24,
-    marginBottom: 8
-  },
-})
+export default StudentForm
 

@@ -1,40 +1,25 @@
-import { api, configDefaultTokenInHeader } from '../shared/services/api'
-import { User, UserCredential } from '../interfaces/user'
+import { api } from '../shared/services/api'
 
-export default class AuthService {
-  private static instance: AuthService
+import { User, UserCredential } from '../entities/user'
+import { TokenResponse } from '../entities/token-response'
 
-  private loginUrl = 'auth/login/'
-  private logoutUrl = 'auth/logout/'
-  private userDetailsUrl = 'users/details/'
+const loginUrl = 'auth/login/'
+const logoutUrl = 'auth/logout/'
+const userDetailsUrl = 'users/details/'
 
-  constructor() {}
+const login = async (credential: UserCredential): Promise<any> => {
+  const tokenResponse = await api.post(loginUrl, credential)
+  const { token } = tokenResponse.data as TokenResponse
 
-  public static getInstance(): AuthService {
-    if (!AuthService.instance) {
-      AuthService.instance = new AuthService()
-    }
-    return AuthService.instance
-  }
-
-  configureHeaderToken(token?: string) {
-    configDefaultTokenInHeader(token)
-  }
-
-  async login(credential: UserCredential) {
-    const tokenResponse = await api.post(this.loginUrl, credential)
-    const { token } = tokenResponse.data as TokenResponse
-
-    const headers = { Authorization: `Token ${ token }` }
-    const userResponse = await api.get(this.userDetailsUrl, { headers })
-    const user = userResponse.data as User
-    
-    return { token, user }
-  }
-
-  async logout(): Promise<void> {
-    await api.delete(this.logoutUrl)
-  }
-
+  const headers = { Authorization: `Token ${ token }` }
+  const userResponse = await api.get(userDetailsUrl, { headers })
+  const user = userResponse.data as User
+  
+  return { token, user }
 }
 
+const logout = async (): Promise<void> => {
+  await api.delete(logoutUrl)
+}
+
+export { login, logout }

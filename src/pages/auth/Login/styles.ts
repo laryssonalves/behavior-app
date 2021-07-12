@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
-import GlobalStyle from '../../../global-style'
-import { PRIMARY_COLOR, SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
+
+import GlobalStyle from '../../../styles/global-style'
+import { PRIMARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 
 const styles = StyleSheet.create({
   container: {
@@ -20,6 +21,11 @@ const styles = StyleSheet.create({
     ...GlobalStyle.inputView,
     width: '80%',
     borderColor: PRIMARY_COLOR,
+  },
+
+  inputViewError: {
+    ...GlobalStyle.inputViewError,
+    width: '80%',
   },
 
   inputText: {

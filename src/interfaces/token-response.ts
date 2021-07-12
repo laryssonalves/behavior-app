@@ -1,3 +1,0 @@
-interface TokenResponse {
-  token: string
-}

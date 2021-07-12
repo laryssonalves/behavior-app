@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { useRoute } from '@react-navigation/native'
 
@@ -7,47 +7,47 @@ import { Appbar } from 'react-native-paper'
 import { useAuth } from '../../../../contexts/auth.context'
 import { useHeaderContext } from '../../../contexts/header.context'
 
+import { MenuStudentDetail, MenuStudentList } from '../Menu'
+
 import styles from './styles'
 
-const getHeaderTitle = (name: string): string => {
-  switch (name) {
-    case 'StudentList':
-      return 'Estudantes'
-    default:
-      return ''
-  }
-}
-
 const ActionBar = ({ navigation, previous }: any) => {
-  const [ title, setTitle ] = useState<string>('')
+  const route = useRoute()
 
   const { signOut } = useAuth()
 
-  const { actions } = useHeaderContext()
+  const { state, actions } = useHeaderContext()
 
-  const route = useRoute()
+  const headerScreenMap = [
+    {
+      screenName: 'StudentList',
+      menu: (
+        <MenuStudentList
+          onSearchPress={() => actions.setSearchBarVisible(true)}
+          onLogoutPress={async () => await signOut()}
+        />
+      )
+    },
+    {
+      screenName: 'StudentDetail',
+      menu: <MenuStudentDetail onAddPress={() => {}} />
+    }
+  ]
 
-  useEffect(() => {
-    setTitle(getHeaderTitle(route.name))
-  }, [ route.name ])
+  const getHeaderScreen = () => {
+    return headerScreenMap.find(
+      headerScreen => headerScreen.screenName === route.name
+    )?.menu
+  }
 
   return (
-    <Appbar.Header
-      statusBarHeight={ 0 }
-      style={ styles.actionBar }>
-      {
-        previous ?
-          <Appbar.BackAction onPress={ navigation.goBack }/> : null
-      }
+    <Appbar.Header statusBarHeight={0} style={styles.actionBar}>
+      {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
       <Appbar.Content
-        title={ title }
-        titleStyle={ styles.titleStyle }/>
-      <Appbar.Action
-        icon='magnify'
-        onPress={ () => { actions.setSearchBarVisible(true) } }/>
-      {/* <Appbar.Action icon='plus' onPress={ () => { actions.setModalVisible(true) } }/> */ }
-      <Appbar.Action icon='logout-variant' onPress={ async () => await signOut() }/>
-      {/*<Appbar.Action icon='refresh' onPress={ () => setLoading(!loading) }/>*/}
+        title={state.actionBarTitle}
+        titleStyle={styles.titleStyle}
+      />
+      {getHeaderScreen()}
     </Appbar.Header>
   )
 }
