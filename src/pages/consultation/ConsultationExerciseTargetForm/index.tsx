@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { FlatList, View } from 'react-native'
+import { FlatList, RefreshControl, View } from 'react-native'
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
@@ -13,7 +13,7 @@ import { HeaderState } from '../../../entities/header-state'
 import TargetListItem from './TargetListItem'
 import { sendConsultationExerciseTargetAnswers, getConsultationExerciseTargets } from '../../../services/consultation-service'
 import { ProgressBar } from 'react-native-paper'
-import { PRIMARY_COLOR } from '../../../colors'
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 
 type ConsultationExerciseTargetFormParams = {
   Params: {
@@ -91,7 +91,7 @@ const ConsultationExerciseTargetForm = () => {
     },
   }
 
-  const getTargets = async () => {
+  const getTargets = () => {
     showProgress()
 
     const {id, consultation_id} = consultationExercise
@@ -112,17 +112,26 @@ const ConsultationExerciseTargetForm = () => {
     }
     setHeaderState(newHeaderState)
   }
- 
-  useEffect(() => {
-    getHeaderState()
-    getTargets()
-  }, [])
 
   const saveIfUnsaved = () => {
     if (!saved) {
       saveApplication()
     }
   }
+
+  const refreshControl = (
+    <RefreshControl
+      progressBackgroundColor="#FFF"
+      colors={[PRIMARY_COLOR, SECONDARY_COLOR]}
+      refreshing={false}
+      onRefresh={getTargets}
+    />
+  )
+ 
+  useEffect(() => {
+    getHeaderState()
+    getTargets()
+  }, [])
 
   useEffect(() => navigation.addListener('beforeRemove', saveIfUnsaved))
 
@@ -139,6 +148,7 @@ const ConsultationExerciseTargetForm = () => {
 
       <FlatList
         style={styles.flatList}
+        refreshControl={refreshControl}
         data={targets}
         renderItem={({ item, index }) => renderItem(item, index)}
         keyExtractor={item => item.id.toString()}

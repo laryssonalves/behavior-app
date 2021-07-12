@@ -22,31 +22,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
 
-  textItemName: {
+  textItemProgram: {
     ...GlobalStyle.textSemiBold,
     color: PRIMARY_TEXT_COLOR,
     fontSize: 16
   },
 
-  textItemAge: {
+  textItemApplication: {
     ...GlobalStyle.textMedium,
     color: SECONDARY_TEXT_COLOR,
     fontSize: 14
   },
-
+  
   dividerItem: {
     marginHorizontal: 8,
     height: 2,
-  },
-  
-  btnDefault: {
-    ...GlobalStyle.btnDefault,
-    width: '48%'
-  },
-
-  btnPrimary: {
-    ...GlobalStyle.btnPrimary,
-    width: '48%',
   },
   
 })

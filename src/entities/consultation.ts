@@ -11,6 +11,7 @@ export class Consultation {
   concluded_date: Moment
   owner: User
   student: Student
+  is_exercises_applied: boolean
 
   constructor(props?: Partial<Consultation>) {
     const create_date = moment(props?.create_date, 'YYYY-MM-DDTHH:mm:ss')
@@ -44,11 +45,15 @@ export class ConsultationExercise {
   exercise: StudentExercise
   concluded: boolean
   concluded_date: Moment
+  result: ConsultationExerciseResult
+  targets: ConsultationExerciseTarget[]
+  is_applied: boolean
 
   constructor(props?: Partial<ConsultationExercise>) {
     const exercise = new StudentExercise(props?.exercise)
     const concluded_date = moment(props?.concluded_date, 'YYYY-MM-DDTHH:mm:ss')
-    const parsedData = { exercise, concluded_date }
+    const targets = props?.targets?.map(target => new ConsultationExerciseTarget(target))
+    const parsedData = { exercise, concluded_date, targets }
     Object.assign(this, props, parsedData)
   }
 
@@ -75,6 +80,20 @@ export class ConsultationExerciseTarget {
   }
 
   isNotApplied(): boolean {
+    return this.checkResult(ResultTypeChoice.NOT_APPLIED)
+  }
+
+  checkResult(resultType: ResultTypeChoice): boolean {
+    return this.result_type === resultType
+  }
+
+  isIndependent(): boolean {
     return this.result_type === ResultTypeChoice.NOT_APPLIED
   }
+}
+
+export class ConsultationExerciseResult {
+  result_indepent: number
+  result_correct_with_help: number
+  result_wrong: number
 }

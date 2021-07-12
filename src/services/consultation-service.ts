@@ -2,13 +2,23 @@ import { Consultation, ConsultationExercise, ConsultationExerciseTarget } from '
 import { api } from '../shared/services/api'
 
 const consultationUrl = 'consultations/'
-const consultationExerciseUrl = (consultationId: number) => `${consultationUrl}${consultationId}/exercises/`
+const consultationDetailUrl = (consultationId: number) => `${consultationUrl}${consultationId}/`
+const consultationExerciseUrl = (consultationId: number) => `${consultationDetailUrl(consultationId)}exercises/`
 
 const getConsultations = async (student: number): Promise<Consultation[]> => {
   const params = { student, concluded: true }
   const response = await api.get<Consultation[]>(consultationUrl, { params })
 
   return response.data.map(consultation => new Consultation(consultation))
+}
+
+const getConsultation = async (consultationId: number): Promise<Consultation> => {
+  const response = await api.get<Consultation>(consultationDetailUrl(consultationId))
+  return new Consultation(response.data)
+}
+
+const deleteConsultation = async (consultationId: number): Promise<void> => {
+  await api.delete(consultationDetailUrl(consultationId))
 }
 
 const addConsultation = async (payload: any): Promise<Consultation> => {
@@ -43,8 +53,10 @@ const getConsultationExercises = async (consultationId: number): Promise<Consult
 
 export { 
   getConsultations, 
+  getConsultation,
   addConsultation, 
   editConsultation,
+  deleteConsultation,
   sendConsultationExerciseTargetAnswers, 
   getConsultationExerciseTargets,
   getConsultationExercises

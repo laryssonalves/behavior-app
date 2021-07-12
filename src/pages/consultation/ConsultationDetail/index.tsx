@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import {
   ActivityIndicator,
   FlatList,
+  RefreshControl,
   Text,
   TouchableOpacity,
   View
@@ -14,12 +15,13 @@ import { Divider, IconButton, Modal, Portal, ProgressBar } from 'react-native-pa
 
 import GlobalStyle from '../../../styles/global-style'
 import styles from './styles'
-import { PRIMARY_COLOR, SECONDARY_TEXT_COLOR, TERCIARY_COLOR } from '../../../colors'
+import { PRIMARY_COLOR, SECONDARY_COLOR, SECONDARY_TEXT_COLOR, TERCIARY_COLOR } from '../../../colors'
 
 import ConsultationDetailActionBar from './ActionBar'
 import { Consultation, ConsultationExercise } from '../../../entities/consultation'
 import { HeaderState } from '../../../entities/header-state'
-import { getConsultationExercises, editConsultation } from '../../../services/consultation-service'
+import { getConsultationExercises, editConsultation, deleteConsultation } from '../../../services/consultation-service'
+import WarningModal from '../../../shared/components/modals/WarningModal'
 
 type ConsultationDetailParams = {
   Params: {
@@ -37,7 +39,7 @@ const ConsultationDetail = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false)
   const [progressVisible, setProgressVisible] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
-  const [concluded, setConcluded] = useState<boolean>(false)
+  const [canGoBack, setCanGoBack] = useState<boolean>(false)
 
   const goBack = navigation.goBack
 
@@ -63,8 +65,8 @@ const ConsultationDetail = () => {
         }}
         style={styles.flatListItem}>
         <View style={{flex: 1}}>
-          <Text style={styles.textItemName}>{consultationExercise.exercise.program}</Text>
-          <Text style={styles.textItemAge}>{consultationExercise.exercise.getApplicationTypeDescription()}</Text>
+          <Text style={styles.textItemProgram}>{consultationExercise.exercise.program}</Text>
+          <Text style={styles.textItemApplication}>{consultationExercise.exercise.getApplicationTypeDescription()}</Text>
         </View>
         {
           consultationExercise.concluded && 
@@ -83,6 +85,42 @@ const ConsultationDetail = () => {
     actions: {
       goBack: navigation.goBack
     },
+  }
+
+  const isAnyExerciseApplied = (): boolean => {
+    return !!exercises.filter(exercise => exercise.is_applied).length
+  }
+
+  const warningModalText = 
+    isAnyExerciseApplied() ?
+    'O atendimento será concluído com as informações correntes. Tem certeza que deseja sair?' :
+    'Os treinos não foram aplicados e o atendimento será descartado. Tem certeza que deseja sair?'
+
+  const warningModalProps = {
+    modalState: {
+      modalVisible,
+      modalText: warningModalText
+    },
+    btnStates: {
+      btnPositive: {
+        loading,
+        onPress: () => {
+          hideModal()
+          
+          if (isAnyExerciseApplied()) {
+            concludeConsultation()
+          } else {
+            discardConsultation()
+          }
+        },
+        label: 'Confirmar'
+      },
+      btnNegative: {
+        label: 'Cancelar',
+        onPress: hideModal  
+      },
+    },
+    hideModal,
   }
 
   const getHeaderState = () => {
@@ -104,26 +142,47 @@ const ConsultationDetail = () => {
       .finally(() => hideProgress())
   }
   
-  const concludeConsultation = async () => {
+  const concludeConsultation = () => {
     showLoading()
+
     const payload = {concluded: true}
+
     editConsultation(consultation.id, payload)
       .then(() => {
-        setConcluded(true)
+        setCanGoBack(true)
         hideLoading()
         goBack()
       })
       .catch(e => console.log(e))
   }
 
-  useEffect(() => {
-    getHeaderState()
-  }, [])
+  const discardConsultation = () => {
+    showProgress()
+
+    deleteConsultation(consultation.id)
+      .then(() => {
+        setCanGoBack(true)
+        hideProgress()
+        goBack()
+      })
+      .catch(e => console.log(e))
+  }
+
+  const refreshControl = (
+    <RefreshControl
+      progressBackgroundColor="#FFF"
+      colors={[PRIMARY_COLOR, SECONDARY_COLOR]}
+      refreshing={false}
+      onRefresh={getExercises}
+    />
+  )
+
+  useEffect(getHeaderState, [])
 
   useEffect(() => navigation.addListener('focus', getExercises))
 
   useEffect(() => navigation.addListener('beforeRemove', e => {
-    if (!concluded) {
+    if (!canGoBack) {
       e.preventDefault()
       showModal()
     }
@@ -142,6 +201,7 @@ const ConsultationDetail = () => {
 
       <FlatList
         style={styles.flatList}
+        refreshControl={refreshControl}
         data={exercises}
         renderItem={({ item, index }) => renderItem(item, index)}
         keyExtractor={item => item.id.toString()}
@@ -157,36 +217,7 @@ const ConsultationDetail = () => {
         }
       </TouchableOpacity>
 
-      <Portal>
-        <Modal
-          visible={modalVisible}
-          onDismiss={hideModal}
-          contentContainerStyle={GlobalStyle.modalContainer}>
-            <Text style={GlobalStyle.modalTitle}>Aviso</Text>
-            <Text style={GlobalStyle.modalBody}>
-              O atendimento será concluído com as informações correntes. Tem certeza que deseja sair?
-            </Text>
-            <View style={GlobalStyle.modalFooter}>
-              <TouchableOpacity
-                style={styles.btnDefault}
-                onPress={hideModal}>
-                <Text style={GlobalStyle.btnPrimaryText}>CANCELAR</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.btnPrimary}
-                onPress={() => {
-                  hideModal()
-                  concludeConsultation()
-                }}>
-                {
-                  loading ?
-                    <ActivityIndicator animating={true} color={TERCIARY_COLOR} /> :
-                    <Text style={GlobalStyle.btnPrimaryText}>CONFIRMAR</Text>
-                }
-              </TouchableOpacity>
-            </View>
-        </Modal>
-      </Portal>
+      <WarningModal {...warningModalProps} />
     </View>
   )
 }
