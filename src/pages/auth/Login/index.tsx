@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
-import { ActivityIndicator, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, Text, TouchableOpacity, View, TextInput } from 'react-native'
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import { Snackbar } from 'react-native-paper';
 
@@ -9,20 +10,23 @@ import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 
 import { useAuth } from '../../../contexts/auth.context'
 
-import GlobalStyle from '../../../styles/global-style';
-
 import styles from './styles'
 
 const Login = () => {
   const [ credential, setCredential ] = useState<UserCredential>({} as UserCredential)
   const [ logging, setLogging ] = useState<boolean>(false)
   const [ submitted, setSubmitted ] = useState<boolean>(false)
+  const [ passwordVisible, setPasswordVisible ] = useState<boolean>(false)
 
   const [ snackBarVisible, setSnackBarVisible ] = useState(false);
 
   const showSnackBar = () => setSnackBarVisible(true);
 
   const onDismissSnackBar = () => setSnackBarVisible(false);
+
+  const tooglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
+  
+  const passwordInputIcon = passwordVisible ? 'eye-slash' : 'eye'
 
   const { signIn } = useAuth()
 
@@ -50,11 +54,15 @@ const Login = () => {
       </View>
       <View style={submitted && !credential.password ? styles.inputViewError : styles.inputView}>
         <TextInput
-          secureTextEntry
+          secureTextEntry={ !passwordVisible }
           style={ styles.inputText }
           placeholder="Senha..."
           placeholderTextColor={ SECONDARY_COLOR }
           onChangeText={ password => setCredential({ ...credential, password }) }/>
+          <FontAwesome5 
+            name={passwordInputIcon} 
+            onPress={tooglePasswordVisibility}
+            size={16} />
       </View>
       <TouchableOpacity
         style={ styles.btnLogin }

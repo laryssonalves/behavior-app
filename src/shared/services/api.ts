@@ -5,8 +5,8 @@ import { navigate } from './navigation-service'
 import * as SecureStorage from '../../shared/services/secure-storage'
 
 const api = axios.create({
-  baseURL: 'http://192.168.18.206:8000/',
-  // baseURL: 'https://bhavior-api.herokuapp.com/'
+  // baseURL: 'http://192.168.18.206:8000/',
+  baseURL: 'https://bhavior-api.herokuapp.com/'
 });
 
 api.interceptors.request.use(
