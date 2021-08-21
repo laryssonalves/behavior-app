@@ -11,7 +11,6 @@ export class Consultation {
   concluded_date: Moment
   owner: User
   student: Student
-  is_exercises_applied: boolean
 
   constructor(props?: Partial<Consultation>) {
     const create_date = moment(props?.create_date, 'YYYY-MM-DDTHH:mm:ss')
@@ -55,6 +54,7 @@ export class ConsultationExercise {
     const targets = props?.targets?.map(target => new ConsultationExerciseTarget(target))
     const parsedData = { exercise, concluded_date, targets }
     Object.assign(this, props, parsedData)
+    console.log(props?.targets)
   }
 
   toJson() {
@@ -71,6 +71,7 @@ export class ConsultationExerciseTarget {
   consultation_exercise_id: number
   result_type: ResultTypeChoice
   student_target: StudentExerciseTarget
+  sequence: number
 
   //frontend variables
   showOptions = true

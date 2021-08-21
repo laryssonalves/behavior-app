@@ -1,14 +1,24 @@
 import React from 'react'
 import { TouchableOpacity, View, Text } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
 import { Colors, Divider, IconButton } from 'react-native-paper'
 import { SECONDARY_TEXT_COLOR } from '../../../../colors'
 import { ResultTypeChoice, resultTypeChoiceList } from '../../../../entities/choices'
 import { ConsultationExerciseTarget } from '../../../../entities/consultation'
+import { isDivisible } from '../../../../utils'
 
 import styles from './styles'
 
-const TargetListItem = (props: any) => {
-  const {consultationExerciseTarget, index, targetState, concluded} = props
+interface TargetListItemProps {
+  consultationExerciseTarget: ConsultationExerciseTarget
+  index: number
+  targetState: any,
+  concluded: boolean,
+  exerciseTargetsTotal: number
+}
+
+const TargetListItem = (props: TargetListItemProps) => {
+  const {consultationExerciseTarget, index, targetState, concluded, exerciseTargetsTotal} = props
   const {targets, setTargets} = targetState
 
   const setShowOptions = (showOptions: boolean) => {
@@ -61,48 +71,53 @@ const TargetListItem = (props: any) => {
     return consultationExerciseTarget.result_type === resultType ? getResultTypeIconColor(resultType) : SECONDARY_TEXT_COLOR
   }
 
-  const renderResultTypeOptions = () => resultTypeChoiceList()
-    .filter(resultChoice => resultChoice.value != ResultTypeChoice.NOT_APPLIED)
-    .map(resultChoice => {
-      const resultType = resultChoice.value as ResultTypeChoice
-
-      return (
-        <IconButton 
-          icon={getResultTypeIcon(resultType)}
-          size={35}
-          color={getOptionColor(resultType)}
-          onPress={() => { setResultType(resultType) }}
-          key={resultType.toString()}/>
-      )
-    })
+  const ListOptions = () => (
+    <FlatList
+      horizontal
+      contentContainerStyle={styles.flatListItemOptionsContainer}
+      data={resultTypeChoiceList().filter(resultChoice => resultChoice.value != ResultTypeChoice.NOT_APPLIED)}
+      renderItem={({ item: { value  }, index }) => {
+        const resultType = value as ResultTypeChoice
   
+        return (
+          <IconButton 
+            icon={getResultTypeIcon(resultType)}
+            size={35}
+            color={getOptionColor(resultType)}
+            onPress={() => { setResultType(resultType) }}
+            key={resultType.toString()}/>
+        )
+      }}
+      keyExtractor={item => item.value.toString()}
+    />
+  )
+
+  const listSequence = `${index + 1}.` 
+
+  const ItemOptions = () => (
+    <View style={styles.flatListItemOptions}>
+      <Text style={styles.textTarget}>{consultationExerciseTarget.sequence}. {consultationExerciseTarget.student_target.target}</Text>
+      <ListOptions />
+    </View>
+  )
+
+  const ItemAnswered = () => (
+    <TouchableOpacity 
+      style={styles.flatListItemAnswered}
+      onPress={() => !concluded && setShowOptions(true)}>
+      <Text style={styles.textTargetAnswered}>{consultationExerciseTarget.sequence}. {consultationExerciseTarget.student_target.target}</Text>
+      <IconButton 
+        icon={getResultTypeIcon(consultationExerciseTarget.result_type)}
+        size={20}
+        color={getResultTypeIconColor(consultationExerciseTarget.result_type)}
+      />
+    </TouchableOpacity>
+  )
+
   return (
     <View style={styles.flatListItem}>
-      {
-        consultationExerciseTarget.showOptions && !concluded?
-        (
-          <View style={styles.flatListItemOptions}>
-            <Text style={styles.textTarget}>{consultationExerciseTarget.student_target.target}</Text>
-            <View style={styles.flatListItemOptionsContainer}> 
-            {renderResultTypeOptions()}
-            </View>
-          </View>
-        )
-        :
-        (
-          <TouchableOpacity 
-            style={styles.flatListItemAnswered}
-            onPress={() => !concluded && setShowOptions(true)}>
-            <Text style={styles.textTargetAnswered}>{consultationExerciseTarget.student_target.target}</Text>
-            <IconButton 
-              icon={getResultTypeIcon(consultationExerciseTarget.result_type)}
-              size={20}
-              color={getResultTypeIconColor(consultationExerciseTarget.result_type)}
-            />
-          </TouchableOpacity>
-        )
-      }
-      {index !== targets.length - 1 && ( <Divider style={styles.dividerItem} /> ) }
+      {consultationExerciseTarget.showOptions && !concluded? <ItemOptions /> : <ItemAnswered />}
+      {index !== targets.length - 1 && ( <Divider style={isDivisible(index + 1, exerciseTargetsTotal) ? styles.dividerAttempts : styles.dividerItem} /> ) }
     </View>
   )
 }

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { PRIMARY_TEXT_COLOR } from "../../../../colors";
+import { PRIMARY_COLOR, PRIMARY_TEXT_COLOR, TERCIARY_COLOR } from "../../../../colors";
 import GlobalStyle from "../../../../styles/global-style";
 
 const styles = StyleSheet.create({
@@ -24,13 +24,20 @@ const styles = StyleSheet.create({
     height: 2,
   },
 
+  dividerAttempts: {
+    height: 2,
+    marginVertical: 16,
+    backgroundColor: PRIMARY_COLOR
+  },
+
   flatListItemOptions: {
     paddingTop: 8
   },
 
   flatListItemOptionsContainer: {
     flexDirection: 'row', 
-    justifyContent: 'space-around'
+    justifyContent: 'space-around',
+    flex: 1
   },
 
   flatListItemAnswered: {

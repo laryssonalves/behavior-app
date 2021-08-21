@@ -9,7 +9,7 @@ import StudentDetail from '../pages/student/StudentDetail'
 import GlobalStyle from '../styles/global-style'
 import ConsultationDetail from '../pages/consultation/ConsultationDetail'
 import ConsultationExerciseTargetForm from '../pages/consultation/ConsultationExerciseTargetForm'
-import ConsultationView from '../pages/consultation/ConsultationView'
+import ConsultationResume from '../pages/consultation/ConsultationResume'
 
 const AppStack = createStackNavigator()
 
@@ -20,7 +20,7 @@ const AppRoutes = () => {
         <AppStack.Screen name="StudentList" component={StudentList} />
         <AppStack.Screen name="StudentDetail" component={StudentDetail} />
         <AppStack.Screen name="ConsultationDetail" component={ConsultationDetail} />
-        <AppStack.Screen name="ConsultationView" component={ConsultationView} />
+        <AppStack.Screen name="ConsultationResume" component={ConsultationResume} />
         <AppStack.Screen name="ConsultationExerciseTargetForm" component={ConsultationExerciseTargetForm} />
       </AppStack.Navigator>
     </View>

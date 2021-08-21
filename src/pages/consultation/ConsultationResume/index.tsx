@@ -23,7 +23,7 @@ type ConsultationViewParams = {
   }
 }
 
-const ExerciseItem = ({consultationExercise, isLastIndex}: any) => {
+const ExerciseItem = ({consultationExercise}: any) => {
   const [targetsVisible, setTargetsVisible] = useState(false)
 
   const toggleTargets = () => setTargetsVisible(!targetsVisible)
@@ -88,7 +88,7 @@ const ExerciseItem = ({consultationExercise, isLastIndex}: any) => {
 )}
 
 
-const ConsultationView = () => {
+const ConsultationResume = () => {
   const navigation = useNavigation()
   const route = useRoute<RouteProp<ConsultationViewParams, 'Params'>>()
   
@@ -162,12 +162,12 @@ const ConsultationView = () => {
         style={styles.flatList}
         refreshControl={refreshControl}
         data={exercises}
-        renderItem={({item, index}) => <ExerciseItem {...{consultationExercise: item, isLastIndex: isLastIndex(index)}}/>}
+        renderItem={({item, index}) => <ExerciseItem {...{consultationExercise: item}}/>}
         keyExtractor={item => item.id.toString()}
       />
-      
+
     </View>
   )
 }
 
-export default ConsultationView
+export default ConsultationResume

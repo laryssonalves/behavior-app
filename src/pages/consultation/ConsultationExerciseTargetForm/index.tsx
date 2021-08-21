@@ -76,7 +76,8 @@ const ConsultationExerciseTargetForm = () => {
       consultationExerciseTarget, 
       index, 
       targetState: { targets, setTargets },
-      concluded: consultationExercise.concluded
+      concluded: consultationExercise.concluded,
+      exerciseTargetsTotal: consultationExercise.exercise.total_targets
     }
 
     return <TargetListItem  {...props}/>
