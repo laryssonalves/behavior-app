@@ -54,7 +54,6 @@ export class ConsultationExercise {
     const targets = props?.targets?.map(target => new ConsultationExerciseTarget(target))
     const parsedData = { exercise, concluded_date, targets }
     Object.assign(this, props, parsedData)
-    console.log(props?.targets)
   }
 
   toJson() {
