@@ -4,6 +4,7 @@ import { View, Text, FlatList, RefreshControl, TouchableOpacity } from 'react-na
 
 import { Divider } from 'react-native-paper'
 
+import { isLastIndex } from '../../../../utils'
 import { StudentExercise } from '../../../../entities/student'
 
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../../colors'
@@ -22,13 +23,13 @@ const ExcerciseList = ({ exercises, refreshList }: any) => {
     />
   )
 
-  const renderItem = (studentExercise: StudentExercise, lastItem: boolean) => (
+  const renderItem = (studentExercise: StudentExercise, isLastIndex: boolean) => (
     <View>
       <TouchableOpacity style={styles.flatListItem}>
         <Text style={styles.textItemName}>{studentExercise.program}</Text>
         <Text style={styles.textItemAge}>{studentExercise.getApplicationTypeDescription()}</Text>
       </TouchableOpacity>
-      {lastItem && <Divider style={styles.dividerItem} />}
+      {!isLastIndex && <Divider style={styles.dividerItem} />}
     </View>
   )
 
@@ -38,7 +39,7 @@ const ExcerciseList = ({ exercises, refreshList }: any) => {
         style={styles.flatList}
         data={exercises}
         refreshControl={refreshControl}
-        renderItem={({ item, index }) => renderItem(item, index !== exercises.length - 1)}
+        renderItem={({ item, index }) => renderItem(item, isLastIndex(index, exercises))}
         keyExtractor={item => item.id.toString()}
       />
     </View>

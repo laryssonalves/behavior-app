@@ -50,7 +50,7 @@ const ExerciseItem = ({consultationExercise}: any) => {
         <ExerciseInfo />
         <ExerciseResult />
       </TouchableOpacity>
-      {targetsVisible && <ExerciseTargetList consultationExercise={consultationExercise} />}
+      {targetsVisible && <ExerciseTargetList targets={consultationExercise.targets} exerciseTargetsTotal={consultationExercise.exercise.total_targets} />}
     </View>
   )
 }

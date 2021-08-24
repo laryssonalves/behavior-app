@@ -5,7 +5,7 @@ import { Colors, Divider, IconButton } from 'react-native-paper'
 import { SECONDARY_TEXT_COLOR } from '../../../../colors'
 import { ResultTypeChoice, resultTypeChoiceList } from '../../../../entities/choices'
 import { ConsultationExerciseTarget } from '../../../../entities/consultation'
-import { isDivisible } from '../../../../utils'
+import { isDivisible, isLastIndex } from '../../../../utils'
 
 import styles from './styles'
 
@@ -76,7 +76,7 @@ const TargetListItem = (props: TargetListItemProps) => {
       horizontal
       contentContainerStyle={styles.flatListItemOptionsContainer}
       data={resultTypeChoiceList().filter(resultChoice => resultChoice.value != ResultTypeChoice.NOT_APPLIED)}
-      renderItem={({ item: { value  }, index }) => {
+      renderItem={({ item: { value }, index }) => {
         const resultType = value as ResultTypeChoice
   
         return (
@@ -91,8 +91,6 @@ const TargetListItem = (props: TargetListItemProps) => {
       keyExtractor={item => item.value.toString()}
     />
   )
-
-  const listSequence = `${index + 1}.` 
 
   const ItemOptions = () => (
     <View style={styles.flatListItemOptions}>
@@ -117,7 +115,7 @@ const TargetListItem = (props: TargetListItemProps) => {
   return (
     <View style={styles.flatListItem}>
       {consultationExerciseTarget.showOptions && !concluded? <ItemOptions /> : <ItemAnswered />}
-      {index !== targets.length - 1 && ( <Divider style={isDivisible(index + 1, exerciseTargetsTotal) ? styles.dividerAttempts : styles.dividerItem} /> ) }
+      {!isLastIndex(index, targets) && ( <Divider style={isDivisible(index + 1, exerciseTargetsTotal) ? styles.dividerAttempts : styles.dividerItem} /> ) }
     </View>
   )
 }

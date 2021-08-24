@@ -9,6 +9,7 @@ import { Divider } from 'react-native-paper'
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 import { Consultation } from '../../../entities/consultation'
 import styles from './styles'
+import { isLastIndex } from '../../../utils'
 
 const ConsultationList = ({ consultations, refreshList }: any) => {
   const navigation = useNavigation()
@@ -51,7 +52,7 @@ const ConsultationList = ({ consultations, refreshList }: any) => {
       <FlatList
         data={consultations}
         refreshControl={refreshControl}
-        renderItem={({ item, index }) => renderItem(item, index !== consultations.length - 1)}
+        renderItem={({ item, index }) => renderItem(item, !isLastIndex(index, consultations))}
         keyExtractor={item => item.id.toString()}
       />
     </View>

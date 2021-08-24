@@ -24,6 +24,7 @@ import styles from './styles'
 import GlobalStyle from '../../../styles/global-style'
 
 import StudentListHeader from './Header'
+import { isLastIndex } from '../../../utils'
 
 class HeaderState {
   searchBar = {
@@ -98,7 +99,7 @@ const StudentList = () => {
     }
   }
 
-  const renderItem = (student: Student, index: number) => (
+  const renderItem = (student: Student, isLastIndex: boolean) => (
     <View>
       <TouchableOpacity
         onPress={() => {
@@ -110,9 +111,7 @@ const StudentList = () => {
         <Text style={styles.textItemName}>{student.name}</Text>
         <Text style={styles.textItemAge}>{student.age} anos</Text>
       </TouchableOpacity>
-      {index !== students.length - 1 ? (
-        <Divider style={styles.dividerItem} />
-      ) : null}
+      {!isLastIndex && <Divider style={styles.dividerItem} />}
     </View>
   )
 
@@ -147,7 +146,7 @@ const StudentList = () => {
           style={styles.flatList}
           data={students}
           refreshControl={refreshControl}
-          renderItem={({ item, index }) => renderItem(item, index)}
+          renderItem={({ item, index }) => renderItem(item, isLastIndex(index, students))}
           keyExtractor={item => item.id.toString()}
         />
 
