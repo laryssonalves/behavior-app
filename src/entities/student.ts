@@ -41,6 +41,7 @@ export class StudentExercise {
   total_attempts: number
   procedure: string
   concluded: boolean
+  total_targets: number
 
   constructor(props?: Partial<StudentExercise>) {
     Object.assign(this, props)

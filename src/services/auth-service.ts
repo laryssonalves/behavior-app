@@ -8,11 +8,14 @@ const logoutUrl = 'auth/logout/'
 const userDetailsUrl = 'users/details/'
 
 const login = async (credential: UserCredential): Promise<any> => {
-  const tokenResponse = await api.post(loginUrl, credential)
+  const loginHeaders = { 'Authorization': null }
+  const tokenResponse = await api.post(loginUrl, credential, { headers: loginHeaders })
+  
   const { token } = tokenResponse.data as TokenResponse
 
-  const headers = { Authorization: `Token ${ token }` }
-  const userResponse = await api.get(userDetailsUrl, { headers })
+  const userHeaders = { Authorization: `Token ${ token }` }
+  const userResponse = await api.get(userDetailsUrl, { headers: userHeaders })
+
   const user = userResponse.data as User
   
   return { token, user }

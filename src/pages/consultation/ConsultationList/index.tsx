@@ -25,7 +25,7 @@ const ConsultationList = ({ consultations, refreshList }: any) => {
   const renderItem = (consultation: Consultation, lastItem: boolean) => (
     <View>
       <TouchableOpacity 
-        onPress={() => navigation.navigate('ConsultationView', { consultation: consultation.toJson() })} 
+        onPress={() => navigation.navigate('ConsultationResume', { consultation: consultation.toJson() })} 
         style={styles.flatListItem}
       >
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>

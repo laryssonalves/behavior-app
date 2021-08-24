@@ -21,15 +21,22 @@ const styles = StyleSheet.create({
     ...GlobalStyle.inputView,
     width: '80%',
     borderColor: PRIMARY_COLOR,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
 
   inputViewError: {
     ...GlobalStyle.inputViewError,
     width: '80%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
 
   inputText: {
-    ...GlobalStyle.inputText
+    ...GlobalStyle.inputText,
+    flex: 1,
   },
 
   btnLogin: {

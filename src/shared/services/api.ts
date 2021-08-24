@@ -12,7 +12,7 @@ const api = axios.create({
 api.interceptors.request.use(
   axiosRequestConfig => {
     const backSlashUrl = axiosRequestConfig.url?.endsWith('/')
-  
+
     axiosRequestConfig.url = backSlashUrl ? axiosRequestConfig.url : `${axiosRequestConfig.url}/`
 
     return axiosRequestConfig
