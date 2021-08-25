@@ -47,6 +47,9 @@ export class ConsultationExercise {
   result: ConsultationExerciseResult
   targets: ConsultationExerciseTarget[]
   is_applied: boolean
+  total_targets_answered: number
+  total_targets_correct: number
+  percentage_correct_targets: number
 
   constructor(props?: Partial<ConsultationExercise>) {
     const exercise = new StudentExercise(props?.exercise)

@@ -8,7 +8,7 @@ import { isDivisible } from "../../../../../../utils"
 
 import styles from "./styles"
 
-const ExerciseTargetListItem = ({item, exerciseTargetsTotal, index, isLastIndex}: any) => (
+const ExerciseTargetListItem = ({item, index, exerciseTargetsTotal, isLastIndex}: any) => (
   <>
   <View style={styles.itemContainer}> 
       <View style={styles.itemDescription}>
