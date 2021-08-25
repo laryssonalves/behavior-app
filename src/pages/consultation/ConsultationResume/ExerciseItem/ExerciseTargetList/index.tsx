@@ -1,31 +1,55 @@
 import React from "react"
+
 import { View, Text, FlatList } from "react-native"
-import { ResultTypeChoice } from "../../../../../entities/choices"
+
+import { ConsultationExercise, ConsultationExerciseTarget } from "../../../../../entities/consultation"
+import { isLastIndex } from "../../../../../utils"
+
+import ExerciseTargetListItem from "./ExerciseTargetListItem"
+
 import styles from "./styles"
 
-const ExerciseTargetListItem = ({item}: any) => (
-  <View> 
-    <View style={styles.listItemDescription}>
-      <Text style={styles.listItemText}>{item.student_target.target}</Text>
-    </View>
-    <View style={styles.listItemResults}>
-      <Text style={styles.listItemText}>{item.checkResult(ResultTypeChoice.INDEPENDENT) ? 1 : 0}</Text>
-      <Text style={styles.listItemText}>{item.checkResult(ResultTypeChoice.CORRECT_WITH_HELP) ? 1 : 0}</Text>
-      <Text style={styles.listItemText}>{item.checkResult(ResultTypeChoice.WRONG) ? 1 : 0}</Text>
-    </View>
-  </View>
-)
+interface ExerciseTargetListProps {
+  consultationExercise: ConsultationExercise
+}
 
+const ExerciseTargetList = (props: ExerciseTargetListProps) => {
+  const { consultationExercise } = props
 
-const ExerciseTargetList = ({consultationExercise}: any) => (
-  <View style={styles.listContainer}>
-    <Text style={styles.listTitle}>Resultados por alvo</Text>
-    <FlatList
-      data={consultationExercise.targets}
-      renderItem={({ item, index }) => <ExerciseTargetListItem item={consultationExercise} />}
-      keyExtractor={item => item.id.toString()}
-    />
-  </View>
-)
+  const renderListItem = (item: ConsultationExerciseTarget, index: number) => {
+    const props = {
+      item,
+      index,
+      exerciseTargetsTotal: consultationExercise.exercise.total_targets,
+      isLastIndex: isLastIndex(index, consultationExercise.targets)
+    }
+    return <ExerciseTargetListItem {...props}/>
+  }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.containerDetail}>
+        <Text style={styles.detailTitle}>Tentativas</Text>
+        <Text style={styles.detailInfo}>
+          {consultationExercise.total_targets_answered}/{consultationExercise.exercise.total_attempts}
+        </Text>
+      </View>
+      <View style={styles.containerDetail}>
+        <Text style={styles.detailTitle}>Respostas corretas</Text>
+        <Text style={styles.detailInfo}>{consultationExercise.total_targets_correct}</Text>
+      </View>
+      <View style={styles.containerDetail}>
+        <Text style={styles.detailTitle}>Porcentagem de acerto</Text>
+        <Text style={styles.detailInfo}>{consultationExercise.percentage_correct_targets}%</Text>
+      </View>
+      <Text style={styles.title}>Resultado detalhado</Text>
+      <FlatList
+        data={consultationExercise.targets}
+        renderItem={({ item, index }) => renderListItem(item, index)}
+        keyExtractor={item => item.id.toString()}
+      />
+    </View>
+  )
+}
 
 export default ExerciseTargetList

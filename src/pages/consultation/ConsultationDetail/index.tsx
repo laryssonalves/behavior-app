@@ -22,6 +22,7 @@ import { Consultation, ConsultationExercise } from '../../../entities/consultati
 import { HeaderState } from '../../../entities/header-state'
 import { getConsultationExercises, editConsultation, deleteConsultation } from '../../../services/consultation-service'
 import WarningModal from '../../../shared/components/modals/WarningModal'
+import { isLastIndex } from '../../../utils'
 
 type ConsultationDetailParams = {
   Params: {
@@ -76,7 +77,7 @@ const ConsultationDetail = () => {
             size={20}/>
         }
       </TouchableOpacity>
-      {index !== exercises.length - 1 && (<Divider style={styles.dividerItem} />)}
+      {!isLastIndex(index, exercises) && (<Divider style={styles.dividerItem} />)}
     </View>
   )
 

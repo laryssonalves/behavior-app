@@ -71,7 +71,7 @@ const ConsultationExerciseTargetForm = () => {
     setTargets(targetsResume)
   }
 
-  const renderItem = (consultationExerciseTarget: ConsultationExerciseTarget, index: number) => {
+  const renderTargetListItem = (consultationExerciseTarget: ConsultationExerciseTarget, index: number) => {
     const props = { 
       consultationExerciseTarget, 
       index, 
@@ -151,7 +151,7 @@ const ConsultationExerciseTargetForm = () => {
         style={styles.flatList}
         refreshControl={refreshControl}
         data={targets}
-        renderItem={({ item, index }) => renderItem(item, index)}
+        renderItem={({ item, index }) => renderTargetListItem(item, index)}
         keyExtractor={item => item.id.toString()}
       />
     </View>

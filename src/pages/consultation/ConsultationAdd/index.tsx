@@ -11,6 +11,7 @@ import { addConsultation } from '../../../services/consultation-service'
 
 import GlobalStyle from '../../../styles/global-style'
 import styles from './styles'
+import { isLastIndex } from '../../../utils'
 
 const ConsultationAdd = ({ visible, hideModal, exercises, studentId }: any) => {
   const [exerciseIds, setExerciseIds] = useState<number[]>([])
@@ -43,7 +44,7 @@ const ConsultationAdd = ({ visible, hideModal, exercises, studentId }: any) => {
           onPress={() => onCheckPress(exercise.id)}
         />
       </TouchableOpacity>
-      {index !== exercises.length - 1 && <Divider style={styles.dividerItem} />}
+      {!isLastIndex(index, exercises) && <Divider style={styles.dividerItem} />}
     </View>
   )
 
