@@ -2,7 +2,7 @@
   "expo": {
     "name": "Beeapp",
     "slug": "beeapp",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "orientation": "portrait",
     "icon": "./assets/logo-icon.png",
     "splash": {
