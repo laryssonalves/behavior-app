@@ -53,11 +53,7 @@ const AuthProvider = ({ children }: any) => {
     })()
   })
 
-  return (
-    <AuthContext.Provider value={{ signed: !!user, user, signIn, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={{ signed: !!user, user, signIn, signOut }}>{children}</AuthContext.Provider>
 }
 
 const useAuth = () => {

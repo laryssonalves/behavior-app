@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from 'react'
 
-import { View, FlatList, RefreshControl } from "react-native"
+import { View, FlatList, RefreshControl } from 'react-native'
 
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
-import { ProgressBar } from "react-native-paper"
+import { ProgressBar } from 'react-native-paper'
 
-import { PRIMARY_COLOR, SECONDARY_COLOR } from "../../../colors"
-import { Consultation, ConsultationExercise } from "../../../entities/consultation"
-import { HeaderState } from "../../../entities/header-state"
-import { getConsultationExercises } from "../../../services/consultation-service"
-import GlobalStyle from "../../../styles/global-style"
-import ConsultationViewActionBar from "./ActionBar"
-import ExerciseItem from "./ExerciseItem"
-import styles from "./styles"
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
+import { Consultation, ConsultationExercise } from '../../../entities/consultation'
+import { HeaderState } from '../../../entities/header-state'
+import { getConsultationExercises } from '../../../services/consultation-service'
+import GlobalStyle from '../../../styles/global-style'
+import ConsultationViewActionBar from './ActionBar'
+import ExerciseItem from './ExerciseItem'
+import styles from './styles'
 
 type ConsultationViewParams = {
   Params: {
@@ -21,11 +21,10 @@ type ConsultationViewParams = {
   }
 }
 
-
 const ConsultationResume = () => {
   const navigation = useNavigation()
   const route = useRoute<RouteProp<ConsultationViewParams, 'Params'>>()
-  
+
   const consultation = Consultation.fromJson(route.params.consultation)
   const [exercises, setExercises] = useState<ConsultationExercise[]>([])
   const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
@@ -35,28 +34,27 @@ const ConsultationResume = () => {
   const hideProgress = () => setProgressVisible(false)
 
   const headerProps = {
-    headerState, 
+    headerState,
     actions: {
-      goBack: navigation.goBack
+      goBack: navigation.goBack,
     },
   }
 
-
   const getExercises = () => {
     showProgress()
-    
+
     getConsultationExercises(consultation.id)
-      .then(exercises => setExercises(exercises))
+      .then(results => setExercises(results))
       .finally(() => hideProgress())
   }
 
   const getHeaderState = () => {
-    const newHeaderState = { 
-      ...headerState, 
-      actionBar: { 
+    const newHeaderState = {
+      ...headerState,
+      actionBar: {
         title: 'Detalhes do atendimento',
-        subTitle: `${consultation?.student.name} - Terapeuta: ${consultation?.owner.name}`
-      } 
+        subTitle: `${consultation?.student.name} - Terapeuta: ${consultation?.owner.name}`,
+      },
     }
     setHeaderState(newHeaderState)
   }
@@ -79,23 +77,17 @@ const ConsultationResume = () => {
 
   return (
     <View style={GlobalStyle.container}>
-      <ConsultationViewActionBar {...headerProps}/>
+      <ConsultationViewActionBar {...headerProps} />
 
-      <ProgressBar
-        style={styles.progressBar}
-        visible={progressVisible}
-        color={PRIMARY_COLOR}
-        indeterminate
-      />
+      <ProgressBar style={styles.progressBar} visible={progressVisible} color={PRIMARY_COLOR} indeterminate />
 
       <FlatList
         style={styles.flatList}
         refreshControl={refreshControl}
         data={exercises}
-        renderItem={({item, index}) => <ExerciseItem {...{consultationExercise: item}}/>}
+        renderItem={({ item, index }) => <ExerciseItem {...{ consultationExercise: item }} />}
         keyExtractor={item => item.id.toString()}
       />
-
     </View>
   )
 }

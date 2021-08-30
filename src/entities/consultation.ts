@@ -1,8 +1,7 @@
-import moment, { Moment } from "moment"
-import { ResultTypeChoice } from "./choices"
-import { Student, StudentExercise, StudentExerciseTarget } from "./student"
-import { User } from "./user"
-
+import moment, { Moment } from 'moment'
+import { ResultTypeChoice } from './choices'
+import { Student, StudentExercise, StudentExerciseTarget } from './student'
+import { User } from './user'
 
 export class Consultation {
   readonly id: number

@@ -1,6 +1,6 @@
-import * as SecureStore from 'expo-secure-store';
-import Company from '../../entities/company';
-import { User } from '../../entities/user';
+import * as SecureStore from 'expo-secure-store'
+import Company from '../../entities/company'
+import { User } from '../../entities/user'
 
 export const storeItem = async (key: string, value: string) => {
   await SecureStore.setItemAsync(key, value)
