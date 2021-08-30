@@ -1,29 +1,28 @@
-import React from "react"
+import React from 'react'
 
-import { View, Text, FlatList } from "react-native"
+import { View, Text, FlatList } from 'react-native'
 
-import { ConsultationExercise, ConsultationExerciseTarget } from "../../../../../entities/consultation"
-import { isLastIndex } from "../../../../../utils"
+import { ConsultationExercise, ConsultationExerciseTarget } from '../../../../../entities/consultation'
+import { isLastIndex } from '../../../../../utils'
 
-import ExerciseTargetListItem from "./ExerciseTargetListItem"
+import ExerciseTargetListItem from './ExerciseTargetListItem'
 
-import styles from "./styles"
+import styles from './styles'
 
 interface ExerciseTargetListProps {
   consultationExercise: ConsultationExercise
 }
 
-const ExerciseTargetList = (props: ExerciseTargetListProps) => {
-  const { consultationExercise } = props
-
+const ExerciseTargetList = ({ consultationExercise }: ExerciseTargetListProps) => {
   const renderListItem = (item: ConsultationExerciseTarget, index: number) => {
     const props = {
       item,
       index,
       exerciseTargetsTotal: consultationExercise.exercise.total_targets,
-      isLastIndex: isLastIndex(index, consultationExercise.targets)
+      isLastIndex: isLastIndex(index, consultationExercise.targets),
     }
-    return <ExerciseTargetListItem {...props}/>
+
+    return <ExerciseTargetListItem {...props} />
   }
 
   return (

@@ -4,11 +4,11 @@ const isDivisible = (dividend: number, divisor: number): boolean => {
   }
 
   const quotient = dividend > divisor ? dividend / divisor : divisor / dividend
-  
+
   return Math.floor(quotient) === quotient
 }
 
-const isLastIndex = (indexToCheck: number, arr: any[]): boolean =>  {
+const isLastIndex = (indexToCheck: number, arr: any[]): boolean => {
   return indexToCheck === arr.length - 1
 }
 

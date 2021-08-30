@@ -5,5 +5,4 @@ export const TERCIARY_COLOR = '#3b3b3b'
 export const PRIMARY_TEXT_COLOR = SECONDARY_COLOR
 export const SECONDARY_TEXT_COLOR = '#918f8f'
 
-
 export const LIST_ITEM_BACKGROUD = '#e6e6e6'
