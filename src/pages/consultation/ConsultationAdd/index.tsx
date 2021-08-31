@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 
 import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 
-import { useNavigation } from '@react-navigation/native'
-
 import { Divider, Modal, Portal, Checkbox, ActivityIndicator } from 'react-native-paper'
 import { PRIMARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 import { StudentExercise } from '../../../entities/student'
@@ -13,11 +11,9 @@ import GlobalStyle from '../../../styles/global-style'
 import styles from './styles'
 import { isLastIndex } from '../../../utils'
 
-const ConsultationAdd = ({ visible, hideModal, exercises, studentId }: any) => {
+const ConsultationAdd = ({ visible, hideModal, exercises, studentId, navigateToDetails }: any) => {
   const [exerciseIds, setExerciseIds] = useState<number[]>([])
   const [loading, setLoading] = useState(false)
-
-  const navigation = useNavigation()
 
   const isExeciseChecked = (exerciseId: number): boolean => {
     return exerciseIds.includes(exerciseId)
@@ -55,7 +51,7 @@ const ConsultationAdd = ({ visible, hideModal, exercises, studentId }: any) => {
   }
 
   const isAllExercisesChecked = () => {
-    return (exerciseIds.length || exercises.length) && (exerciseIds.length === exercises.length)
+    return (exerciseIds.length || exercises.length) && exerciseIds.length === exercises.length
   }
 
   const setAllExercisesChecked = () => {
@@ -78,10 +74,10 @@ const ConsultationAdd = ({ visible, hideModal, exercises, studentId }: any) => {
       }
 
       const consultation = await addConsultation(payload)
-      
+
       closeModal()
-      
-      navigation.navigate('ConsultationDetail', { consultation: consultation.toJson() })
+
+      navigateToDetails(consultation)
     } catch (e) {
       console.log(e)
     } finally {
@@ -95,17 +91,17 @@ const ConsultationAdd = ({ visible, hideModal, exercises, studentId }: any) => {
         visible={visible}
         dismissable={loading}
         onDismiss={closeModal}
-        contentContainerStyle={{...GlobalStyle.modalContainer, margin: 16}}>
+        contentContainerStyle={{ ...GlobalStyle.modalContainer, margin: 16 }}>
         <View>
           <View style={styles.titleContainer}>
-            <Text style={{...GlobalStyle.modalTitle, flex: 1}}>Selecionar treinos</Text>
+            <Text style={{ ...GlobalStyle.modalTitle, flex: 1 }}>Selecionar treinos</Text>
             <Checkbox
               color={PRIMARY_COLOR}
               status={isAllExercisesChecked() ? 'checked' : 'unchecked'}
               onPress={() => setAllExercisesChecked()}
             />
-          </View>    
-          <View style={{...GlobalStyle.modalBody, paddingHorizontal: 0, paddingTop: 0, maxHeight: '85%'}}>
+          </View>
+          <View style={{ ...GlobalStyle.modalBody, paddingHorizontal: 0, paddingTop: 0, maxHeight: '85%' }}>
             <FlatList
               data={exercises}
               renderItem={({ item, index }) => renderItem(item, index)}
@@ -113,21 +109,15 @@ const ConsultationAdd = ({ visible, hideModal, exercises, studentId }: any) => {
             />
           </View>
           <View style={GlobalStyle.modalFooter}>
-            <TouchableOpacity
-              style={styles.btnDefault}
-              onPress={closeModal}
-              disabled={loading}>
+            <TouchableOpacity style={styles.btnDefault} onPress={closeModal} disabled={loading}>
               <Text style={GlobalStyle.btnPrimaryText}>CANCELAR</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.btnPrimary}
-              onPress={submitForm}
-              disabled={loading || !exerciseIds.length}>
-              {
-                loading ?
-                  <ActivityIndicator animating={true} color={TERCIARY_COLOR} /> :
-                  <Text style={GlobalStyle.btnPrimaryText}>INICIAR</Text>
-              }
+            <TouchableOpacity style={styles.btnPrimary} onPress={submitForm} disabled={loading || !exerciseIds.length}>
+              {loading ? (
+                <ActivityIndicator animating={true} color={TERCIARY_COLOR} />
+              ) : (
+                <Text style={GlobalStyle.btnPrimaryText}>INICIAR</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>

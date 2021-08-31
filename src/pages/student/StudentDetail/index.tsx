@@ -21,7 +21,6 @@ import GlobalStyle from '../../../styles/global-style'
 import StudentDetailActionBar from './ActionBar'
 import ConsultationAdd from '../../consultation/ConsultationAdd'
 
-
 type StudentDetailParams = {
   Params: {
     id: number
@@ -35,15 +34,15 @@ const StudentDetail = () => {
 
   const [index, setIndex] = useState(0)
   const [routes] = useState([
-    { 
-      key: 'exercise', 
-      title: 'Treinos', 
-      icon: 'format-list-checks'
+    {
+      key: 'exercise',
+      title: 'Treinos',
+      icon: 'format-list-checks',
     },
     {
       key: 'consultation',
       title: 'Atendimentos',
-      icon: 'calendar-check-outline'
+      icon: 'calendar-check-outline',
     },
   ])
 
@@ -53,12 +52,24 @@ const StudentDetail = () => {
   const [progressVisible, setProgressVisible] = useState(false)
   const [consultationAddVisible, setConsultationAddVisible] = useState(false)
 
+  const navigateToDetails = (consultation: Consultation) => {
+    navigation.navigate('ConsultationDetail', { consultation: consultation.toJson() })
+  }
+
+  const verifyHasUnconcludedConsultation = async () => {
+    const results = await getConsultations({ concluded: true })
+
+    if (results.length) {
+      console.log(results[0])
+    }
+  }
+
   const fetchStudentExercises = async () => {
     try {
       setProgressVisible(true)
       const { id } = route.params
-      const studentExercises = await getStudentExercises(id)
-      setStudentExercises(studentExercises)
+      const results = await getStudentExercises(id)
+      setStudentExercises(results)
     } catch (e) {
     } finally {
       setProgressVisible(false)
@@ -69,8 +80,14 @@ const StudentDetail = () => {
     try {
       setProgressVisible(true)
       const { id } = route.params
-      const consultations = await getConsultations(id)
-      setConsultations(consultations)
+      const results = await getConsultations({ student: id, concluded: true })
+      setConsultations(results)
+
+      const unconcludedConsultation = results.find(consultation => !consultation.concluded)
+
+      if (unconcludedConsultation) {
+        console.log(unconcludedConsultation)
+      }
     } catch (e) {
       console.log(e)
     } finally {
@@ -95,21 +112,16 @@ const StudentDetail = () => {
   }
 
   const fetchData = async () => {
+    await verifyHasUnconcludedConsultation()
     await fetchStudentExercises()
     await fetchConsultations()
   }
-
-  // useEffect(() => {
-  //   ;(async () => {
-  //     await fetchData()
-  //   })()
-  // }, [])
 
   useEffect(() => navigation.addListener('focus', async () => await fetchData()))
 
   return (
     <View style={GlobalStyle.container}>
-      <StudentDetailActionBar 
+      <StudentDetailActionBar
         title={route.params.name}
         showAdd={isTabConsultationActive()}
         onAddPress={showConsultationAddModal}
@@ -122,6 +134,7 @@ const StudentDetail = () => {
         hideModal={hideConsultationAddModal}
         exercises={studentExercises}
         studentId={route.params.id}
+        navigateToDetails={navigateToDetails}
       />
 
       <BottomNavigation

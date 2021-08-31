@@ -1,12 +1,17 @@
 import { Consultation, ConsultationExercise, ConsultationExerciseTarget } from '../entities/consultation'
 import { api } from '../shared/services/api'
 
+type ConsultationListParams = {
+  student?: number
+  concluded?: boolean
+}
+
 const consultationUrl = 'consultations/'
 const consultationDetailUrl = (consultationId: number) => `${consultationUrl}${consultationId}/`
 const consultationExerciseUrl = (consultationId: number) => `${consultationDetailUrl(consultationId)}exercises/`
 
-const getConsultations = async (student: number): Promise<Consultation[]> => {
-  const params = { student, concluded: true }
+const getConsultations = async (params: ConsultationListParams): Promise<Consultation[]> => {
+  // const params = { student, concluded }
   const response = await api.get<Consultation[]>(consultationUrl, { params })
 
   return response.data.map(consultation => new Consultation(consultation))
@@ -37,13 +42,15 @@ const sendConsultationExerciseTargetAnswers = async (consultationId: number, pay
   await api.post(targetsAnswersUrl, payload)
 }
 
-const getConsultationExerciseTargets = 
-  async (consultationId: number, consultationExerciseId: number): Promise<ConsultationExerciseTarget[]> => {
-    const targetListUrl = `${consultationExerciseUrl(consultationId)}${consultationExerciseId}/targets-list/`
-    const response = await api.get<ConsultationExerciseTarget[]>(targetListUrl)
+const getConsultationExerciseTargets = async (
+  consultationId: number,
+  consultationExerciseId: number
+): Promise<ConsultationExerciseTarget[]> => {
+  const targetListUrl = `${consultationExerciseUrl(consultationId)}${consultationExerciseId}/targets-list/`
+  const response = await api.get<ConsultationExerciseTarget[]>(targetListUrl)
 
-    return response.data.map(consultationExerciseTarget => new ConsultationExerciseTarget(consultationExerciseTarget))
-  }
+  return response.data.map(consultationExerciseTarget => new ConsultationExerciseTarget(consultationExerciseTarget))
+}
 
 const getConsultationExercises = async (consultationId: number): Promise<ConsultationExercise[]> => {
   const response = await api.get<ConsultationExercise[]>(consultationExerciseUrl(consultationId))
@@ -51,13 +58,13 @@ const getConsultationExercises = async (consultationId: number): Promise<Consult
   return response.data.map(consultationExercise => new ConsultationExercise(consultationExercise))
 }
 
-export { 
-  getConsultations, 
+export {
+  getConsultations,
   getConsultation,
-  addConsultation, 
+  addConsultation,
   editConsultation,
   deleteConsultation,
-  sendConsultationExerciseTargetAnswers, 
+  sendConsultationExerciseTargetAnswers,
   getConsultationExerciseTargets,
-  getConsultationExercises
+  getConsultationExercises,
 }

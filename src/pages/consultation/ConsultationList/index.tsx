@@ -25,18 +25,15 @@ const ConsultationList = ({ consultations, refreshList }: any) => {
 
   const renderItem = (consultation: Consultation, lastItem: boolean) => (
     <View>
-      <TouchableOpacity 
-        onPress={() => navigation.navigate('ConsultationResume', { consultation: consultation.toJson() })} 
-        style={styles.flatListItem}
-      >
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ConsultationResume', { consultation: consultation.toJson() })}
+        style={styles.flatListItem}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.textItemName}>{`Terapeuta: ${consultation.owner.name}`}</Text>
           <Text style={styles.textItemAge}>{consultation.getDuration()}</Text>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={styles.textItemAge}>
-            {consultation.create_date.format('DD/MM/YYYY')} 
-          </Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={styles.textItemAge}>{consultation.create_date.format('DD/MM/YYYY')}</Text>
           <Text style={styles.textItemAge}>
             {`${consultation.create_date.format('HH:mm')} às ${consultation.concluded_date.format('HH:mm')}`}
           </Text>
@@ -50,6 +47,7 @@ const ConsultationList = ({ consultations, refreshList }: any) => {
     <View style={styles.container}>
       {!consultations.length ? <Text style={styles.textEmptyList}>Não há atendimentos para este estudante</Text> : null}
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={consultations}
         refreshControl={refreshControl}
         renderItem={({ item, index }) => renderItem(item, !isLastIndex(index, consultations))}

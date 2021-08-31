@@ -6,29 +6,29 @@ const styles = StyleSheet.create({
   flatList: {
     paddingBottom: 16,
     paddingHorizontal: 16,
-    marginBottom: 16
+    marginBottom: 4,
   },
 
   flatListItem: {
-    padding: 8
+    padding: 8,
   },
 
   textItemName: {
     ...GlobalStyle.textSemiBold,
     color: PRIMARY_TEXT_COLOR,
-    fontSize: 16
+    fontSize: 16,
   },
 
   textItemAge: {
     ...GlobalStyle.textMedium,
     color: SECONDARY_TEXT_COLOR,
-    fontSize: 14
+    fontSize: 14,
   },
 
   dividerItem: {
     marginHorizontal: 8,
-    height: 2
-  }
+    height: 2,
+  },
 })
 
 export default styles
