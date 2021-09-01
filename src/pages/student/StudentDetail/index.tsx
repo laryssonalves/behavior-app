@@ -7,7 +7,7 @@ import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 import { BottomNavigation, ProgressBar } from 'react-native-paper'
 
 import { getStudentExercises } from '../../../services/student-exercise-service'
-import { getConsultations } from '../../../services/consultation-service'
+import { getConsultations, verifyHasUnconcludedConsultation } from '../../../services/consultation-service'
 
 import { Consultation } from '../../../entities/consultation'
 import { StudentExercise } from '../../../entities/student'
@@ -54,14 +54,6 @@ const StudentDetail = () => {
 
   const navigateToDetails = (consultation: Consultation) => {
     navigation.navigate('ConsultationDetail', { consultation: consultation.toJson() })
-  }
-
-  const verifyHasUnconcludedConsultation = async () => {
-    const results = await getConsultations({ concluded: true })
-
-    if (results.length) {
-      console.log(results[0])
-    }
   }
 
   const fetchStudentExercises = async () => {

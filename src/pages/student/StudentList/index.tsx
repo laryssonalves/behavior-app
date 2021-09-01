@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import {
-  FlatList,
-  RefreshControl,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native'
+import { FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -25,6 +19,10 @@ import GlobalStyle from '../../../styles/global-style'
 
 import StudentListHeader from './Header'
 import { isLastIndex } from '../../../utils'
+import useProgressBar from '../../../hooks/useProgressBar'
+import { verifyHasUnconcludedConsultation } from '../../../services/consultation-service'
+import { Consultation } from '../../../entities/consultation'
+import ConsultationUnconcluded from '../../consultation/ConsultationUnconcluded'
 
 class HeaderState {
   searchBar = {
@@ -32,20 +30,21 @@ class HeaderState {
     query: '',
   }
   actionBar = {
-    title: 'Estudantes'
+    title: 'Estudantes',
   }
 }
 
 const StudentList = () => {
   const [students, setStudents] = useState<Student[]>([])
-  const [studentToEdit, setStudentToEdit] = useState<Student>({name: ''} as Student)
+  const [studentToEdit, setStudentToEdit] = useState<Student>({ name: '' } as Student)
   const [studentFormVisible, setStudentFormVisible] = useState<boolean>(false)
+  const [consultationUnconcluded, setConsultationUnconcluded] = useState<Consultation | null>(null)
 
   const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
 
   const navigation = useNavigation()
 
-  const [progressVisible, setProgressVisible] = useState<boolean>(false)
+  const [Progress, showProgress, hideProgress] = useProgressBar()
 
   const showStudentFormModal = () => setStudentFormVisible(true)
   const hideStudentFormModal = () => {
@@ -53,15 +52,23 @@ const StudentList = () => {
     setStudentFormVisible(false)
   }
 
+  const hasToShowConsultationUnconcluded = async () => {
+    const consultation = await verifyHasUnconcludedConsultation()
+
+    if (consultation) {
+      setConsultationUnconcluded(consultation)
+    }
+  }
+
   const fetchStudents = async () => {
     try {
-      setProgressVisible(true)
+      showProgress()
       const students = await getStudents(headerState.searchBar.query)
       setStudents(students)
     } catch (e) {
       console.log(e)
     } finally {
-      setProgressVisible(false)
+      hideProgress()
     }
   }
 
@@ -76,14 +83,13 @@ const StudentList = () => {
   }
 
   useEffect(() => {
-    ;(async () => {
-      await fetchStudents()
-    })()
+    fetchStudents()
+    hasToShowConsultationUnconcluded()
   }, [headerState.searchBar.query])
 
-  const setSearchBarQuery = (query: string) => { 
+  const setSearchBarQuery = (query: string) => {
     const searchBar = { ...headerState.searchBar, query }
-    setHeaderState({ ...headerState, searchBar }) 
+    setHeaderState({ ...headerState, searchBar })
   }
 
   const setSearchBarVisible = (visible: boolean) => {
@@ -92,11 +98,11 @@ const StudentList = () => {
   }
 
   const headerProps = {
-    headerState, 
+    headerState,
     actions: {
       setSearchBarQuery,
-      setSearchBarVisible
-    }
+      setSearchBarVisible,
+    },
   }
 
   const renderItem = (student: Student, isLastIndex: boolean) => (
@@ -106,8 +112,7 @@ const StudentList = () => {
           goToStudentDetail(student)
         }}
         onLongPress={() => editStudent(student)}
-        style={styles.flatListItem}
-      >
+        style={styles.flatListItem}>
         <Text style={styles.textItemName}>{student.name}</Text>
         <Text style={styles.textItemAge}>{student.age} anos</Text>
       </TouchableOpacity>
@@ -120,43 +125,34 @@ const StudentList = () => {
       progressBackgroundColor="#FFF"
       colors={[PRIMARY_COLOR, SECONDARY_COLOR]}
       refreshing={false}
-      onRefresh={async () => await fetchStudents()}
+      onRefresh={async () => {
+        await fetchStudents()
+        await hasToShowConsultationUnconcluded()
+      }}
     />
   )
 
+  const hideConsultationUnconcluded = () => setConsultationUnconcluded(null)
+
   return (
-      <View style={GlobalStyle.container}>
-        <StudentListHeader {...headerProps} 
-        />
+    <View style={GlobalStyle.container}>
+      <StudentListHeader {...headerProps} />
 
-        <StudentForm
-          visible={studentFormVisible}
-          hideModal={hideStudentFormModal}
-          studentToEdit={studentToEdit}
-        />
+      <StudentForm visible={studentFormVisible} hideModal={hideStudentFormModal} studentToEdit={studentToEdit} />
+      <ConsultationUnconcluded consultation={consultationUnconcluded} hideModal={hideConsultationUnconcluded} />
 
-        <ProgressBar
-          style={styles.progressBar}
-          visible={progressVisible}
-          color={PRIMARY_COLOR}
-          indeterminate
-        />
+      <Progress />
 
-        <FlatList
-          style={styles.flatList}
-          data={students}
-          refreshControl={refreshControl}
-          renderItem={({ item, index }) => renderItem(item, isLastIndex(index, students))}
-          keyExtractor={item => item.id.toString()}
-        />
+      <FlatList
+        style={styles.flatList}
+        data={students}
+        refreshControl={refreshControl}
+        renderItem={({ item, index }) => renderItem(item, isLastIndex(index, students))}
+        keyExtractor={item => item.id.toString()}
+      />
 
-        <FAB
-          style={styles.fabAdd}
-          icon="plus"
-          color={SECONDARY_COLOR}
-          onPress={showStudentFormModal}
-        />
-      </View>
+      <FAB style={styles.fabAdd} icon="plus" color={SECONDARY_COLOR} onPress={showStudentFormModal} />
+    </View>
   )
 }
 

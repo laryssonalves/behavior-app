@@ -58,6 +58,12 @@ const getConsultationExercises = async (consultationId: number): Promise<Consult
   return response.data.map(consultationExercise => new ConsultationExercise(consultationExercise))
 }
 
+const verifyHasUnconcludedConsultation = async (): Promise<Consultation | null> => {
+  const results = await getConsultations({ concluded: false })
+
+  return results.length ? results[0] : null
+}
+
 export {
   getConsultations,
   getConsultation,
@@ -67,4 +73,5 @@ export {
   sendConsultationExerciseTargetAnswers,
   getConsultationExerciseTargets,
   getConsultationExercises,
+  verifyHasUnconcludedConsultation,
 }

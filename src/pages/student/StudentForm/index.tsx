@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
 import { Modal, Portal } from 'react-native-paper'
 
@@ -19,13 +19,13 @@ import { Student } from '../../../entities/student'
 
 import { SECONDARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 import GlobalStyle from '../../../styles/global-style'
-import { pickerStyleInvalid, pickerStyleValid } from '../../../styles/datepicker-style';
+import { pickerStyleInvalid, pickerStyleValid } from '../../../styles/datepicker-style'
 import styles from './styles'
 
 const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
   const [student, setStudent] = useState<Student>(studentToEdit)
   const [loading, setLoading] = useState<boolean>(false)
-  const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false);
+  const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false)
   const [submitted, setSubmitted] = useState<boolean>(false)
 
   const genreChoices = genreChoiceList().map(genre => ({ label: genre.name, value: genre.value }))
@@ -36,7 +36,7 @@ const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
 
       setSubmitted(true)
 
-      const storagedCompany = await SecureStorage.retrieveItem('company') as Company
+      const storagedCompany = (await SecureStorage.retrieveItem('company')) as Company
 
       const studentToSave = new Student({ ...student, company: storagedCompany.id })
 
@@ -81,31 +81,31 @@ const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
   }
 
   const datePicker = () => {
-    return datePickerVisible &&
-      <DateTimePickerModal
-        isVisible={datePickerVisible}
-        maximumDate={new Date()}
-        date={student?.birth_date ? student?.birth_date.toDate() : new Date()}
-        mode="date"
-        onConfirm={onBirthPickerChange}
-        onCancel={closeDatePicker}
-      />
+    return (
+      datePickerVisible && (
+        <DateTimePickerModal
+          isVisible={datePickerVisible}
+          maximumDate={new Date()}
+          date={student?.birth_date ? student?.birth_date.toDate() : new Date()}
+          mode="date"
+          onConfirm={onBirthPickerChange}
+          onCancel={closeDatePicker}
+        />
+      )
+    )
   }
 
   const MemoizedDatePicker = useMemo(datePicker, [datePickerVisible])
 
-  const validatedViewStyle = (value: any) => submitted && !value ? styles.inputViewError : styles.inputView
+  const validatedViewStyle = (value: any) => (submitted && !value ? styles.inputViewError : styles.inputView)
 
-  const getTitle = (): string => student.id ? 'Alterar estudante' : 'Novo estudante'
+  const getTitle = (): string => (student.id ? 'Alterar estudante' : 'Novo estudante')
 
   useEffect(() => setStudent(studentToEdit), [studentToEdit])
 
   return (
     <Portal>
-      <Modal
-        visible={visible}
-        onDismiss={closeModal}
-        contentContainerStyle={GlobalStyle.modalContainer}>
+      <Modal visible={visible} onDismiss={closeModal} contentContainerStyle={GlobalStyle.modalContainer}>
         <Text style={GlobalStyle.modalTitle}>{getTitle()}</Text>
         <View style={GlobalStyle.modalBody}>
           <View style={submitted && !student?.name ? styles.inputViewError : styles.inputView}>
@@ -115,7 +115,8 @@ const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
               value={student?.name || ''}
               autoCapitalize="words"
               placeholderTextColor={SECONDARY_COLOR}
-              onChangeText={name => updateStudent({ name })} />
+              onChangeText={name => updateStudent({ name })}
+            />
           </View>
           <RNPickerSelect
             useNativeAndroidPickerStyle={false}
@@ -134,21 +135,15 @@ const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
           </TouchableOpacity>
         </View>
         <View style={GlobalStyle.modalFooter}>
-          <TouchableOpacity
-            style={styles.btnDefault}
-            onPress={closeModal}
-            disabled={loading}>
+          <TouchableOpacity style={styles.btnDefault} onPress={closeModal} disabled={loading}>
             <Text style={GlobalStyle.btnPrimaryText}>CANCELAR</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btnPrimary}
-            onPress={submitForm}
-            disabled={loading}>
-            {
-              loading ?
-                <ActivityIndicator animating={true} color={TERCIARY_COLOR} /> :
-                <Text style={GlobalStyle.btnPrimaryText}>SALVAR</Text>
-            }
+          <TouchableOpacity style={styles.btnPrimary} onPress={submitForm} disabled={loading}>
+            {loading ? (
+              <ActivityIndicator animating={true} color={TERCIARY_COLOR} />
+            ) : (
+              <Text style={GlobalStyle.btnPrimaryText}>SALVAR</Text>
+            )}
           </TouchableOpacity>
         </View>
       </Modal>
@@ -157,4 +152,3 @@ const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
 }
 
 export default StudentForm
-
