@@ -1,9 +1,9 @@
 import { CommonActions } from '@react-navigation/native'
 
-let navigator: any;
+let navigator: any
 
 function setTopLevelNavigator(navigatorRef: any) {
-  navigator = navigatorRef;
+  navigator = navigatorRef
 }
 
 function navigate(name: string, params?: object) {
@@ -12,12 +12,9 @@ function navigate(name: string, params?: object) {
       name,
       params,
     })
-  );
+  )
 }
 
 // add other navigation functions that you need and export them
 
-export {
-  navigate,
-  setTopLevelNavigator,
-};
+export { navigate, setTopLevelNavigator }

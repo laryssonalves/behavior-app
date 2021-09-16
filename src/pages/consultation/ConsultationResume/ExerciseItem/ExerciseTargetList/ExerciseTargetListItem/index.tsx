@@ -17,9 +17,9 @@ const ExerciseTargetListItem = ({ item, index, exerciseTargetsTotal, isLastIndex
         </Text>
       </View>
       <View style={styles.itemResults}>
-        <Text style={styles.itemText}>{item.checkResult(ResultTypeChoice.INDEPENDENT) ? 1 : 0}</Text>
-        <Text style={styles.itemText}>{item.checkResult(ResultTypeChoice.CORRECT_WITH_HELP) ? 1 : 0}</Text>
         <Text style={styles.itemText}>{item.checkResult(ResultTypeChoice.WRONG) ? 1 : 0}</Text>
+        <Text style={styles.itemText}>{item.checkResult(ResultTypeChoice.CORRECT_WITH_HELP) ? 1 : 0}</Text>
+        <Text style={styles.itemText}>{item.checkResult(ResultTypeChoice.INDEPENDENT) ? 1 : 0}</Text>
       </View>
     </View>
     {!isLastIndex && isDivisible(index + 1, exerciseTargetsTotal) && <Divider style={styles.divider} />}

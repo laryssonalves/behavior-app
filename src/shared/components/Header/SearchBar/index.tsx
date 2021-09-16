@@ -14,9 +14,14 @@ import { useState } from 'react'
 const SearchBar = () => {
   const { state, actions } = useHeaderContext()
 
-  const [ query, setQuery ] = useState<string>('')
-  
-  const delayedSetSearchBarQuery = useCallback(_.debounce(search => { actions.setSearchBarQuery(search) }, 300), []);
+  const [query, setQuery] = useState<string>('')
+
+  const delayedSetSearchBarQuery = useCallback(
+    _.debounce(search => {
+      actions.setSearchBarQuery(search)
+    }, 300),
+    []
+  )
 
   const onSearchChange = (search: string) => {
     setQuery(search)
@@ -25,32 +30,31 @@ const SearchBar = () => {
 
   const backAction = () => {
     actions.setSearchBarVisible(false)
-    return true;
-  };
+    return true
+  }
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction)
 
-    return () => backHandler.remove();
-  }, []);
+    return () => backHandler.remove()
+  }, [])
 
   return (
     <Searchbar
-      style={ styles.searchBar }
-      inputStyle={ styles.inputStyle }
-      icon={ 'arrow-left' }
-      iconColor={ 'white' }
-      onIconPress={ () => { actions.setSearchBarVisible(false) } }
-      selectionColor={ 'white' }
-      placeholderTextColor={ 'white' }
+      style={styles.searchBar}
+      inputStyle={styles.inputStyle}
+      icon={'arrow-left'}
+      iconColor={'white'}
+      onIconPress={() => {
+        actions.setSearchBarVisible(false)
+      }}
+      selectionColor={'white'}
+      placeholderTextColor={'white'}
       placeholder="Pesquisar estudante..."
-      autoFocus={ state.searchBarVisible }
+      autoFocus={state.searchBarVisible}
       // onChangeText={ text => setQuery(text) }
       onChangeText={onSearchChange}
-      value={ query }
+      value={query}
     />
   )
 }

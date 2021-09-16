@@ -16,7 +16,7 @@ const AppStack = createStackNavigator()
 const AppRoutes = () => {
   return (
     <View style={GlobalStyle.container}>
-      <AppStack.Navigator screenOptions={{headerShown: false}}>
+      <AppStack.Navigator screenOptions={{ headerShown: false }}>
         <AppStack.Screen name="StudentList" component={StudentList} />
         <AppStack.Screen name="StudentDetail" component={StudentDetail} />
         <AppStack.Screen name="ConsultationDetail" component={ConsultationDetail} />

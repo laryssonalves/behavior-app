@@ -5,6 +5,6 @@ export class HeaderState {
   }
   actionBar = {
     title: '',
-    subTitle: ''
+    subTitle: '',
   }
 }

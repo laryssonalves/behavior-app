@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native'
+import { ActivityIndicator, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native'
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
@@ -34,7 +27,7 @@ const ConsultationDetail = () => {
   const navigation = useNavigation()
   const route = useRoute<RouteProp<ConsultationDetailParams, 'Params'>>()
   const consultation = Consultation.fromJson(route.params.consultation)
-  
+
   const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
   const [exercises, setExercises] = useState<ConsultationExercise[]>([])
   const [modalVisible, setModalVisible] = useState<boolean>(false)
@@ -65,26 +58,22 @@ const ConsultationDetail = () => {
           goToConsultationExerciseList(consultationExercise)
         }}
         style={styles.flatListItem}>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <Text style={styles.textItemProgram}>{consultationExercise.exercise.program}</Text>
-          <Text style={styles.textItemApplication}>{consultationExercise.exercise.getApplicationTypeDescription()}</Text>
+          <Text style={styles.textItemApplication}>
+            {consultationExercise.exercise.getApplicationTypeDescription()}
+          </Text>
         </View>
-        {
-          consultationExercise.concluded && 
-          <IconButton
-            icon="lock"
-            color={SECONDARY_TEXT_COLOR}
-            size={20}/>
-        }
+        {consultationExercise.concluded && <IconButton icon="lock" color={SECONDARY_TEXT_COLOR} size={20} />}
       </TouchableOpacity>
-      {!isLastIndex(index, exercises) && (<Divider style={styles.dividerItem} />)}
+      {!isLastIndex(index, exercises) && <Divider style={styles.dividerItem} />}
     </View>
   )
 
   const headerProps = {
-    headerState, 
+    headerState,
     actions: {
-      goBack: navigation.goBack
+      goBack: navigation.goBack,
     },
   }
 
@@ -92,61 +81,60 @@ const ConsultationDetail = () => {
     return !!exercises.filter(exercise => exercise.is_applied).length
   }
 
-  const warningModalText = 
-    isAnyExerciseApplied() ?
-    'O atendimento será concluído com as informações correntes. Tem certeza que deseja sair?' :
-    'Os treinos não foram aplicados e o atendimento será descartado. Tem certeza que deseja sair?'
+  const warningModalText = isAnyExerciseApplied()
+    ? 'O atendimento será concluído com as informações correntes. Tem certeza que deseja sair?'
+    : 'Os treinos não foram aplicados e o atendimento será descartado. Tem certeza que deseja sair?'
 
   const warningModalProps = {
     modalState: {
       modalVisible,
-      modalText: warningModalText
+      modalText: warningModalText,
     },
     btnStates: {
       btnPositive: {
         loading,
         onPress: () => {
           hideModal()
-          
+
           if (isAnyExerciseApplied()) {
             concludeConsultation()
           } else {
             discardConsultation()
           }
         },
-        label: 'Confirmar'
+        label: 'Confirmar',
       },
       btnNegative: {
         label: 'Cancelar',
-        onPress: hideModal  
+        onPress: hideModal,  
       },
     },
     hideModal,
   }
 
   const getHeaderState = () => {
-    const newHeaderState = { 
-      ...headerState, 
-      actionBar: { 
+    const newHeaderState = {
+      ...headerState,
+      actionBar: {
         title: consultation.student.name,
-        subTitle: `Terapeuta: ${consultation.owner.name}` 
-      } 
+        subTitle: `Terapeuta: ${consultation.owner.name}`, 
+      }, 
     }
     setHeaderState(newHeaderState)
   }
 
   const getExercises = () => {
     showProgress()
-    
+
     getConsultationExercises(consultation.id)
       .then(exercises => setExercises(exercises))
       .finally(() => hideProgress())
   }
-  
+
   const concludeConsultation = () => {
     showLoading()
 
-    const payload = {concluded: true}
+    const payload = { concluded: true }
 
     editConsultation(consultation.id, payload)
       .then(() => {
@@ -182,23 +170,20 @@ const ConsultationDetail = () => {
 
   useEffect(() => navigation.addListener('focus', getExercises))
 
-  useEffect(() => navigation.addListener('beforeRemove', e => {
-    if (!canGoBack) {
-      e.preventDefault()
-      showModal()
-    }
-  }))
+  useEffect(() =>
+    navigation.addListener('beforeRemove', e => {
+      if (!canGoBack) {
+        e.preventDefault()
+        showModal()
+      }
+    })
+  )
 
   return (
     <View style={GlobalStyle.container}>
       <ConsultationDetailActionBar {...headerProps} />
 
-      <ProgressBar
-        style={styles.progressBar}
-        visible={progressVisible}
-        color={PRIMARY_COLOR}
-        indeterminate
-      />
+      <ProgressBar style={styles.progressBar} visible={progressVisible} color={PRIMARY_COLOR} indeterminate />
 
       <FlatList
         style={styles.flatList}
@@ -209,13 +194,13 @@ const ConsultationDetail = () => {
       />
 
       <TouchableOpacity
-        style={{...GlobalStyle.btnPrimary, alignSelf: 'center', marginBottom: 16}}
+        style={{ ...GlobalStyle.btnPrimary, alignSelf: 'center', marginBottom: 16 }}
         onPress={concludeConsultation}>
-        {
-          loading ?
-            <ActivityIndicator animating={true} color={TERCIARY_COLOR} /> :
-            <Text style={GlobalStyle.btnPrimaryText}>Concluir atendimento</Text>
-        }
+        {loading ? (
+          <ActivityIndicator animating={true} color={TERCIARY_COLOR} />
+        ) : (
+          <Text style={GlobalStyle.btnPrimaryText}>Concluir atendimento</Text>
+        )}
       </TouchableOpacity>
 
       <WarningModal {...warningModalProps} />

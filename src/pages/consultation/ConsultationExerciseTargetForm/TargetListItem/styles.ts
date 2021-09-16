@@ -1,6 +1,6 @@
-import { StyleSheet } from "react-native";
-import { PRIMARY_COLOR, PRIMARY_TEXT_COLOR, TERCIARY_COLOR } from "../../../../colors";
-import GlobalStyle from "../../../../styles/global-style";
+import { StyleSheet } from 'react-native'
+import { PRIMARY_COLOR, PRIMARY_TEXT_COLOR } from '../../../../colors'
+import GlobalStyle from '../../../../styles/global-style'
 
 const styles = StyleSheet.create({
   flatListItem: {
@@ -10,14 +10,14 @@ const styles = StyleSheet.create({
   textTarget: {
     ...GlobalStyle.textSemiBold,
     color: PRIMARY_TEXT_COLOR,
-    fontSize: 16
+    fontSize: 16,
   },
 
   textTargetAnswered: {
     ...GlobalStyle.textSemiBold,
     color: PRIMARY_TEXT_COLOR,
     fontSize: 16,
-    flex: 1
+    flex: 1,
   },
 
   dividerItem: {
@@ -27,24 +27,18 @@ const styles = StyleSheet.create({
   dividerAttempts: {
     height: 2,
     marginVertical: 16,
-    backgroundColor: PRIMARY_COLOR
+    backgroundColor: PRIMARY_COLOR,
   },
 
-  flatListItemOptions: {
-    paddingTop: 8
+  itemOptions: {
+    paddingTop: 8,
   },
 
-  flatListItemOptionsContainer: {
-    flexDirection: 'row', 
-    justifyContent: 'space-around',
-    flex: 1
+  itemAnswered: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
   },
-
-  flatListItemAnswered: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    paddingVertical: 8
-  }
 })
 
 export default styles

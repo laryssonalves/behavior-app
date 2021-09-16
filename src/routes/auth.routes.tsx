@@ -9,7 +9,7 @@ const AppStack = createStackNavigator()
 const AuthRoutes = () => {
   return (
     <AppStack.Navigator>
-      <AppStack.Screen name='Login' component={ Login } options={ { headerShown: false } }/>
+      <AppStack.Screen name="Login" component={Login} options={{ headerShown: false }} />
     </AppStack.Navigator>
   )
 }

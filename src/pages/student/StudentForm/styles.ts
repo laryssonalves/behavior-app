@@ -6,7 +6,7 @@ import GlobalStyle from '../../../styles/global-style'
 const styles = StyleSheet.create({
   inputView: {
     ...GlobalStyle.inputView,
-    marginBottom: 8
+    marginBottom: 8,
   },
 
   inputViewError: {
@@ -16,25 +16,25 @@ const styles = StyleSheet.create({
 
   btnDefault: {
     ...GlobalStyle.btnDefault,
-    width: '48%'
+    width: '48%',
   },
 
   btnPrimary: {
     ...GlobalStyle.btnPrimary,
-    width: '48%'
+    width: '48%',
   },
-  
+
   textDropdown: {
     fontSize: 16,
     color: SECONDARY_COLOR,
-    fontFamily: 'Chai-Regular'
+    fontFamily: 'Chai-Regular',
   },
 
   datePickerText: {
     fontSize: 16,
     color: SECONDARY_COLOR,
-    fontFamily: 'Chai-Regular'
-  }
+    fontFamily: 'Chai-Regular',
+  },
 })
 
 export default styles

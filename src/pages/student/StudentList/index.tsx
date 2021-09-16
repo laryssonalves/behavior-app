@@ -4,7 +4,7 @@ import { FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-na
 
 import { useNavigation } from '@react-navigation/native'
 
-import { Divider, FAB, ProgressBar } from 'react-native-paper'
+import { Divider, FAB } from 'react-native-paper'
 
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 
@@ -20,9 +20,7 @@ import GlobalStyle from '../../../styles/global-style'
 import StudentListHeader from './Header'
 import { isLastIndex } from '../../../utils'
 import useProgressBar from '../../../hooks/useProgressBar'
-import { verifyHasUnconcludedConsultation } from '../../../services/consultation-service'
-import { Consultation } from '../../../entities/consultation'
-import ConsultationUnconcluded from '../../consultation/ConsultationUnconcluded'
+import useConsultationUnconcluded from '../../../hooks/useConsultationUnconcluded'
 
 class HeaderState {
   searchBar = {
@@ -38,13 +36,13 @@ const StudentList = () => {
   const [students, setStudents] = useState<Student[]>([])
   const [studentToEdit, setStudentToEdit] = useState<Student>({ name: '' } as Student)
   const [studentFormVisible, setStudentFormVisible] = useState<boolean>(false)
-  const [consultationUnconcluded, setConsultationUnconcluded] = useState<Consultation | null>(null)
 
   const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
 
   const navigation = useNavigation()
 
-  const [Progress, showProgress, hideProgress] = useProgressBar()
+  const [ProgressIndicator, showProgress, hideProgress] = useProgressBar()
+  const [ConsultationUnconcludedModal] = useConsultationUnconcluded()
 
   const showStudentFormModal = () => setStudentFormVisible(true)
   const hideStudentFormModal = () => {
@@ -52,19 +50,11 @@ const StudentList = () => {
     setStudentFormVisible(false)
   }
 
-  const hasToShowConsultationUnconcluded = async () => {
-    const consultation = await verifyHasUnconcludedConsultation()
-
-    if (consultation) {
-      setConsultationUnconcluded(consultation)
-    }
-  }
-
   const fetchStudents = async () => {
     try {
       showProgress()
-      const students = await getStudents(headerState.searchBar.query)
-      setStudents(students)
+      const result = await getStudents(headerState.searchBar.query)
+      setStudents(result)
     } catch (e) {
       console.log(e)
     } finally {
@@ -84,7 +74,6 @@ const StudentList = () => {
 
   useEffect(() => {
     fetchStudents()
-    hasToShowConsultationUnconcluded()
   }, [headerState.searchBar.query])
 
   const setSearchBarQuery = (query: string) => {
@@ -105,7 +94,7 @@ const StudentList = () => {
     },
   }
 
-  const renderItem = (student: Student, isLastIndex: boolean) => (
+  const renderItem = (student: Student, isLast: boolean) => (
     <View>
       <TouchableOpacity
         onPress={() => {
@@ -116,7 +105,7 @@ const StudentList = () => {
         <Text style={styles.textItemName}>{student.name}</Text>
         <Text style={styles.textItemAge}>{student.age} anos</Text>
       </TouchableOpacity>
-      {!isLastIndex && <Divider style={styles.dividerItem} />}
+      {!isLast && <Divider style={styles.dividerItem} />}
     </View>
   )
 
@@ -125,23 +114,19 @@ const StudentList = () => {
       progressBackgroundColor="#FFF"
       colors={[PRIMARY_COLOR, SECONDARY_COLOR]}
       refreshing={false}
-      onRefresh={async () => {
-        await fetchStudents()
-        await hasToShowConsultationUnconcluded()
-      }}
+      onRefresh={async () => await fetchStudents()}
     />
   )
-
-  const hideConsultationUnconcluded = () => setConsultationUnconcluded(null)
 
   return (
     <View style={GlobalStyle.container}>
       <StudentListHeader {...headerProps} />
 
-      <StudentForm visible={studentFormVisible} hideModal={hideStudentFormModal} studentToEdit={studentToEdit} />
-      <ConsultationUnconcluded consultation={consultationUnconcluded} hideModal={hideConsultationUnconcluded} />
+      <ProgressIndicator />
 
-      <Progress />
+      <StudentForm visible={studentFormVisible} hideModal={hideStudentFormModal} studentToEdit={studentToEdit} />
+
+      <ConsultationUnconcludedModal />
 
       <FlatList
         style={styles.flatList}

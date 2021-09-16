@@ -1,5 +1,4 @@
-import { CorePerson } from "./core-person"
-
+import { CorePerson } from './core-person'
 
 export class Member extends CorePerson {
   company: number

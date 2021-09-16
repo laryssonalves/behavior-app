@@ -9,29 +9,29 @@ const styles = StyleSheet.create({
   },
 
   progressBar: {
-    height: 8
+    height: 8,
   },
 
   flatList: {
     paddingBottom: 16,
     paddingHorizontal: 16,
-    marginBottom: 16
+    marginBottom: 16,
   },
 
   flatListItem: {
-    padding: 8
+    padding: 8,
   },
 
   textItemName: {
     ...GlobalStyle.textSemiBold,
     color: PRIMARY_TEXT_COLOR,
-    fontSize: 16
+    fontSize: 16,
   },
 
   textItemAge: {
     ...GlobalStyle.textMedium,
     color: SECONDARY_TEXT_COLOR,
-    fontSize: 14
+    fontSize: 14,
   },
 
   dividerItem: {
@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
     backgroundColor: PRIMARY_COLOR,
     margin: 24,
     right: 0,
-    bottom: 0
-  }
+    bottom: 0,
+  },
 })
 
 export default styles

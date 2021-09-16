@@ -26,27 +26,22 @@ const ActionBar = ({ navigation, previous }: any) => {
           onSearchPress={() => actions.setSearchBarVisible(true)}
           onLogoutPress={async () => await signOut()}
         />
-      )
+      ),
     },
     {
       screenName: 'StudentDetail',
-      menu: <MenuStudentDetail onAddPress={() => {}} />
-    }
+      menu: <MenuStudentDetail onAddPress={() => {}} />,
+    },
   ]
 
   const getHeaderScreen = () => {
-    return headerScreenMap.find(
-      headerScreen => headerScreen.screenName === route.name
-    )?.menu
+    return headerScreenMap.find(headerScreen => headerScreen.screenName === route.name)?.menu
   }
 
   return (
     <Appbar.Header statusBarHeight={0} style={styles.actionBar}>
       {previous ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
-      <Appbar.Content
-        title={state.actionBarTitle}
-        titleStyle={styles.titleStyle}
-      />
+      <Appbar.Content title={state.actionBarTitle} titleStyle={styles.titleStyle} />
       {getHeaderScreen()}
     </Appbar.Header>
   )

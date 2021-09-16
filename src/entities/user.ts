@@ -1,14 +1,14 @@
-import { Member } from "./member";
+import { Member } from './member'
 
 export interface UserCredential {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 export class User {
-  id: number;
-  email: string;
-  name: string;
+  id: number
+  email: string
+  name: string
   photo: string
   person: Member
   group_role_id: number
@@ -21,6 +21,4 @@ export class User {
   // hasPerms(codenames: string[]): boolean {
   //   return !!this.permissions.filter(perm => codenames.includes(perm.codename)).length
   // }
-
 }
-

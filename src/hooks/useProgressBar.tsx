@@ -10,11 +10,11 @@ const useProgressBar = () => {
   const showProgress = () => setVisible(true)
   const hideProgress = () => setVisible(false)
 
-  const Progress = () => (
+  const ProgressIndicator = () => (
     <ProgressBar style={GlobalStyle.progressBar} visible={visible} color={PRIMARY_COLOR} indeterminate />
   )
 
-  return [Progress, showProgress, hideProgress]
+  return [ProgressIndicator, showProgress, hideProgress]
 }
 
 export default useProgressBar

@@ -17,10 +17,7 @@ const addStudent = async (student: Student): Promise<Student> => {
 }
 
 const editStudent = async (student: Student): Promise<Student> => {
-  const response = await api.put<Student>(
-    `${studentUrl}${student.id}`,
-    student.getPayload()
-  )
+  const response = await api.put<Student>(`${studentUrl}${student.id}`, student.getPayload())
   return new Student(response.data)
 }
 

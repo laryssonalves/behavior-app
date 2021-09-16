@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState } from 'react'
 
 interface HeaderContextState {
-  searchBarVisible: boolean;
-  searchBarQuery: string;
-  actionBarTitle: string;
+  searchBarVisible: boolean
+  searchBarQuery: string
+  actionBarTitle: string
   modalVisible: boolean
 
   page: {
@@ -14,21 +14,23 @@ interface HeaderContextState {
 }
 
 interface HeaderContextData {
-  state: HeaderContextState;
+  state: HeaderContextState
   actions: {
-    setSearchBarVisible: (visible: boolean) => void;
-    setSearchBarQuery: (query: string) => void;
-    setActionBarTitle: (query: string) => void;
-    setModalVisible: (visible: boolean) => void;
-  };
+    setSearchBarVisible: (visible: boolean) => void
+    setSearchBarQuery: (query: string) => void
+    setActionBarTitle: (query: string) => void
+    setModalVisible: (visible: boolean) => void
+  }
 }
 
 const HeaderContext = createContext<HeaderContextData>({} as HeaderContextData)
 
 const HeaderProvider = ({ children }: any) => {
-  const [ state, setState ] = useState<HeaderContextState>({} as HeaderContextState)
+  const [state, setState] = useState<HeaderContextState>({} as HeaderContextState)
 
-  const setSearchBarQuery = (query: string) => { setState({ ...state, searchBarQuery: query }) }
+  const setSearchBarQuery = (query: string) => {
+    setState({ ...state, searchBarQuery: query })
+  }
 
   const setSearchBarVisible = (visible: boolean) => {
     const newState = { ...state, searchBarVisible: visible, searchBarQuery: visible ? state.searchBarQuery : '' }
@@ -40,15 +42,13 @@ const HeaderProvider = ({ children }: any) => {
     setState(newState)
   }
 
-  const setModalVisible = (visible: boolean) => { setState({ ...state, searchBarVisible: visible }) }
+  const setModalVisible = (visible: boolean) => {
+    setState({ ...state, searchBarVisible: visible })
+  }
 
   const actions = { setSearchBarVisible, setSearchBarQuery, setActionBarTitle, setModalVisible }
 
-  return (
-    <HeaderContext.Provider value={ { state, actions } }>
-      { children }
-    </HeaderContext.Provider>
-  )
+  return <HeaderContext.Provider value={{ state, actions }}>{children}</HeaderContext.Provider>
 }
 
 const useHeaderContext = () => {

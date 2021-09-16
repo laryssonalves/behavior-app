@@ -1,10 +1,10 @@
-import { StyleSheet } from "react-native";
-import GlobalStyle from "../../../../styles/global-style";
+import { StyleSheet } from 'react-native'
+import GlobalStyle from '../../../../styles/global-style'
 
 const styles = StyleSheet.create({
   btnDefault: {
     ...GlobalStyle.btnDefault,
-    width: '48%'
+    width: '48%',
   },
 
   btnPrimary: {

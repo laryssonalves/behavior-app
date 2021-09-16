@@ -10,9 +10,11 @@ import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 import { Consultation } from '../../../entities/consultation'
 import styles from './styles'
 import { isLastIndex } from '../../../utils'
+import useConsultationUnconcluded from '../../../hooks/useConsultationUnconcluded'
 
 const ConsultationList = ({ consultations, refreshList }: any) => {
   const navigation = useNavigation()
+  const [ConsultationUnconcludedModal] = useConsultationUnconcluded()
 
   const refreshControl = (
     <RefreshControl
@@ -46,6 +48,7 @@ const ConsultationList = ({ consultations, refreshList }: any) => {
   return (
     <View style={styles.container}>
       {!consultations.length ? <Text style={styles.textEmptyList}>Não há atendimentos para este estudante</Text> : null}
+      <ConsultationUnconcludedModal />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={consultations}

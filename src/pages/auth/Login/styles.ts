@@ -9,12 +9,12 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: TERCIARY_COLOR,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 
   logo: {
     width: 300,
-    height: 169
+    height: 169,
   },
 
   inputView: {
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     borderColor: PRIMARY_COLOR,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
 
   inputViewError: {
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     width: '80%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
 
   inputText: {
@@ -42,12 +42,12 @@ const styles = StyleSheet.create({
   btnLogin: {
     ...GlobalStyle.btnPrimary,
     marginTop: 20,
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   btnLoginText: {
     ...GlobalStyle.btnPrimaryText,
-  }
+  },
 })
 
 export default styles

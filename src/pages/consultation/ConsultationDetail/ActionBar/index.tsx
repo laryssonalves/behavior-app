@@ -5,7 +5,7 @@ import { Appbar } from 'react-native-paper'
 import styles from './styles'
 
 const ConsultationDetailActionBar = (props: any) => {
-  const {headerState, actions} = props
+  const { headerState, actions } = props
 
   return (
     <Appbar.Header statusBarHeight={0} style={styles.actionBar}>
@@ -14,7 +14,8 @@ const ConsultationDetailActionBar = (props: any) => {
         title={headerState.actionBar.title}
         subtitle={headerState.actionBar.subTitle}
         titleStyle={styles.titleStyle}
-        subtitleStyle={styles.subTitleStyle}/>
+        subtitleStyle={styles.subTitleStyle}
+      />
       {/* <Appbar.Action icon="close" color="white" onPress={actions.goBack} /> */}
     </Appbar.Header>
   )

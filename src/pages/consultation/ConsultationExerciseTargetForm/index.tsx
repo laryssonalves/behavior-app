@@ -11,13 +11,16 @@ import ConsultationExerciseTargetFormActionBar from './ActionBar'
 import { ConsultationExercise, ConsultationExerciseTarget } from '../../../entities/consultation'
 import { HeaderState } from '../../../entities/header-state'
 import TargetListItem from './TargetListItem'
-import { sendConsultationExerciseTargetAnswers, getConsultationExerciseTargets } from '../../../services/consultation-service'
+import {
+  sendConsultationExerciseTargetAnswers,
+  getConsultationExerciseTargets,
+} from '../../../services/consultation-service'
 import { ProgressBar } from 'react-native-paper'
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 
 type ConsultationExerciseTargetFormParams = {
   Params: {
-    consultationExercise: string,
+    consultationExercise: string
   }
 }
 
@@ -25,7 +28,7 @@ const ConsultationExerciseTargetForm = () => {
   const navigation = useNavigation()
   const route = useRoute<RouteProp<ConsultationExerciseTargetFormParams, 'Params'>>()
   const consultationExercise = ConsultationExercise.fromJson(route.params.consultationExercise)
-  
+
   const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
   const [targets, setTargets] = useState<ConsultationExerciseTarget[]>([])
   const [saved, setSaved] = useState<boolean>(false)
@@ -39,16 +42,16 @@ const ConsultationExerciseTargetForm = () => {
   const saveApplication = (concluded?: boolean) => {
     showProgress()
 
-    const {id, consultation_id} = consultationExercise
+    const { id, consultation_id } = consultationExercise
 
     const payload = {
       consultation_exercise: id,
       concluded: concluded === undefined ? consultationExercise.concluded : concluded,
-      targets
+      targets,
     }
 
     sendConsultationExerciseTargetAnswers(consultation_id, payload)
-      .then(() => { 
+      .then(() => {
         setSaved(true)
 
         if (concluded) {
@@ -72,30 +75,30 @@ const ConsultationExerciseTargetForm = () => {
   }
 
   const renderTargetListItem = (consultationExerciseTarget: ConsultationExerciseTarget, index: number) => {
-    const props = { 
-      consultationExerciseTarget, 
-      index, 
+    const props = {
+      consultationExerciseTarget,
+      index,
       targetState: { targets, setTargets },
       concluded: consultationExercise.concluded,
-      exerciseTargetsTotal: consultationExercise.exercise.total_targets
+      exerciseTargetsTotal: consultationExercise.exercise.total_targets,
     }
 
-    return <TargetListItem  {...props}/>
+    return <TargetListItem {...props} />
   }
 
- const headerProps = {
-    headerState, 
+  const headerProps = {
+    headerState,
     actions: {
       goBack,
       concludeExercise,
-      showResume
+      showResume,
     },
   }
 
   const getTargets = () => {
     showProgress()
 
-    const {id, consultation_id} = consultationExercise
+    const { id, consultation_id } = consultationExercise
 
     getConsultationExerciseTargets(consultation_id, id)
       .then(targets => setTargets(targets))
@@ -103,13 +106,13 @@ const ConsultationExerciseTargetForm = () => {
   }
 
   const getHeaderState = () => {
-    const newHeaderState = { 
+    const newHeaderState = {
       ...headerState,
       concluded: consultationExercise.concluded,
-      actionBar: { 
+      actionBar: {
         title: consultationExercise.exercise.program,
-        subTitle: consultationExercise.exercise.getApplicationTypeDescription()
-      } 
+        subTitle: consultationExercise.exercise.getApplicationTypeDescription(),
+      },
     }
     setHeaderState(newHeaderState)
   }
@@ -128,7 +131,7 @@ const ConsultationExerciseTargetForm = () => {
       onRefresh={getTargets}
     />
   )
- 
+
   useEffect(() => {
     getHeaderState()
     getTargets()
@@ -140,12 +143,7 @@ const ConsultationExerciseTargetForm = () => {
     <View style={GlobalStyle.container}>
       <ConsultationExerciseTargetFormActionBar {...headerProps} />
 
-      <ProgressBar
-        style={styles.progressBar}
-        visible={progressVisible}
-        color={PRIMARY_COLOR}
-        indeterminate
-      />
+      <ProgressBar style={styles.progressBar} visible={progressVisible} color={PRIMARY_COLOR} indeterminate />
 
       <FlatList
         style={styles.flatList}

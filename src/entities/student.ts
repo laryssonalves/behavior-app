@@ -14,10 +14,7 @@ export class Student {
 
   constructor(props?: Partial<Student>) {
     const birth_date = moment(props?.birth_date, 'YYYY-MM-DD')
-    const first_avaliation_date = moment(
-      props?.first_avaliation_date,
-      'YYYY-MM-DD'
-    )
+    const first_avaliation_date = moment(props?.first_avaliation_date, 'YYYY-MM-DD')
 
     const momentDates = { birth_date, first_avaliation_date }
 
@@ -27,7 +24,7 @@ export class Student {
   getPayload() {
     return {
       ...this,
-      birth_date: this.birth_date.format('YYYY-MM-DD')
+      birth_date: this.birth_date.format('YYYY-MM-DD'),
     }
   }
 }
@@ -49,11 +46,7 @@ export class StudentExercise {
   }
 
   getApplicationTypeDescription(): string {
-    return (
-      applicationTypeChoiceList().find(
-        appType => appType.value === this.application_type
-      )?.name || ''
-    )
+    return applicationTypeChoiceList().find(appType => appType.value === this.application_type)?.name || ''
   }
 }
 
