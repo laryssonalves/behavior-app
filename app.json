@@ -18,7 +18,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.smartdev.beeapp",
-      "buildNumber": "1.1.1",
+      "buildNumber": "1.1.2",
       "supportsTablet": true
     },
     "android": {
