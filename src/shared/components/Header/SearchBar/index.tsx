@@ -50,7 +50,7 @@ const SearchBar = () => {
       }}
       selectionColor={'white'}
       placeholderTextColor={'white'}
-      placeholder="Pesquisar estudante..."
+      placeholder="Pesquisar aprendente..."
       autoFocus={state.searchBarVisible}
       // onChangeText={ text => setQuery(text) }
       onChangeText={onSearchChange}

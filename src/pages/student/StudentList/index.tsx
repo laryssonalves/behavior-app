@@ -28,7 +28,7 @@ class HeaderState {
     query: '',
   }
   actionBar = {
-    title: 'Estudantes',
+    title: 'Aprendentes',
   }
 }
 

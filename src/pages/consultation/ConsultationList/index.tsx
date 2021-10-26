@@ -47,7 +47,7 @@ const ConsultationList = ({ consultations, refreshList }: any) => {
 
   return (
     <View style={styles.container}>
-      {!consultations.length ? <Text style={styles.textEmptyList}>Não há atendimentos para este estudante</Text> : null}
+      {!consultations.length ? <Text style={styles.textEmptyList}>Não há atendimentos para este aprendente</Text> : null}
       <ConsultationUnconcludedModal />
       <FlatList
         showsVerticalScrollIndicator={false}

@@ -45,7 +45,7 @@ const StudentListSearchBar = ({ headerState, actions }: any) => {
       }}
       selectionColor={'white'}
       placeholderTextColor={'white'}
-      placeholder="Pesquisar estudante..."
+      placeholder="Pesquisar aprendente..."
       autoFocus={headerState.searchBar.visible}
       onChangeText={onSearchChange}
       value={query}

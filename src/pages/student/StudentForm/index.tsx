@@ -99,7 +99,7 @@ const StudentForm = ({ visible, hideModal, studentToEdit }: any) => {
 
   const validatedViewStyle = (value: any) => (submitted && !value ? styles.inputViewError : styles.inputView)
 
-  const getTitle = (): string => (student.id ? 'Alterar estudante' : 'Novo estudante')
+  const getTitle = (): string => (student.id ? 'Alterar aprendente' : 'Novo aprendente')
 
   useEffect(() => setStudent(studentToEdit), [studentToEdit])
 

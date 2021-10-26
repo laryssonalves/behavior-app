@@ -59,7 +59,7 @@ const ConsultationUnconcluded = ({ consultation, hideModal }: ConsultationUnconc
           </View>
           <View style={styles.rowInfo}>
             <Text style={styles.rowInfoField} numberOfLines={1}>
-              Estudante
+              Aprendente
             </Text>
             <View style={styles.rowInfoValueContainer}>
               <Text style={styles.rowInfoValue} numberOfLines={1}>
