@@ -23,7 +23,7 @@
     },
     "android": {
       "package": "com.smartdev.beeapp",
-      "versionCode": 2,
+      "versionCode": 3,
       "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-logo-icon.png",
