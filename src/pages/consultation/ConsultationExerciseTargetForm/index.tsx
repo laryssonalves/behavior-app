@@ -4,6 +4,8 @@ import { FlatList, RefreshControl, View } from 'react-native'
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
+import _ from 'lodash'
+
 import GlobalStyle from '../../../styles/global-style'
 import styles from './styles'
 
@@ -74,6 +76,25 @@ const ConsultationExerciseTargetForm = () => {
     setTargets(targetsResume)
   }
 
+  const shuffleTargets = () => {
+    const targetsShuffled = _.shuffle(targets)
+
+    targetsShuffled.map((value, index) => ({ ...value, application_sequence: index + 1 }))
+    console.log(
+      targetsShuffled.map(value => {
+        const { id, sequence, application_sequence } = value
+        return { id, sequence, application_sequence }
+      })
+    )
+
+    setTargets(targetsShuffled)
+  }
+
+  const unshuffleTargets = () => {
+    const targetsUnshuffled = targets.map(value => ({ ...value, application_sequence: value.sequence }))
+    setTargets(_.sortBy(targetsUnshuffled, 'id') as ConsultationExerciseTarget[])
+  }
+
   const renderTargetListItem = (consultationExerciseTarget: ConsultationExerciseTarget, index: number) => {
     const props = {
       consultationExerciseTarget,
@@ -92,6 +113,8 @@ const ConsultationExerciseTargetForm = () => {
       goBack,
       concludeExercise,
       showResume,
+      shuffleTargets,
+      unshuffleTargets,
     },
   }
 

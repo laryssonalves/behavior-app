@@ -73,6 +73,7 @@ export class ConsultationExerciseTarget {
   result_type: ResultTypeChoice
   student_target: StudentExerciseTarget
   sequence: number
+  application_sequence: number
 
   //frontend variables
   showOptions = true

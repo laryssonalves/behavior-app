@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Appbar, Button, Colors, Menu } from 'react-native-paper'
+import { Appbar, Colors, Menu } from 'react-native-paper'
 
 import styles from './styles'
 
@@ -40,6 +40,20 @@ const ConsultationExerciseTargetFormActionBar = (props: any) => {
             onPress={() => {
               closeMenu()
               actions.showResume()
+            }}
+          />
+          <Menu.Item
+            title="Randomizar"
+            onPress={() => {
+              closeMenu()
+              actions.shuffleTargets()
+            }}
+          />
+          <Menu.Item
+            title="Não randomizar"
+            onPress={() => {
+              closeMenu()
+              actions.unshuffleTargets()
             }}
           />
         </Menu>
