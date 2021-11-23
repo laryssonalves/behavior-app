@@ -6,6 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
+    "build:android": "expo build:android -t app-bundle",
     "lint": "eslint --fix 'src/**'",
     "format": "prettier --write \"src/**/*.ts\""
   },
@@ -17,7 +18,7 @@
     "axios": "^0.21.1",
     "expo": "^41.0.0",
     "expo-app-loading": "^1.0.1",
-    "expo-cli": "^4.1.4",
+    "expo-cli": "^4.13.0",
     "expo-font": "~9.1.0",
     "expo-secure-store": "~10.1.0",
     "expo-status-bar": "~1.0.4",
