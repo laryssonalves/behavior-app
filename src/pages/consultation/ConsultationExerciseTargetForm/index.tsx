@@ -77,17 +77,18 @@ const ConsultationExerciseTargetForm = () => {
   }
 
   const shuffleTargets = () => {
-    const targetsShuffled = _.shuffle(targets)
+    const numberOfTries = targets.length / consultationExercise.exercise.total_targets
+    const numberOfTargets = targets.length / numberOfTries
 
-    targetsShuffled.map((value, index) => ({ ...value, application_sequence: index + 1 }))
-    console.log(
-      targetsShuffled.map(value => {
-        const { id, sequence, application_sequence } = value
-        return { id, sequence, application_sequence }
-      })
-    )
+    const shuffledTargets = []
+    const targetsArrAux = targets
 
-    setTargets(targetsShuffled)
+    for (let i = 0; i < numberOfTries; i++) {
+      const arr = targetsArrAux.splice(0, numberOfTargets)
+      shuffledTargets.push(_.shuffle(arr).map((value, index) => ({ ...value, application_sequence: index + 1 })))
+    }
+
+    setTargets(shuffledTargets.flat() as ConsultationExerciseTarget[])
   }
 
   const unshuffleTargets = () => {
