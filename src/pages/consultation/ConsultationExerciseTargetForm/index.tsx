@@ -69,30 +69,31 @@ const ConsultationExerciseTargetForm = () => {
   }
 
   const showResume = () => {
-    const targetsResume = targets.map(target => {
-      target.showOptions = false
-      return target
-    })
+    const targetsResume = getTargetsHidden()
     setTargets(targetsResume)
   }
+
+  const getTargetsHidden = (): ConsultationExerciseTarget[] =>
+    targets.map(target => Object.assign(target, { showOptions: false }))
 
   const shuffleTargets = () => {
     const numberOfTries = targets.length / consultationExercise.exercise.total_targets
     const numberOfTargets = targets.length / numberOfTries
 
     const shuffledTargets = []
-    const targetsArrAux = targets
+    const targetsArrAux = _.sortBy(getTargetsHidden(), 'id')
 
     for (let i = 0; i < numberOfTries; i++) {
       const arr = targetsArrAux.splice(0, numberOfTargets)
-      shuffledTargets.push(_.shuffle(arr).map((value, index) => ({ ...value, application_sequence: index + 1 })))
+      const arrShuffled = _.shuffle(arr).map((value, index) => ({ ...value, application_sequence: index + 1 }))
+      shuffledTargets.push(arrShuffled)
     }
 
     setTargets(shuffledTargets.flat() as ConsultationExerciseTarget[])
   }
 
   const unshuffleTargets = () => {
-    const targetsUnshuffled = targets.map(value => ({ ...value, application_sequence: value.sequence }))
+    const targetsUnshuffled = getTargetsHidden().map(value => ({ ...value, application_sequence: value.sequence }))
     setTargets(_.sortBy(targetsUnshuffled, 'id') as ConsultationExerciseTarget[])
   }
 
