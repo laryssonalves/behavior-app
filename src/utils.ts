@@ -12,4 +12,6 @@ const isLastIndex = (indexToCheck: number, arr: any[]): boolean => {
   return indexToCheck === arr.length - 1
 }
 
-export { isDivisible, isLastIndex }
+const percentage = (value: number, total: number): number => (100 * value) / total
+
+export { isDivisible, isLastIndex, percentage }
