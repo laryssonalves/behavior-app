@@ -10,7 +10,7 @@ import { StudentExercise } from '../../../../entities/student'
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../../colors'
 
 import styles from './styles'
-import GlobalStyle from '../../../../styles/global-style'
+import EmptyList from '../../../../components/EmptyList'
 
 const ExcerciseList = ({ exercises, refreshList }: any) => {
   const refreshControl = (
@@ -33,15 +33,18 @@ const ExcerciseList = ({ exercises, refreshList }: any) => {
   )
 
   return (
-    <View style={GlobalStyle.container}>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        style={styles.flatList}
-        data={exercises}
-        refreshControl={refreshControl}
-        renderItem={({ item, index }) => renderItem(item, isLastIndex(index, exercises))}
-        keyExtractor={item => item.id.toString()}
-      />
+    <View style={styles.container}>
+      {!exercises.length ? (
+        <EmptyList text="Nenhum exercício encontrado" />
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={exercises}
+          refreshControl={refreshControl}
+          renderItem={({ item, index }) => renderItem(item, isLastIndex(index, exercises))}
+          keyExtractor={item => item.id.toString()}
+        />
+      )}
     </View>
   )
 }

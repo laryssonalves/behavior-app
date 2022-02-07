@@ -74,12 +74,6 @@ const StudentDetail = () => {
       const { id } = route.params
       const results = await getConsultations({ student: id, concluded: true })
       setConsultations(results)
-
-      const unconcludedConsultation = results.find(consultation => !consultation.concluded)
-
-      if (unconcludedConsultation) {
-        console.log(unconcludedConsultation)
-      }
     } catch (e) {
       console.log(e)
     } finally {

@@ -3,7 +3,8 @@ import { PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR } from '../../../../colors'
 import GlobalStyle from '../../../../styles/global-style'
 
 const styles = StyleSheet.create({
-  flatList: {
+  container: {
+    ...GlobalStyle.container,
     paddingBottom: 16,
     paddingHorizontal: 16,
     marginBottom: 4,

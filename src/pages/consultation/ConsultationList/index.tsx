@@ -10,6 +10,7 @@ import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 import { Consultation } from '../../../entities/consultation'
 import styles from './styles'
 import { isLastIndex } from '../../../utils'
+import EmptyList from '../../../components/EmptyList'
 
 const ConsultationList = ({ consultations, refreshList }: any) => {
   const navigation = useNavigation()
@@ -46,15 +47,16 @@ const ConsultationList = ({ consultations, refreshList }: any) => {
   return (
     <View style={styles.container}>
       {!consultations.length ? (
-        <Text style={styles.textEmptyList}>Não há atendimentos para este aprendente</Text>
-      ) : null}
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={consultations}
-        refreshControl={refreshControl}
-        renderItem={({ item, index }) => renderItem(item, !isLastIndex(index, consultations))}
-        keyExtractor={item => item.id.toString()}
-      />
+        <EmptyList text="Nenhuma consulta encontrada" />
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={consultations}
+          refreshControl={refreshControl}
+          renderItem={({ item, index }) => renderItem(item, !isLastIndex(index, consultations))}
+          keyExtractor={item => item.id.toString()}
+        />
+      )}
     </View>
   )
 }

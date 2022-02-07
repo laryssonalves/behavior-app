@@ -10,9 +10,17 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
 
+  containerEmptyList: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   textEmptyList: {
     ...GlobalStyle.textMedium,
     fontSize: 16,
+    alignContent: 'center',
+    justifyContent: 'center',
   },
 
   flatListItem: {
