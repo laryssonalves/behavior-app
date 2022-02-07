@@ -11,7 +11,6 @@ const consultationDetailUrl = (consultationId: number) => `${consultationUrl}${c
 const consultationExerciseUrl = (consultationId: number) => `${consultationDetailUrl(consultationId)}exercises/`
 
 const getConsultations = async (params: ConsultationListParams): Promise<Consultation[]> => {
-  // const params = { student, concluded }
   const response = await api.get<Consultation[]>(consultationUrl, { params })
 
   return response.data.map(consultation => new Consultation(consultation))
