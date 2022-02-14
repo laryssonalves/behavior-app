@@ -35,7 +35,7 @@ const ExcerciseList = ({ exercises, refreshList }: any) => {
   return (
     <View style={styles.container}>
       {!exercises.length ? (
-        <EmptyList text="Nenhum exercício encontrado" />
+        <EmptyList text="Nenhum programa de ensino encontrado" />
       ) : (
         <FlatList
           showsVerticalScrollIndicator={false}

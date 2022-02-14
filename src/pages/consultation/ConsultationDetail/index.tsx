@@ -83,7 +83,7 @@ const ConsultationDetail = () => {
 
   const warningModalText = isAnyExerciseApplied()
     ? 'O atendimento será concluído com as informações correntes. Tem certeza que deseja sair?'
-    : 'Os treinos não foram aplicados e o atendimento será descartado. Tem certeza que deseja sair?'
+    : 'Os programas não foram aplicados e o atendimento será descartado. Tem certeza que deseja sair?'
 
   const warningModalProps = {
     modalState: {
@@ -106,7 +106,7 @@ const ConsultationDetail = () => {
       },
       btnNegative: {
         label: 'Cancelar',
-        onPress: hideModal,  
+        onPress: hideModal,
       },
     },
     hideModal,
@@ -117,8 +117,8 @@ const ConsultationDetail = () => {
       ...headerState,
       actionBar: {
         title: consultation.student.name,
-        subTitle: `Terapeuta: ${consultation.owner.name}`, 
-      }, 
+        subTitle: `Terapeuta: ${consultation.owner.name}`,
+      },
     }
     setHeaderState(newHeaderState)
   }

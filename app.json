@@ -2,7 +2,7 @@
   "expo": {
     "name": "Beeapp",
     "slug": "beeapp",
-    "version": "1.1.6",
+    "version": "1.1.7",
     "orientation": "portrait",
     "icon": "./assets/logo-icon.png",
     "splash": {
@@ -18,12 +18,12 @@
     ],
     "ios": {
       "bundleIdentifier": "com.smartdev.beeapp",
-      "buildNumber": "1.1.6",
+      "buildNumber": "1.1.7",
       "supportsTablet": true
     },
     "android": {
       "package": "com.smartdev.beeapp",
-      "versionCode": 5,
+      "versionCode": 6,
       "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-logo-icon.png",

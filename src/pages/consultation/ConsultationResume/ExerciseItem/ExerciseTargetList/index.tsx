@@ -40,7 +40,7 @@ const ExerciseTargetList = ({ consultationExercise }: ExerciseTargetListProps) =
         <Text style={styles.detailInfo}>{result.result_indepent}</Text>
       </View>
       <View style={styles.containerDetail}>
-        <Text style={styles.detailTitle}>Porcentagem de acerto com ajuda</Text>
+        <Text style={styles.detailTitle}>Porcentagem de acerto independente</Text>
         <Text style={styles.detailInfo}>{percentage(result.result_indepent, targets.length)}%</Text>
       </View>
       <View style={styles.containerDetail}>
@@ -48,7 +48,7 @@ const ExerciseTargetList = ({ consultationExercise }: ExerciseTargetListProps) =
         <Text style={styles.detailInfo}>{result.result_correct_with_help}</Text>
       </View>
       <View style={styles.containerDetail}>
-        <Text style={styles.detailTitle}>Porcentagem de acerto independente</Text>
+        <Text style={styles.detailTitle}>Porcentagem de acerto com ajuda</Text>
         <Text style={styles.detailInfo}>{percentage(result.result_correct_with_help, targets.length)}%</Text>
       </View>
       <Text style={styles.title}>Resultado detalhado</Text>

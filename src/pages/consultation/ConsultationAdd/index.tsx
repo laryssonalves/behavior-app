@@ -94,7 +94,7 @@ const ConsultationAdd = ({ visible, hideModal, exercises, studentId, navigateToD
         contentContainerStyle={{ ...GlobalStyle.modalContainer, margin: 16 }}>
         <View>
           <View style={styles.titleContainer}>
-            <Text style={{ ...GlobalStyle.modalTitle, flex: 1 }}>Selecionar treinos</Text>
+            <Text style={{ ...GlobalStyle.modalTitle, flex: 1 }}>Selecionar programas</Text>
             <Checkbox
               color={PRIMARY_COLOR}
               status={isAllExercisesChecked() ? 'checked' : 'unchecked'}

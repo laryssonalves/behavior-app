@@ -36,7 +36,7 @@ const StudentDetail = () => {
   const [routes] = useState([
     {
       key: 'exercise',
-      title: 'Treinos',
+      title: 'Programas',
       icon: 'format-list-checks',
     },
     {
