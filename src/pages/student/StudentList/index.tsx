@@ -20,7 +20,10 @@ import GlobalStyle from '../../../styles/global-style'
 import StudentListHeader from './Header'
 import { isLastIndex } from '../../../utils'
 import useProgressBar from '../../../hooks/useProgressBar'
-import useConsultationUnconcluded from '../../../hooks/useConsultationUnconcluded'
+import { useAuth } from '../../../contexts/auth.context'
+import ConsultationUnconcluded from '../../consultation/ConsultationUnconcluded'
+import { Consultation } from '../../../entities/consultation'
+import { verifyHasUnconcludedConsultation } from '../../../services/consultation-service'
 
 class HeaderState {
   searchBar = {
@@ -36,13 +39,14 @@ const StudentList = () => {
   const [students, setStudents] = useState<Student[]>([])
   const [studentToEdit, setStudentToEdit] = useState<Student>({ name: '' } as Student)
   const [studentFormVisible, setStudentFormVisible] = useState<boolean>(false)
+  const [unconcludedConsultation, setUnconcludedConsultation] = useState<Consultation>()
 
   const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
 
   const navigation = useNavigation()
 
-  const [ProgressIndicator, showProgress, hideProgress] = useProgressBar()
-  const [ConsultationUnconcludedModal] = useConsultationUnconcluded()
+  const { user } = useAuth()
+  const { ProgressIndicator, showProgress, hideProgress } = useProgressBar()
 
   const showStudentFormModal = () => setStudentFormVisible(true)
   const hideStudentFormModal = () => {
@@ -71,10 +75,6 @@ const StudentList = () => {
     const { id, name } = student
     navigation.navigate('StudentDetail', { id, name })
   }
-
-  useEffect(() => {
-    fetchStudents()
-  }, [headerState.searchBar.query])
 
   const setSearchBarQuery = (query: string) => {
     const searchBar = { ...headerState.searchBar, query }
@@ -118,6 +118,22 @@ const StudentList = () => {
     />
   )
 
+  useEffect(() => {
+    fetchStudents()
+  }, [headerState.searchBar.query])
+
+  useEffect(() => {
+    const hasUnconcludedConsultation = async () => {
+      const consultationUnconcluded = await verifyHasUnconcludedConsultation(user?.id)
+  
+      if (consultationUnconcluded) {
+        setUnconcludedConsultation(consultationUnconcluded)
+      }
+    }
+
+    hasUnconcludedConsultation()
+  }, [user])
+
   return (
     <View style={GlobalStyle.container}>
       <StudentListHeader {...headerProps} />
@@ -125,8 +141,13 @@ const StudentList = () => {
       <ProgressIndicator />
 
       <StudentForm visible={studentFormVisible} hideModal={hideStudentFormModal} studentToEdit={studentToEdit} />
-
-      <ConsultationUnconcludedModal />
+      {
+        unconcludedConsultation && (
+          <ConsultationUnconcluded
+            consultation={unconcludedConsultation} 
+            hideModal={() => setUnconcludedConsultation(undefined)} />
+        )
+      }
 
       <FlatList
         style={styles.flatList}

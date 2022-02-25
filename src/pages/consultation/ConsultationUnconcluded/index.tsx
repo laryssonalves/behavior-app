@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { ActivityIndicator, Modal, Portal } from 'react-native-paper'
@@ -9,12 +9,12 @@ import GlobalStyle from '../../../styles/global-style'
 import { editConsultation } from '../../../services/consultation-service'
 import styles from './styles'
 
-type ConsultationUnconcludedProps = {
+type Props = {
   consultation: Consultation | null
   hideModal: () => void
 }
 
-const ConsultationUnconcluded = ({ consultation, hideModal }: ConsultationUnconcludedProps) => {
+const ConsultationUnconcluded = ({ consultation, hideModal }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const navigation = useNavigation()
 
@@ -37,14 +37,14 @@ const ConsultationUnconcluded = ({ consultation, hideModal }: ConsultationUnconc
 
   const navigateToConsultationDetails = () => {
     setIsLoading(true)
+    setIsLoading(false)
     hideModal()
     navigation.navigate('ConsultationDetail', { consultation: consultation?.toJson() })
-    setIsLoading(false)
   }
 
   return (
     <Portal>
-      <Modal visible={!!consultation} onDismiss={hideModal} contentContainerStyle={GlobalStyle.modalContainer}>
+      <Modal visible={true} dismissable={false} onDismiss={hideModal} contentContainerStyle={GlobalStyle.modalContainer}>
         <Text style={GlobalStyle.modalTitle}>Atendimento em andamento</Text>
         <View style={GlobalStyle.modalBody}>
           <View style={styles.rowInfo}>

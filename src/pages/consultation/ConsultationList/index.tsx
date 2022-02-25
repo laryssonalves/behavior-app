@@ -10,7 +10,7 @@ import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 import { Consultation } from '../../../entities/consultation'
 import styles from './styles'
 import { isLastIndex } from '../../../utils'
-import EmptyList from '../../../components/EmptyList'
+import EmptyList from '../../../shared/components/EmptyList'
 
 const ConsultationList = ({ consultations, refreshList }: any) => {
   const navigation = useNavigation()

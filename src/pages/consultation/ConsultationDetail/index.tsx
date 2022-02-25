@@ -4,7 +4,7 @@ import { ActivityIndicator, FlatList, RefreshControl, Text, TouchableOpacity, Vi
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
-import { Divider, IconButton, Modal, Portal, ProgressBar } from 'react-native-paper'
+import { Divider, IconButton, ProgressBar } from 'react-native-paper'
 
 import GlobalStyle from '../../../styles/global-style'
 import styles from './styles'
@@ -60,9 +60,7 @@ const ConsultationDetail = () => {
         style={styles.flatListItem}>
         <View style={{ flex: 1 }}>
           <Text style={styles.textItemProgram}>{consultationExercise.exercise.program}</Text>
-          <Text style={styles.textItemApplication}>
-            {consultationExercise.exercise.getApplicationTypeDescription()}
-          </Text>
+          <Text style={styles.textItemApplication}>{consultationExercise.getApplicationTypeDescription()}</Text>
         </View>
         {consultationExercise.concluded && <IconButton icon="lock" color={SECONDARY_TEXT_COLOR} size={20} />}
       </TouchableOpacity>
@@ -127,7 +125,7 @@ const ConsultationDetail = () => {
     showProgress()
 
     getConsultationExercises(consultation.id)
-      .then(exercises => setExercises(exercises))
+      .then(data => setExercises(data))
       .finally(() => hideProgress())
   }
 

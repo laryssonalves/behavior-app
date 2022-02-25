@@ -1,5 +1,5 @@
 import moment, { Moment } from 'moment'
-import { ResultTypeChoice } from './choices'
+import { ApplicationTypeChoice, applicationTypeChoiceList, ResultTypeChoice } from './choices'
 import { Student, StudentExercise, StudentExerciseTarget } from './student'
 import { User } from './user'
 
@@ -41,6 +41,7 @@ export class ConsultationExercise {
   readonly id: number
   consultation_id: number
   exercise: StudentExercise
+  application_type: ApplicationTypeChoice
   concluded: boolean
   concluded_date: Moment
   result: ConsultationExerciseResult
@@ -60,6 +61,10 @@ export class ConsultationExercise {
 
   toJson() {
     return JSON.stringify(this)
+  }
+
+  getApplicationTypeDescription(): string {
+    return applicationTypeChoiceList().find(appType => appType.value === this.application_type)?.name || ''
   }
 
   static fromJson(data: string) {

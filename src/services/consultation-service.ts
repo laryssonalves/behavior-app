@@ -1,16 +1,17 @@
 import { Consultation, ConsultationExercise, ConsultationExerciseTarget } from '../entities/consultation'
 import { api } from '../shared/services/api'
 
-type ConsultationListParams = {
+type ConsultationParams = {
   student?: number
   concluded?: boolean
+  owner?: number
 }
 
 const consultationUrl = 'consultations/'
 const consultationDetailUrl = (consultationId: number) => `${consultationUrl}${consultationId}/`
 const consultationExerciseUrl = (consultationId: number) => `${consultationDetailUrl(consultationId)}exercises/`
 
-const getConsultations = async (params: ConsultationListParams): Promise<Consultation[]> => {
+const getConsultations = async (params: ConsultationParams): Promise<Consultation[]> => {
   const response = await api.get<Consultation[]>(consultationUrl, { params })
 
   return response.data.map(consultation => new Consultation(consultation))
@@ -31,8 +32,7 @@ const addConsultation = async (payload: any): Promise<Consultation> => {
 }
 
 const editConsultation = async (consultationId: number, payload: any): Promise<Consultation> => {
-  const consultationDetailUrl = `${consultationUrl}${consultationId}/`
-  const response = await api.patch<Consultation>(consultationDetailUrl, payload)
+  const response = await api.patch<Consultation>(consultationDetailUrl(consultationId), payload)
   return new Consultation(response.data)
 }
 
@@ -57,8 +57,8 @@ const getConsultationExercises = async (consultationId: number): Promise<Consult
   return response.data.map(consultationExercise => new ConsultationExercise(consultationExercise))
 }
 
-const verifyHasUnconcludedConsultation = async (): Promise<Consultation | null> => {
-  const results = await getConsultations({ concluded: false })
+const verifyHasUnconcludedConsultation = async (owner?: number): Promise<Consultation | null> => {
+  const results = await getConsultations({ concluded: false, owner })
 
   return results.length ? results[0] : null
 }

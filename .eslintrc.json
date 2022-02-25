@@ -2,6 +2,7 @@
     "extends": "@react-native-community",
     "rules": {
         "semi": "off",
-        "comma-dangle": "error"
+        "comma-dangle": "error",
+        "@typescript-eslint/no-explicit-any": "off",
     }
 }

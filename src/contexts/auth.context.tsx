@@ -51,7 +51,7 @@ const AuthProvider = ({ children }: any) => {
         setUser(storagedUser)
       }
     })()
-  })
+  }, [])
 
   return <AuthContext.Provider value={{ signed: !!user, user, signIn, signOut }}>{children}</AuthContext.Provider>
 }

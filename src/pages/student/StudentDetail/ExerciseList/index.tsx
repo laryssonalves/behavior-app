@@ -10,7 +10,7 @@ import { StudentExercise } from '../../../../entities/student'
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../../colors'
 
 import styles from './styles'
-import EmptyList from '../../../../components/EmptyList'
+import EmptyList from '../../../../shared/components/EmptyList'
 
 const ExcerciseList = ({ exercises, refreshList }: any) => {
   const refreshControl = (
