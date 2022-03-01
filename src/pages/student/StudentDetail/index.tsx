@@ -7,7 +7,7 @@ import { useRoute, RouteProp, useNavigation } from '@react-navigation/native'
 import { BottomNavigation, ProgressBar } from 'react-native-paper'
 
 import { getStudentExercises } from '../../../services/student-exercise-service'
-import { getConsultations } from '../../../services/consultation-service'
+import * as ConsultationService from '../../../services/consultation-service'
 
 import { Consultation } from '../../../entities/consultation'
 import { StudentExercise } from '../../../entities/student'
@@ -72,7 +72,7 @@ const StudentDetail = () => {
     try {
       setProgressVisible(true)
       const { id } = route.params
-      const results = await getConsultations({ student: id, concluded: true })
+      const results = await ConsultationService.getConsultations({ student: id, concluded: true })
       setConsultations(results)
     } catch (e) {
       console.log(e)

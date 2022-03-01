@@ -5,7 +5,7 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import { Divider, Modal, Portal, Checkbox, ActivityIndicator } from 'react-native-paper'
 import { PRIMARY_COLOR, TERCIARY_COLOR } from '../../../colors'
 import { StudentExercise } from '../../../entities/student'
-import { addConsultation } from '../../../services/consultation-service'
+import * as ConsultationService from '../../../services/consultation-service'
 
 import GlobalStyle from '../../../styles/global-style'
 import styles from './styles'
@@ -73,7 +73,7 @@ const ConsultationAdd = ({ visible, hideModal, exercises, studentId, navigateToD
         exercise_ids: exerciseIds,
       }
 
-      const consultation = await addConsultation(payload)
+      const consultation = await ConsultationService.addConsultation(payload)
 
       closeModal()
 

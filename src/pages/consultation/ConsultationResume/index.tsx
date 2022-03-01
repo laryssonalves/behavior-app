@@ -9,7 +9,7 @@ import { ProgressBar } from 'react-native-paper'
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
 import { Consultation, ConsultationExercise } from '../../../entities/consultation'
 import { HeaderState } from '../../../entities/header-state'
-import { getConsultationExercises } from '../../../services/consultation-service'
+import * as ConsultationService from '../../../services/consultation-service'
 import GlobalStyle from '../../../styles/global-style'
 import ConsultationViewActionBar from './ActionBar'
 import ExerciseItem from './ExerciseItem'
@@ -43,7 +43,7 @@ const ConsultationResume = () => {
   const getExercises = () => {
     showProgress()
 
-    getConsultationExercises(consultation.id)
+    ConsultationService.getConsultationExercises(consultation.id)
       .then(results => setExercises(results))
       .finally(() => hideProgress())
   }

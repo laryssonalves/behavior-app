@@ -23,7 +23,7 @@ import useProgressBar from '../../../hooks/useProgressBar'
 import { useAuth } from '../../../contexts/auth.context'
 import ConsultationUnconcluded from '../../consultation/ConsultationUnconcluded'
 import { Consultation } from '../../../entities/consultation'
-import { verifyHasUnconcludedConsultation } from '../../../services/consultation-service'
+import * as ConsultationService from '../../../services/consultation-service'
 
 class HeaderState {
   searchBar = {
@@ -124,7 +124,7 @@ const StudentList = () => {
 
   useEffect(() => {
     const hasUnconcludedConsultation = async () => {
-      const consultationUnconcluded = await verifyHasUnconcludedConsultation(user?.id)
+      const consultationUnconcluded = await ConsultationService.verifyHasUnconcludedConsultation(user?.id)
   
       if (consultationUnconcluded) {
         setUnconcludedConsultation(consultationUnconcluded)

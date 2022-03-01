@@ -6,7 +6,7 @@ import { TERCIARY_COLOR } from '../../../colors'
 
 import { Consultation } from '../../../entities/consultation'
 import GlobalStyle from '../../../styles/global-style'
-import { editConsultation } from '../../../services/consultation-service'
+import * as ConsultationService from '../../../services/consultation-service'
 import styles from './styles'
 
 type Props = {
@@ -27,7 +27,7 @@ const ConsultationUnconcluded = ({ consultation, hideModal }: Props) => {
 
     const payload = { concluded: true }
 
-    editConsultation(consultation?.id, payload)
+    ConsultationService.editConsultation(consultation?.id, payload)
       .then(() => {
         setIsLoading(false)
         hideModal()
