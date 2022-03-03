@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { PRIMARY_COLOR, PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR } from '../../../colors'
+import { PRIMARY_TEXT_COLOR, SECONDARY_TEXT_COLOR } from '../../../colors'
 import GlobalStyle from '../../../styles/global-style'
 
 const styles = StyleSheet.create({
@@ -37,6 +37,12 @@ const styles = StyleSheet.create({
   dividerItem: {
     marginHorizontal: 8,
     height: 2,
+  },
+
+  btnPrimary: {
+    ...GlobalStyle.btnPrimary,
+    alignSelf: 'center',
+    marginBottom: 16,
   },
 })
 

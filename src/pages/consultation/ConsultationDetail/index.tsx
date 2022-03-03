@@ -13,7 +13,7 @@ import { PRIMARY_COLOR, SECONDARY_COLOR, SECONDARY_TEXT_COLOR, TERCIARY_COLOR } 
 import ConsultationDetailActionBar from './ActionBar'
 import { Consultation, ConsultationExercise } from '../../../entities/consultation'
 import { HeaderState } from '../../../entities/header-state'
-import { getConsultationExercises, editConsultation, deleteConsultation } from '../../../services/consultation-service'
+import * as ConsultationService from '../../../services/consultation-service'
 import WarningModal from '../../../shared/components/modals/WarningModal'
 import { isLastIndex } from '../../../utils'
 
@@ -24,7 +24,7 @@ type ConsultationDetailParams = {
 }
 
 const ConsultationDetail = () => {
-  const navigation = useNavigation()
+  const { goBack, navigate, ...navigation } = useNavigation()
   const route = useRoute<RouteProp<ConsultationDetailParams, 'Params'>>()
   const consultation = Consultation.fromJson(route.params.consultation)
 
@@ -35,8 +35,6 @@ const ConsultationDetail = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [canGoBack, setCanGoBack] = useState<boolean>(false)
 
-  const goBack = navigation.goBack
-
   const showProgress = () => setProgressVisible(true)
   const hideProgress = () => setProgressVisible(false)
 
@@ -46,21 +44,16 @@ const ConsultationDetail = () => {
   const showModal = () => setModalVisible(true)
   const hideModal = () => setModalVisible(false)
 
-  const goToConsultationExerciseList = (consultationExercise: ConsultationExercise) => {
-    const params = { consultationExercise: consultationExercise.toJson() }
-    navigation.navigate('ConsultationExerciseTargetForm', params)
+  const goToConsultationExerciseList = ({ consultation_id, id }: ConsultationExercise) => {
+    navigate('ConsultationExerciseTargetForm', { consultationId: consultation_id, consultationExerciseId: id })
   }
 
   const renderItem = (consultationExercise: ConsultationExercise, index: number) => (
     <View>
-      <TouchableOpacity
-        onPress={() => {
-          goToConsultationExerciseList(consultationExercise)
-        }}
-        style={styles.flatListItem}>
-        <View style={{ flex: 1 }}>
+      <TouchableOpacity onPress={() => goToConsultationExerciseList(consultationExercise)} style={styles.flatListItem}>
+        <View style={GlobalStyle.container}>
           <Text style={styles.textItemProgram}>{consultationExercise.exercise.program}</Text>
-          <Text style={styles.textItemApplication}>{consultationExercise.getApplicationTypeDescription()}</Text>
+          <Text style={styles.textItemApplication}>{consultationExercise.application_type_description}</Text>
         </View>
         {consultationExercise.concluded && <IconButton icon="lock" color={SECONDARY_TEXT_COLOR} size={20} />}
       </TouchableOpacity>
@@ -71,7 +64,7 @@ const ConsultationDetail = () => {
   const headerProps = {
     headerState,
     actions: {
-      goBack: navigation.goBack,
+      goBack,
     },
   }
 
@@ -124,7 +117,7 @@ const ConsultationDetail = () => {
   const getExercises = () => {
     showProgress()
 
-    getConsultationExercises(consultation.id)
+    ConsultationService.getConsultationExercises(consultation.id)
       .then(data => setExercises(data))
       .finally(() => hideProgress())
   }
@@ -134,7 +127,7 @@ const ConsultationDetail = () => {
 
     const payload = { concluded: true }
 
-    editConsultation(consultation.id, payload)
+    ConsultationService.editConsultation(consultation.id, payload)
       .then(() => {
         setCanGoBack(true)
         hideLoading()
@@ -146,7 +139,7 @@ const ConsultationDetail = () => {
   const discardConsultation = () => {
     showProgress()
 
-    deleteConsultation(consultation.id)
+    ConsultationService.deleteConsultation(consultation.id)
       .then(() => {
         setCanGoBack(true)
         hideProgress()
@@ -192,7 +185,7 @@ const ConsultationDetail = () => {
       />
 
       <TouchableOpacity
-        style={{ ...GlobalStyle.btnPrimary, alignSelf: 'center', marginBottom: 16 }}
+        style={styles.btnPrimary}
         onPress={concludeConsultation}>
         {loading ? (
           <ActivityIndicator animating={true} color={TERCIARY_COLOR} />

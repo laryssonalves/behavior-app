@@ -12,7 +12,7 @@ const ExerciseTargetListItem = ({ item, index, exerciseTargetsTotal, isLastIndex
     <View style={styles.itemContainer}>
       <View style={styles.itemDescription}>
         <Text style={styles.itemText}>
-          {item.sequence}. {item.student_target.target}
+          {item.sequence}. {item.target_description}
         </Text>
       </View>
       <View style={styles.itemResults}>

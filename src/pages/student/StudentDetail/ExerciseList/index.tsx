@@ -26,7 +26,7 @@ const ExcerciseList = ({ exercises, refreshList }: any) => {
     <View>
       <TouchableOpacity style={styles.flatListItem}>
         <Text style={styles.textItemName}>{studentExercise.program}</Text>
-        <Text style={styles.textItemAge}>{studentExercise.getApplicationTypeDescription()}</Text>
+        <Text style={styles.textItemAge}>{studentExercise.application_type_description}</Text>
       </TouchableOpacity>
       {!isLast && <Divider style={styles.dividerItem} />}
     </View>

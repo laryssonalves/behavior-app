@@ -6,6 +6,7 @@ import ModalActionButtons from '../ModalActionButtons'
 import BaseModalBody from './BaseModalBody'
 
 type Props = {
+  dismissable?: boolean
   visible: boolean
   title: string
   body: any
@@ -23,9 +24,13 @@ type Props = {
   }
 }
 
-export default ({ visible, onDismiss, body, title, buttons }: Props) => (
+export default ({ dismissable, visible, onDismiss, body, title, buttons }: Props) => (
   <Portal>
-    <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={GlobalStyle.modalContainer}>
+    <Modal
+      dismissable={dismissable}
+      visible={visible}
+      onDismiss={onDismiss}
+      contentContainerStyle={GlobalStyle.modalContainer}>
       <Text style={GlobalStyle.modalTitle}>{title}</Text>
       <View style={GlobalStyle.modalBody}>
         <BaseModalBody body={body} />

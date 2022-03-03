@@ -8,8 +8,13 @@ import ExerciseTargetList from './ExerciseTargetList'
 import styles from './styles'
 import { resulTypeColorMap, resulTypeIconMap } from '../../../../constants'
 import { ResultTypeChoice } from '../../../../entities/choices'
+import { ConsultationExercise } from '../../../../entities/consultation'
 
-const ExerciseItem = ({ consultationExercise }: any) => {
+type Props = {
+  consultationExercise: ConsultationExercise
+}
+
+const ExerciseItem = ({ consultationExercise }: Props) => {
   const [targetsVisible, setTargetsVisible] = useState(false)
 
   const toggleTargets = () => setTargetsVisible(!targetsVisible)
@@ -18,7 +23,7 @@ const ExerciseItem = ({ consultationExercise }: any) => {
     <View style={styles.listItemInfo}>
       <Text style={styles.listItemTextProgram}>{consultationExercise.exercise.program}</Text>
       <Text style={styles.listItemTextApplication}>
-        {consultationExercise.exercise.getApplicationTypeDescription()}
+        {consultationExercise.application_type_description}
       </Text>
     </View>
   )

@@ -32,7 +32,7 @@ const ConsultationAdd = ({ visible, hideModal, exercises, studentId, navigateToD
       <TouchableOpacity onPress={() => onCheckPress(exercise.id)} style={styles.flatListItem}>
         <View style={GlobalStyle.container}>
           <Text style={styles.textItemName}>{exercise.program}</Text>
-          <Text style={styles.textItemAge}>{exercise.getApplicationTypeDescription()}</Text>
+          <Text style={styles.textItemAge}>{exercise.application_type_description}</Text>
         </View>
         <Checkbox
           color={PRIMARY_COLOR}

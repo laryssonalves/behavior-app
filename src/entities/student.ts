@@ -34,6 +34,7 @@ export class StudentExercise {
   student_id: number
   program: string
   application_type: number
+  application_type_description: string
   help_type: number
   total_attempts: number
   procedure: string
@@ -43,10 +44,6 @@ export class StudentExercise {
 
   constructor(props?: Partial<StudentExercise>) {
     Object.assign(this, props)
-  }
-
-  getApplicationTypeDescription(): string {
-    return applicationTypeChoiceList().find(appType => appType.value === this.application_type)?.name || ''
   }
 }
 

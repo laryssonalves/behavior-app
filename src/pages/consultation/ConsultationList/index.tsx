@@ -34,7 +34,7 @@ const ConsultationList = ({ consultations, refreshList }: any) => {
           <Text style={styles.textItemAge}>{consultation.getDuration()}</Text>
         </View>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={styles.textItemAge}>{consultation.create_date.format('DD/MM/YYYY')}</Text>
+          <Text style={styles.textItemAge}>{consultation.create_date.format('DD/MM/YY')}</Text>
           <Text style={styles.textItemAge}>
             {`${consultation.create_date.format('HH:mm')} às ${consultation.concluded_date.format('HH:mm')}`}
           </Text>

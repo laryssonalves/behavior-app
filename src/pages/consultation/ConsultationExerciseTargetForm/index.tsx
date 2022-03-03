@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import { FlatList, RefreshControl, View } from 'react-native'
+import { FlatList, TouchableOpacity, View } from 'react-native'
+import { Text } from 'react-native-paper'
 
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 
@@ -13,52 +14,51 @@ import ConsultationExerciseTargetFormActionBar from './ActionBar'
 import { ConsultationExercise, ConsultationExerciseTarget } from '../../../entities/consultation'
 import { HeaderState } from '../../../entities/header-state'
 import TargetListItem from './TargetListItem'
-import {
-  sendConsultationExerciseTargetAnswers,
-  getConsultationExerciseTargets,
-} from '../../../services/consultation-service'
+import * as ConsultationService from '../../../services/consultation-service'
 import { ProgressBar } from 'react-native-paper'
-import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../../colors'
+import { PRIMARY_COLOR } from '../../../colors'
+import useConsultationExerciseStepModal from '../../../components/modals/ConsultationExerciseStep/hook'
 
-type ConsultationExerciseTargetFormParams = {
+type RouteParams = {
   Params: {
-    consultationExercise: string
+    consultationId: number
+    consultationExerciseId: number
   }
 }
 
 const ConsultationExerciseTargetForm = () => {
-  const navigation = useNavigation()
-  const route = useRoute<RouteProp<ConsultationExerciseTargetFormParams, 'Params'>>()
-  const consultationExercise = ConsultationExercise.fromJson(route.params.consultationExercise)
+  const { goBack, addListener } = useNavigation()
+  const route = useRoute<RouteProp<RouteParams, 'Params'>>()
+  const { consultationId, consultationExerciseId } = route.params
 
-  const [headerState, setHeaderState] = useState<HeaderState>(new HeaderState())
+  const [consultationExercise, setConsultationExercise] = useState<ConsultationExercise>({} as ConsultationExercise)
+  const [headerState, setHeaderState] = useState<any>(new HeaderState())
   const [targets, setTargets] = useState<ConsultationExerciseTarget[]>([])
   const [saved, setSaved] = useState<boolean>(false)
   const [progressVisible, setProgressVisible] = useState<boolean>(false)
 
-  const goBack = navigation.goBack
+  const { ConsultationExerciseStepModal, showConsultationExerciseStepModal } = useConsultationExerciseStepModal()
 
   const showProgress = () => setProgressVisible(true)
   const hideProgress = () => setProgressVisible(false)
 
   const saveApplication = (concluded?: boolean) => {
+    if (_.isEqual(consultationExercise.targets, targets) && !concluded) {
+      return
+    }
+
     showProgress()
 
-    const { id, consultation_id } = consultationExercise
-
     const payload = {
-      consultation_exercise: id,
+      consultation_exercise: consultationExerciseId,
       concluded: concluded === undefined ? consultationExercise.concluded : concluded,
       targets,
     }
 
-    sendConsultationExerciseTargetAnswers(consultation_id, payload)
+    ConsultationService.sendConsultationExerciseTargetAnswers(consultationId, payload)
       .then(() => {
         setSaved(true)
-
-        if (concluded) {
-          goBack()
-        }
+        fetchConsultationExercise()
       })
       .catch(e => console.log(e))
       .finally(() => hideProgress())
@@ -109,74 +109,93 @@ const ConsultationExerciseTargetForm = () => {
     return <TargetListItem {...props} />
   }
 
-  const headerProps = {
-    headerState,
-    actions: {
-      goBack,
-      concludeExercise,
-      showResume,
-      shuffleTargets,
-      unshuffleTargets,
-    },
-  }
-
-  const getTargets = () => {
-    showProgress()
-
-    const { id, consultation_id } = consultationExercise
-
-    getConsultationExerciseTargets(consultation_id, id)
-      .then(targets => setTargets(targets))
-      .finally(() => hideProgress())
-  }
-
-  const getHeaderState = () => {
-    const newHeaderState = {
-      ...headerState,
-      concluded: consultationExercise.concluded,
-      actionBar: {
-        title: consultationExercise.exercise.program,
-        subTitle: consultationExercise.exercise.getApplicationTypeDescription(),
-      },
-    }
-    setHeaderState(newHeaderState)
+  function newStep() {
+    showConsultationExerciseStepModal()
   }
 
   const saveIfUnsaved = () => {
-    if (!saved) {
+    if (!saved && !consultationExercise.concluded) {
       saveApplication()
     }
   }
 
-  const refreshControl = (
-    <RefreshControl
-      progressBackgroundColor="#FFF"
-      colors={[PRIMARY_COLOR, SECONDARY_COLOR]}
-      refreshing={false}
-      onRefresh={getTargets}
-    />
-  )
+  function onFetchConsultationExerciseResponse(consultationExercise: ConsultationExercise) {
+    setConsultationExercise(consultationExercise)
+    setTargets(consultationExercise.targets)
+    setHeaderState((currentState: HeaderState) => ({
+      ...currentState,
+      concluded: consultationExercise.concluded,
+      actionBar: {
+        title: consultationExercise.exercise.program,
+        subTitle: consultationExercise.application_type_description,
+      },
+    }))
+  }
+
+  function fetchConsultationExercise() {
+    showProgress()
+
+    ConsultationService.getConsultationExercise(consultationId, consultationExerciseId)
+      .then(onFetchConsultationExerciseResponse)
+      .finally(() => hideProgress())
+  }
+
+  useEffect(() => addListener('beforeRemove', saveIfUnsaved))
 
   useEffect(() => {
-    getHeaderState()
-    getTargets()
-  }, [])
+    fetchConsultationExercise()
+  }, [consultationId, consultationExerciseId])
 
-  useEffect(() => navigation.addListener('beforeRemove', saveIfUnsaved))
+  const Actions = () => {
+    return (
+      <View style={styles.actionsContainer}>
+        <TouchableOpacity style={styles.btnDefault} onPress={goBack}>
+          <Text style={GlobalStyle.btnPrimaryText}>Voltar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btnPrimary} onPress={newStep}>
+          <Text style={GlobalStyle.btnPrimaryText}>Novo passo</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 
   return (
-    <View style={GlobalStyle.container}>
-      <ConsultationExerciseTargetFormActionBar {...headerProps} />
+    <View style={styles.container}>
+      <ConsultationExerciseTargetFormActionBar
+        {...{
+          headerState,
+          actions: {
+            goBack,
+            concludeExercise,
+            showResume,
+            shuffleTargets,
+            unshuffleTargets,
+          },
+        }}
+      />
 
       <ProgressBar style={styles.progressBar} visible={progressVisible} color={PRIMARY_COLOR} indeterminate />
 
-      <FlatList
-        style={styles.flatList}
-        refreshControl={refreshControl}
-        data={targets}
-        renderItem={({ item, index }) => renderTargetListItem(item, index)}
-        keyExtractor={item => item.id.toString()}
+      <ConsultationExerciseStepModal
+        {...{
+          consultationId,
+          exerciseId: consultationExercise?.exercise?.id,
+          applicationType: consultationExercise.application_type,
+          helpType: consultationExercise.help_type,
+          helpDescription: consultationExercise.help_description,
+        }}
       />
+
+      <View style={styles.body}>
+        <FlatList
+          style={styles.flatList}
+          data={targets}
+          renderItem={({ item, index }) => renderTargetListItem(item, index)}
+          keyExtractor={item => item.id.toString()}
+        />
+
+        {consultationExercise.concluded && <Actions></Actions>}
+      </View>
     </View>
   )
 }

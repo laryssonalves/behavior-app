@@ -10,6 +10,8 @@ type ConsultationParams = {
 const consultationUrl = 'consultations/'
 const consultationDetailUrl = (consultationId: number) => `${consultationUrl}${consultationId}/`
 const consultationExerciseUrl = (consultationId: number) => `${consultationDetailUrl(consultationId)}exercises/`
+const consultationExerciseDetailUrl = (consultationId: number, consultationExerciseId: number) =>
+  `${consultationDetailUrl(consultationId)}exercises/${consultationExerciseId}/`
 
 const getConsultations = async (params: ConsultationParams): Promise<Consultation[]> => {
   const response = await api.get<Consultation[]>(consultationUrl, { params })
@@ -41,6 +43,13 @@ const sendConsultationExerciseTargetAnswers = async (consultationId: number, pay
   await api.post(targetsAnswersUrl, payload)
 }
 
+async function addConsultationExercise(consultationId: number, payload: any): Promise<ConsultationExercise> {
+  const url = `${consultationExerciseUrl(consultationId)}`
+  const response = await api.post<ConsultationExercise>(url, payload)
+
+  return new ConsultationExercise(response.data)
+}
+
 const getConsultationExerciseTargets = async (
   consultationId: number,
   consultationExerciseId: number
@@ -57,6 +66,16 @@ const getConsultationExercises = async (consultationId: number): Promise<Consult
   return response.data.map(consultationExercise => new ConsultationExercise(consultationExercise))
 }
 
+async function getConsultationExercise(
+  consultationId: number,
+  consultationExerciseId: number
+): Promise<ConsultationExercise> {
+  const url = consultationExerciseDetailUrl(consultationId, consultationExerciseId)
+  const response = await api.get<ConsultationExercise>(url)
+
+  return new ConsultationExercise(response.data)
+}
+
 const verifyHasUnconcludedConsultation = async (owner?: number): Promise<Consultation | null> => {
   const results = await getConsultations({ concluded: false, owner })
 
@@ -69,8 +88,10 @@ export {
   addConsultation,
   editConsultation,
   deleteConsultation,
+  verifyHasUnconcludedConsultation,
   sendConsultationExerciseTargetAnswers,
   getConsultationExerciseTargets,
   getConsultationExercises,
-  verifyHasUnconcludedConsultation,
+  addConsultationExercise,
+  getConsultationExercise,
 }
