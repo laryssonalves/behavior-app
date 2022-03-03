@@ -14,7 +14,7 @@ interface ExerciseTargetListProps {
 }
 
 const ExerciseTargetList = ({ consultationExercise }: ExerciseTargetListProps) => {
-  const { total_targets_answered, exercise, result, targets } = consultationExercise
+  const { total_targets_answered, exercise, result, targets, total_attempts } = consultationExercise
 
   const renderListItem = (item: ConsultationExerciseTarget, index: number) => {
     const props = {
@@ -32,7 +32,7 @@ const ExerciseTargetList = ({ consultationExercise }: ExerciseTargetListProps) =
       <View style={styles.containerDetail}>
         <Text style={styles.detailTitle}>Tentativas</Text>
         <Text style={styles.detailInfo}>
-          {total_targets_answered}/{exercise.total_attempts}
+          {total_targets_answered}/{total_attempts}
         </Text>
       </View>
       <View style={styles.containerDetail}>

@@ -46,6 +46,8 @@ export class ConsultationExercise {
   help_type: HelpTypeChoice
   help_type_description: string
   help_description: string
+  total_attempts: number
+  procedure: string
   concluded: boolean
   concluded_date: Moment
   create_date: Moment
