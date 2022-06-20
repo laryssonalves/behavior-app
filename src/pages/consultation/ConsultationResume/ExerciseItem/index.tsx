@@ -21,7 +21,7 @@ const ExerciseItem = ({ consultationExercise }: Props) => {
 
   const ExerciseInfo = () => (
     <View style={styles.listItemInfo}>
-      <Text style={styles.listItemTextProgram}>{consultationExercise.exercise.program}</Text>
+      <Text style={styles.listItemTextProgram}>{consultationExercise.program}</Text>
       <Text style={styles.listItemTextApplication}>
         {consultationExercise.application_type_description}
       </Text>
