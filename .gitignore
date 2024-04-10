@@ -17,4 +17,5 @@ web-build/
 .vscode
 
 .env
+.env.local
 .env.development

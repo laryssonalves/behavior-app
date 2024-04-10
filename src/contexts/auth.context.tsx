@@ -32,13 +32,13 @@ const AuthProvider = ({ children }: any) => {
   }
 
   const signOut = async () => {
-    await logout()
-
-    await SecureStorage.clearToLogout()
-
+    setUser(null)
     configDefaultTokenInHeader()
 
-    setUser(null)
+    await Promise.all([
+      SecureStorage.clearToLogout(),
+      logout(),
+    ])
   }
 
   useEffect(() => {

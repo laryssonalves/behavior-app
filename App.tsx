@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import 'react-native-gesture-handler'
 
-import { Platform, SafeAreaView, StatusBar, StyleSheet } from 'react-native'
+import { Platform, SafeAreaView, StatusBar, StyleSheet, View } from 'react-native'
 
-import AppLoading from 'expo-app-loading'
 import { useFonts } from 'expo-font'
+import * as SplashScreen from 'expo-splash-screen'
 
 import MainApp from './src/MainApp'
 
@@ -12,8 +12,10 @@ import { Provider as PaperProvider } from 'react-native-paper'
 
 import { TERCIARY_COLOR } from './src/colors'
 
+SplashScreen.preventAutoHideAsync()
+
 const App = () => {
-  const [fontsLoaded] = useFonts({
+  const [fontsLoaded, fontError] = useFonts({
     'Chai-Bold': require('./assets/fonts/Chai-Bold.ttf'),
     'Chai-SemiBold': require('./assets/fonts/Chai-SemiBold.ttf'),
     'Chai-Medium': require('./assets/fonts/Chai-Medium.ttf'),
@@ -21,15 +23,21 @@ const App = () => {
     'Chai-Light': require('./assets/fonts/Chai-Light.ttf'),
   })
 
-  if (!fontsLoaded) {
-    return <AppLoading />
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded || fontError) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) {
+    return null
   }
 
   return (
     <PaperProvider>
       <StatusBar barStyle="light-content" backgroundColor={TERCIARY_COLOR} translucent />
       <SafeAreaView style={styles.safeArea}>
-        <MainApp />
+        <MainApp onReady={onLayoutRootView}/>
       </SafeAreaView>
     </PaperProvider>
   )

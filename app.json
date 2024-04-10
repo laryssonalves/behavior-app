@@ -2,7 +2,7 @@
   "expo": {
     "name": "Beeapp",
     "slug": "beeapp",
-    "version": "1.3.0",
+    "version": "1.3.1",
     "orientation": "portrait",
     "icon": "./assets/logo-icon.png",
     "splash": {
@@ -18,16 +18,21 @@
     ],
     "ios": {
       "bundleIdentifier": "com.smartdev.beeapp",
-      "buildNumber": "1.2.0",
+      "buildNumber": "1.3.1",
       "supportsTablet": true
     },
     "android": {
       "package": "com.smartdev.beeapp",
-      "versionCode": 7,
+      "versionCode": 9,
       "permissions": [],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-logo-icon.png",
         "backgroundColor": "#f9cc15"
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6d05db06-4759-4dfc-acaf-33fb2659eddf"
       }
     }
   }

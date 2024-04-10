@@ -8,9 +8,9 @@ import { setTopLevelNavigator } from './shared/services/navigation-service'
 
 import Routes from './routes'
 
-const MainApp = () => {
+const MainApp = ({ onReady }: { onReady: () => void }) => {
   return (
-    <NavigationContainer ref={ref => setTopLevelNavigator(ref)}>
+    <NavigationContainer onReady={onReady} ref={ref => setTopLevelNavigator(ref)}>
       <AuthProvider>
         <Routes />
       </AuthProvider>

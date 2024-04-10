@@ -1,11 +1,12 @@
 import axios from 'axios'
-import { API_URL } from 'react-native-dotenv'
+
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
 })
 
 api.interceptors.request.use(axiosRequestConfig => {
+  console.log({ axiosRequestConfig })
   const backSlashUrl = axiosRequestConfig.url?.endsWith('/')
 
   axiosRequestConfig.url = backSlashUrl ? axiosRequestConfig.url : `${axiosRequestConfig.url}/`
