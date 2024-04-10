@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "build:android": "expo build:android -t app-bundle",
+    "build:android": "eas build --platform android",
     "lint": "eslint --fix 'src/**'",
     "format": "prettier --write \"src/**/*.ts\""
   },
