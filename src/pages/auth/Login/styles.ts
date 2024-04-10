@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   inputView: {
     ...GlobalStyle.inputView,
     width: '80%',
+    height: 60,
     borderColor: PRIMARY_COLOR,
     flexDirection: 'row',
     alignItems: 'center',
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
   inputViewError: {
     ...GlobalStyle.inputViewError,
     width: '80%',
+    height: 60,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

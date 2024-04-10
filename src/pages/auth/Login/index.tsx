@@ -33,6 +33,11 @@ const Login = () => {
   const onClickLogin = async () => {
     try {
       setSubmitted(true)
+
+      if (!credential.email || !credential.password) {
+        return
+      }
+
       setLogging(true)
       await signIn(credential)
     } catch (e) {
