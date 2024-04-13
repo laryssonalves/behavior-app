@@ -1,4 +1,6 @@
 import axios from 'axios'
+import * as SecureStorage from './secure-storage'
+import { logoutUrl } from '../../services/auth-service'
 
 
 const api = axios.create({
@@ -6,7 +8,6 @@ const api = axios.create({
 })
 
 api.interceptors.request.use(axiosRequestConfig => {
-  console.log({ axiosRequestConfig })
   const backSlashUrl = axiosRequestConfig.url?.endsWith('/')
 
   axiosRequestConfig.url = backSlashUrl ? axiosRequestConfig.url : `${axiosRequestConfig.url}/`
@@ -14,6 +15,14 @@ api.interceptors.request.use(axiosRequestConfig => {
 })
 
 api.interceptors.response.use(undefined, async error => {
+  if (error.response.status === 401 || error.response.status === 403) {
+    try {
+      await SecureStorage.clearToLogout()
+      await api.delete(logoutUrl)
+    } finally {
+      configDefaultTokenInHeader()
+    }
+  }
   return Promise.reject(error)
 })
 

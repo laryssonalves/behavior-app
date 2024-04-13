@@ -4,7 +4,7 @@ import { User, UserCredential } from '../entities/user'
 import { TokenResponse } from '../entities/token-response'
 
 const loginUrl = 'auth/login/'
-const logoutUrl = 'auth/logout/'
+export const logoutUrl = 'auth/logout/'
 const userDetailsUrl = 'users/details/'
 
 const login = async (credential: UserCredential): Promise<any> => {
